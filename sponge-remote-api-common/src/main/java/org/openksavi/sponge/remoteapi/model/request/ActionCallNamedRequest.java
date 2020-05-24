@@ -22,34 +22,27 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
-import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest.ActionCallNamedRequestBody;
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest.ActionCallNamedParams;
 
 @ApiModel(value = "ActionCallNamedRequest", description = "An action call with named arguments request")
-public class ActionCallNamedRequest extends BodySpongeRequest<ActionCallNamedRequestBody> {
+public class ActionCallNamedRequest extends BaseRequest<ActionCallNamedParams> {
 
-    public ActionCallNamedRequest(ActionCallNamedRequestBody body) {
-        super(body);
+    public ActionCallNamedRequest(ActionCallNamedParams body) {
+        super(RemoteApiConstants.OPERATION_CALL_NAMED, body);
     }
 
     public ActionCallNamedRequest() {
-        this(new ActionCallNamedRequestBody());
-    }
-
-    public ActionCallNamedRequest(String name, Map<String, ?> args, ProcessorQualifiedVersion qualifiedVersion) {
-        this(new ActionCallNamedRequestBody(name, args, qualifiedVersion));
-    }
-
-    public ActionCallNamedRequest(String name, Map<String, ?> args) {
-        this(name, args, null);
+        this(new ActionCallNamedParams());
     }
 
     @Override
-    public ActionCallNamedRequestBody createBody() {
-        return new ActionCallNamedRequestBody();
+    public ActionCallNamedParams createParams() {
+        return new ActionCallNamedParams();
     }
 
-    @ApiModel(value = "ActionCallNamedRequestBody", description = "An action call with named arguments request body")
-    public static class ActionCallNamedRequestBody implements RequestBody, ActionExecutionInfo {
+    @ApiModel(value = "ActionCallNamedParams", description = "An action call with named arguments request params")
+    public static class ActionCallNamedParams extends BaseRequestParams implements ActionExecutionInfo {
 
         private String name;
 
@@ -57,13 +50,13 @@ public class ActionCallNamedRequest extends BodySpongeRequest<ActionCallNamedReq
 
         private ProcessorQualifiedVersion qualifiedVersion;
 
-        public ActionCallNamedRequestBody(String name, Map<String, ?> args, ProcessorQualifiedVersion qualifiedVersion) {
+        public ActionCallNamedParams(String name, Map<String, ?> args, ProcessorQualifiedVersion qualifiedVersion) {
             this.name = name;
             this.args = args;
             this.qualifiedVersion = qualifiedVersion;
         }
 
-        public ActionCallNamedRequestBody() {
+        public ActionCallNamedParams() {
         }
 
         @Override

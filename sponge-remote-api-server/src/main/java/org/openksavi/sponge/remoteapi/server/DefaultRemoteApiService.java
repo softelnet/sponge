@@ -32,11 +32,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.CategoryMeta;
-import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
@@ -68,20 +65,36 @@ import org.openksavi.sponge.remoteapi.model.request.LoginRequest;
 import org.openksavi.sponge.remoteapi.model.request.LogoutRequest;
 import org.openksavi.sponge.remoteapi.model.request.ProvideActionArgsRequest;
 import org.openksavi.sponge.remoteapi.model.request.ReloadRequest;
+import org.openksavi.sponge.remoteapi.model.request.RequestHeader;
 import org.openksavi.sponge.remoteapi.model.request.SendEventRequest;
 import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 import org.openksavi.sponge.remoteapi.model.response.ActionCallResponse;
+import org.openksavi.sponge.remoteapi.model.response.ActionCallResponse.ActionCallResult;
+import org.openksavi.sponge.remoteapi.model.response.ErrorResponse;
 import org.openksavi.sponge.remoteapi.model.response.GetActionsResponse;
+import org.openksavi.sponge.remoteapi.model.response.GetActionsResponse.GetActionsResult;
+import org.openksavi.sponge.remoteapi.model.response.GetActionsResponse.GetActionsValue;
 import org.openksavi.sponge.remoteapi.model.response.GetEventTypesResponse;
+import org.openksavi.sponge.remoteapi.model.response.GetEventTypesResponse.GetEventTypesResult;
 import org.openksavi.sponge.remoteapi.model.response.GetFeaturesResponse;
+import org.openksavi.sponge.remoteapi.model.response.GetFeaturesResponse.GetFeaturesResult;
 import org.openksavi.sponge.remoteapi.model.response.GetKnowledgeBasesResponse;
+import org.openksavi.sponge.remoteapi.model.response.GetKnowledgeBasesResponse.GetKnowledgeBasesResult;
 import org.openksavi.sponge.remoteapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.remoteapi.model.response.GetVersionResponse.GetVersionResult;
 import org.openksavi.sponge.remoteapi.model.response.IsActionActiveResponse;
+import org.openksavi.sponge.remoteapi.model.response.IsActionActiveResponse.IsActionActiveResult;
 import org.openksavi.sponge.remoteapi.model.response.LoginResponse;
+import org.openksavi.sponge.remoteapi.model.response.LoginResponse.LoginResult;
+import org.openksavi.sponge.remoteapi.model.response.LoginResponse.LoginValue;
 import org.openksavi.sponge.remoteapi.model.response.LogoutResponse;
+import org.openksavi.sponge.remoteapi.model.response.LogoutResponse.LogoutResult;
 import org.openksavi.sponge.remoteapi.model.response.ProvideActionArgsResponse;
+import org.openksavi.sponge.remoteapi.model.response.ProvideActionArgsResponse.ProvideActionArgsResult;
 import org.openksavi.sponge.remoteapi.model.response.ReloadResponse;
+import org.openksavi.sponge.remoteapi.model.response.ReloadResponse.ReloadResult;
 import org.openksavi.sponge.remoteapi.model.response.SendEventResponse;
+import org.openksavi.sponge.remoteapi.model.response.SendEventResponse.SendEventResult;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionCloseListener;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionOpenListener;
@@ -108,9 +121,8 @@ import org.openksavi.sponge.util.SpongeApiUtils;
 /**
  * Default Sponge Remote API service.
  */
+@SuppressWarnings("rawtypes")
 public class DefaultRemoteApiService implements RemoteApiService {
-
-    private static final Logger logger = LoggerFactory.getLogger(DefaultRemoteApiService.class);
 
     private SpongeEngine engine;
 
@@ -202,30 +214,22 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
     @Override
     public GetVersionResponse getVersion(GetVersionRequest request) {
-        try {
-            // Privileges checked only if the request is provided.
-            if (request != null) {
-                authenticateRequest(request);
-            }
-
-            return setupSuccessResponse(new GetVersionResponse(getApiVersion()), request);
-        } catch (Throwable e) {
-            return handleError("Remote API getVersion", e, new GetVersionResponse(), request);
+        // Privileges checked only if the request is provided.
+        if (request != null) {
+            authenticateRequest(request);
         }
+
+        return setupResponse(new GetVersionResponse(new GetVersionResult(getApiVersion())), request);
     }
 
     @Override
     public GetFeaturesResponse getFeatures(GetFeaturesRequest request) {
-        try {
-            // Privileges checked only if the request is provided.
-            if (request != null) {
-                authenticateRequest(request);
-            }
-
-            return setupSuccessResponse(new GetFeaturesResponse(features), request);
-        } catch (Throwable e) {
-            return handleError("Remote API getFeatures", e, new GetFeaturesResponse(), request);
+        // Privileges checked only if the request is provided.
+        if (request != null) {
+            authenticateRequest(request);
         }
+
+        return setupResponse(new GetFeaturesResponse(new GetFeaturesResult(features)), request);
     }
 
     @Override
@@ -235,95 +239,73 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
     @Override
     public LoginResponse login(LoginRequest request) {
-        try {
-            Validate.notNull(request, "The request must not be null");
-            Validate.notNull(request.getHeader().getUsername(), "The username must not be null");
+        Validate.notNull(request, "The request must not be null");
+        RequestHeader header = request.getParams().getHeader();
+        Validate.notNull(header.getUsername(), "The username must not be null");
 
-            UserAuthentication userAuthentication =
-                    securityService.authenticateUser(new UserAuthenticationQuery(request.getHeader().getUsername(),
-                            request.getHeader().getPassword(), request.getHeader().getAuthToken(), getSession()));
+        UserAuthentication userAuthentication = securityService.authenticateUser(
+                new UserAuthenticationQuery(header.getUsername(), header.getPassword(), header.getAuthToken(), getSession()));
 
-            String authToken = authTokenService != null ? authTokenService.createAuthToken(userAuthentication) : null;
+        String authToken = authTokenService != null ? authTokenService.createAuthToken(userAuthentication) : null;
 
-            return setupSuccessResponse(new LoginResponse(authToken), request);
-        } catch (Throwable e) {
-            return handleError("Remote API login", e, new LoginResponse(), request);
-        }
+        return setupResponse(new LoginResponse(new LoginResult(new LoginValue(authToken))), request);
     }
 
     @Override
     public LogoutResponse logout(LogoutRequest request) {
-        try {
-            Validate.notNull(request, "The request must not be null");
+        Validate.notNull(request, "The request must not be null");
 
-            authenticateRequest(request);
+        authenticateRequest(request);
 
-            if (request.getHeader().getAuthToken() != null) {
-                if (authTokenService != null) {
-                    authTokenService.removeAuthToken(request.getHeader().getAuthToken());
-                }
+        if (request.getParams().getHeader().getAuthToken() != null) {
+            if (authTokenService != null) {
+                authTokenService.removeAuthToken(request.getParams().getHeader().getAuthToken());
             }
-
-            return setupSuccessResponse(new LogoutResponse(), request);
-        } catch (Throwable e) {
-            return handleError("Remote API logout", e, new LogoutResponse(), request);
         }
+
+        return setupResponse(new LogoutResponse(new LogoutResult(RemoteApiServerConstants.STATUS_OK)), request);
     }
 
     @Override
     public GetKnowledgeBasesResponse getKnowledgeBases(GetKnowledgeBasesRequest request) {
-        if (request == null) {
-            request = new GetKnowledgeBasesRequest();
-        }
+        UserContext userContext = authenticateRequest(request);
 
-        try {
-            UserContext userContext = authenticateRequest(request);
-
-            return setupSuccessResponse(new GetKnowledgeBasesResponse(getEngine().getKnowledgeBaseManager().getKnowledgeBases().stream()
-                    .filter(kb -> accessService.canUseKnowledgeBase(userContext, kb))
-                    .filter(kb -> !kb.getName().equals(DefaultKnowledgeBase.NAME)).map(kb -> createRemoteKnowledgeBase(kb))
-                    .collect(Collectors.toList())), request);
-        } catch (Throwable e) {
-            return handleError("Remote API getKnowledgeBases", e, new GetKnowledgeBasesResponse(), request);
-        }
+        return setupResponse(new GetKnowledgeBasesResponse(new GetKnowledgeBasesResult(getEngine().getKnowledgeBaseManager()
+                .getKnowledgeBases().stream().filter(kb -> accessService.canUseKnowledgeBase(userContext, kb))
+                .filter(kb -> !kb.getName().equals(DefaultKnowledgeBase.NAME)).map(kb -> createRemoteKnowledgeBase(kb))
+                .collect(Collectors.toList()))), request);
     }
 
     @Override
     public GetActionsResponse getActions(GetActionsRequest request) {
-        try {
-            if (request == null) {
-                request = new GetActionsRequest();
-            }
+        UserContext userContext = authenticateRequest(request);
 
-            UserContext userContext = authenticateRequest(request);
+        boolean actualMetadataRequired = request.getParams().getMetadataRequired() != null ? request.getParams().getMetadataRequired()
+                : RemoteApiServerConstants.API_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
+        String actionNameRegExp = request.getParams().getName();
 
-            boolean actualMetadataRequired = request.getBody().getMetadataRequired() != null ? request.getBody().getMetadataRequired()
-                    : RemoteApiServerConstants.API_PARAM_ACTIONS_METADATA_REQUIRED_DEFAULT;
-            String actionNameRegExp = request.getBody().getName();
+        List<ActionAdapter> actions =
+                getEngine().getActions().stream()
+                        .filter(action -> actionNameRegExp != null ? action.getMeta().getName().matches(actionNameRegExp) : true)
+                        .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
+                        .filter(action -> actualMetadataRequired
+                                ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null : true)
+                        .filter(action -> canCallAction(userContext, action)).collect(Collectors.toList());
 
-            List<ActionAdapter> actions =
-                    getEngine().getActions().stream()
-                            .filter(action -> actionNameRegExp != null ? action.getMeta().getName().matches(actionNameRegExp) : true)
-                            .filter(action -> !action.getKnowledgeBase().getName().equals(DefaultKnowledgeBase.NAME))
-                            .filter(action -> actualMetadataRequired
-                                    ? action.getMeta().getArgs() != null && action.getMeta().getResult() != null : true)
-                            .filter(action -> canCallAction(userContext, action)).collect(Collectors.toList());
+        Map<String, DataType<?>> registeredTypes = null;
+        if (request.getParams().getRegisteredTypes() != null && request.getParams().getRegisteredTypes()) {
+            final Set<String> typeNames = new LinkedHashSet<>();
+            actions.stream().forEach(action -> typeNames.addAll(action.getRegisteredTypeNames()));
 
-            Map<String, DataType<?>> registeredTypes = null;
-            if (request.getBody().getRegisteredTypes() != null && request.getBody().getRegisteredTypes()) {
-                final Set<String> typeNames = new LinkedHashSet<>();
-                actions.stream().forEach(action -> typeNames.addAll(action.getRegisteredTypeNames()));
-
-                registeredTypes = typeNames.stream().collect(SpongeApiUtils.collectorToLinkedMap(registeredTypeName -> registeredTypeName,
-                        registeredTypeName -> marshalDataType(getEngine().getType(registeredTypeName))));
-            }
-
-            return setupSuccessResponse(new GetActionsResponse(actions.stream().map(action -> createRemoteActionMeta(action))
-                    .sorted(actionsOrderComparator).map(action -> marshalActionMeta(action)).collect(Collectors.toList()), registeredTypes),
-                    request);
-        } catch (Throwable e) {
-            return handleError("Remote API getActions", e, new GetActionsResponse(), request);
+            registeredTypes = typeNames.stream().collect(SpongeApiUtils.collectorToLinkedMap(registeredTypeName -> registeredTypeName,
+                    registeredTypeName -> marshalDataType(getEngine().getType(registeredTypeName))));
         }
+
+        return setupResponse(new GetActionsResponse(new GetActionsResult(
+                new GetActionsValue(actions.stream().map(action -> createRemoteActionMeta(action)).sorted(actionsOrderComparator)
+                        .map(action -> marshalActionMeta(action)).collect(Collectors.toList()), registeredTypes))
+
+        ), request);
     }
 
     protected RemoteActionMeta createRemoteActionMeta(ActionAdapter actionAdapter) {
@@ -335,12 +317,10 @@ public class DefaultRemoteApiService implements RemoteApiService {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
     public DataType marshalDataType(DataType type) {
         return (DataType) typeConverter.marshal(new TypeType(), type);
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public RemoteActionMeta marshalActionMeta(RemoteActionMeta actionMeta) {
         if (actionMeta != null) {
@@ -383,76 +363,37 @@ public class DefaultRemoteApiService implements RemoteApiService {
     public ActionCallResponse call(ActionCallRequest request) {
         ActionAdapter actionAdapter = null;
 
-        try {
-            Validate.notNull(request, "The request must not be null");
-            UserContext userContext = authenticateRequest(request);
+        Validate.notNull(request, "The request must not be null");
+        UserContext userContext = authenticateRequest(request);
 
-            String actionName = request.getBody().getName();
-            actionAdapter = getActionAdapterForRequest(actionName, request.getBody().getQualifiedVersion(), userContext);
+        String actionName = request.getParams().getName();
+        actionAdapter = getActionAdapterForRequest(actionName, request.getParams().getQualifiedVersion(), userContext);
 
-            List<Object> args = unmarshalActionArgs(actionAdapter, request.getBody().getArgs());
+        List<Object> args = unmarshalActionArgs(actionAdapter, request.getParams().getArgs());
 
-            Object actionResult = getEngine().getOperations().call(actionName, args);
+        Object actionResult = getEngine().getOperations().call(actionName, args);
 
-            return setupSuccessResponse(new ActionCallResponse(marshalActionResult(actionAdapter, actionResult)), request);
-        } catch (Throwable e) {
-            if (actionAdapter != null) {
-                return handleError(actionAdapter, e, new ActionCallResponse(), request);
-            } else {
-                return handleError("Remote API call", e, new ActionCallResponse(), request);
-            }
-        }
+        return setupResponse(new ActionCallResponse(new ActionCallResult(marshalActionResult(actionAdapter, actionResult))), request);
     }
 
     @Override
     public ActionCallResponse callNamed(ActionCallNamedRequest request) {
         ActionAdapter actionAdapter = null;
 
-        try {
-            Validate.notNull(request, "The request must not be null");
-            UserContext userContext = authenticateRequest(request);
+        Validate.notNull(request, "The request must not be null");
+        UserContext userContext = authenticateRequest(request);
 
-            String actionName = request.getBody().getName();
-            actionAdapter = getActionAdapterForRequest(actionName, request.getBody().getQualifiedVersion(), userContext);
+        String actionName = request.getParams().getName();
+        actionAdapter = getActionAdapterForRequest(actionName, request.getParams().getQualifiedVersion(), userContext);
 
-            List<Object> argsAsList = request.getBody().getArgs() != null
-                    ? SpongeUtils.buildActionArgsList(actionAdapter, request.getBody().getArgs()) : null;
+        List<Object> argsAsList = request.getParams().getArgs() != null
+                ? SpongeUtils.buildActionArgsList(actionAdapter, request.getParams().getArgs()) : null;
 
-            List<Object> args = unmarshalActionArgs(actionAdapter, argsAsList);
+        List<Object> args = unmarshalActionArgs(actionAdapter, argsAsList);
 
-            Object actionResult = getEngine().getOperations().call(actionName, args);
+        Object actionResult = getEngine().getOperations().call(actionName, args);
 
-            return setupSuccessResponse(new ActionCallResponse(marshalActionResult(actionAdapter, actionResult)), request);
-        } catch (Throwable e) {
-            if (actionAdapter != null) {
-                return handleError(actionAdapter, e, new ActionCallResponse(), request);
-            } else {
-                return handleError("Remote API callNamed", e, new ActionCallResponse(), request);
-            }
-        }
-    }
-
-    protected <T extends SpongeResponse, R extends SpongeRequest> T handleError(ProcessorAdapter<?> processorAdapter, Throwable e,
-            T response, R request) {
-        if (!(e instanceof ApplicationServerSpongeException)) {
-            getEngine().handleError(processorAdapter, e);
-        } else {
-            logger.debug("Remote API application error in "
-                    + (processorAdapter != null && processorAdapter.getMeta() != null ? processorAdapter.getMeta().getName() : "unknown"),
-                    e);
-        }
-
-        return setupErrorResponse(response, request, e);
-    }
-
-    protected <T extends SpongeResponse, R extends SpongeRequest> T handleError(String source, Throwable e, T response, R request) {
-        if (!(e instanceof ApplicationServerSpongeException)) {
-            getEngine().handleError(source, e);
-        } else {
-            logger.debug("Remote API application error in " + source, e);
-        }
-
-        return setupErrorResponse(response, request, e);
+        return setupResponse(new ActionCallResponse(new ActionCallResult(marshalActionResult(actionAdapter, actionResult))), request);
     }
 
     protected List<Object> unmarshalActionArgs(ActionAdapter actionAdapter, List<Object> args) {
@@ -466,29 +407,25 @@ public class DefaultRemoteApiService implements RemoteApiService {
     @SuppressWarnings("unchecked")
     @Override
     public SendEventResponse send(SendEventRequest request) {
-        try {
-            Validate.notNull(request, "The request must not be null");
+        Validate.notNull(request, "The request must not be null");
 
-            UserContext userContext = authenticateRequest(request);
+        UserContext userContext = authenticateRequest(request);
 
-            String eventName = request.getBody().getName();
-            Map<String, Object> attributes = request.getBody().getAttributes();
+        String eventName = request.getParams().getName();
+        Map<String, Object> attributes = request.getParams().getAttributes();
 
-            // Unmarshal attributes if there is an event type registered.
-            RecordType eventType = getEngine().getEventTypes().get(eventName);
-            if (eventType != null) {
-                attributes = (Map<String, Object>) typeConverter.unmarshal(eventType, attributes);
-            }
-
-            Map<String, Object> features = FeaturesUtils.unmarshal(typeConverter.getFeatureConverter(), request.getBody().getFeatures());
-
-            Event event = sendEvent(eventName, attributes, request.getBody().getLabel(), request.getBody().getDescription(), features,
-                    userContext);
-
-            return setupSuccessResponse(new SendEventResponse(event.getId()), request);
-        } catch (Throwable e) {
-            return handleError("Remote API send", e, new SendEventResponse(), request);
+        // Unmarshal attributes if there is an event type registered.
+        RecordType eventType = getEngine().getEventTypes().get(eventName);
+        if (eventType != null) {
+            attributes = (Map<String, Object>) typeConverter.unmarshal(eventType, attributes);
         }
+
+        Map<String, Object> features = FeaturesUtils.unmarshal(typeConverter.getFeatureConverter(), request.getParams().getFeatures());
+
+        Event event = sendEvent(eventName, attributes, request.getParams().getLabel(), request.getParams().getDescription(), features,
+                userContext);
+
+        return setupResponse(new SendEventResponse(new SendEventResult(event.getId())), request);
     }
 
     @Override
@@ -525,62 +462,48 @@ public class DefaultRemoteApiService implements RemoteApiService {
         return sendEvent(eventName, attributes, null, null, userContext);
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public IsActionActiveResponse isActionActive(IsActionActiveRequest request) {
-        try {
-            Validate.notNull(request, "The request must not be null");
-            UserContext userContext = authenticateRequest(request);
+        Validate.notNull(request, "The request must not be null");
+        UserContext userContext = authenticateRequest(request);
 
-            List<Boolean> active = new ArrayList<>();
+        List<Boolean> active = new ArrayList<>();
 
-            if (request.getBody().getEntries() != null) {
-                request.getBody().getEntries().forEach(entry -> {
-                    ActionAdapter actionAdapter = getActionAdapterForRequest(entry.getName(), entry.getQualifiedVersion(), userContext);
+        if (request.getParams().getEntries() != null) {
+            request.getParams().getEntries().forEach(entry -> {
+                ActionAdapter actionAdapter = getActionAdapterForRequest(entry.getName(), entry.getQualifiedVersion(), userContext);
 
-                    DataType contextType = entry.getContextType() != null
-                            ? (DataType) typeConverter.unmarshal(new TypeType(), entry.getContextType()) : null;
-                    Object contextValue = entry.getContextValue() != null && contextType != null
-                            ? typeConverter.unmarshal(contextType, entry.getContextValue()) : entry.getContextValue();
+                DataType contextType =
+                        entry.getContextType() != null ? (DataType) typeConverter.unmarshal(new TypeType(), entry.getContextType()) : null;
+                Object contextValue = entry.getContextValue() != null && contextType != null
+                        ? typeConverter.unmarshal(contextType, entry.getContextValue()) : entry.getContextValue();
 
-                    active.add(getEngine().getOperations().isActionActive(entry.getName(),
-                            new IsActionActiveContext(contextValue, contextType, unmarshalActionArgs(actionAdapter, entry.getArgs()),
-                                    FeaturesUtils.unmarshal(featureConverter, entry.getFeatures()))));
-                });
-            }
-
-            return setupSuccessResponse(new IsActionActiveResponse(active), request);
-        } catch (Throwable e) {
-            return handleError("Remote API isActionActive", e, new IsActionActiveResponse(), request);
+                active.add(getEngine().getOperations().isActionActive(entry.getName(),
+                        new IsActionActiveContext(contextValue, contextType, unmarshalActionArgs(actionAdapter, entry.getArgs()),
+                                FeaturesUtils.unmarshal(featureConverter, entry.getFeatures()))));
+            });
         }
+
+        return setupResponse(new IsActionActiveResponse(new IsActionActiveResult(active)), request);
     }
 
     @Override
     public ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request) {
         ActionAdapter actionAdapter = null;
 
-        try {
-            Validate.notNull(request, "The request must not be null");
-            UserContext userContext = authenticateRequest(request);
-            actionAdapter = getActionAdapterForRequest(request.getBody().getName(), request.getBody().getQualifiedVersion(), userContext);
+        Validate.notNull(request, "The request must not be null");
+        UserContext userContext = authenticateRequest(request);
+        actionAdapter = getActionAdapterForRequest(request.getParams().getName(), request.getParams().getQualifiedVersion(), userContext);
 
-            Map<String, ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
-                    new ProvideArgsParameters(request.getBody().getProvide(), request.getBody().getSubmit(),
-                            RemoteApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter, request.getBody().getCurrent(),
-                                    request.getBody().getDynamicTypes()),
-                            request.getBody().getDynamicTypes(), unmarshalProvideArgsFeaturesMap(request.getBody().getArgFeatures()),
-                            request.getBody().getInitial()));
-            RemoteApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided,
-                    request.getBody().getDynamicTypes());
+        Map<String, ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
+                new ProvideArgsParameters(request.getParams().getProvide(), request.getParams().getSubmit(),
+                        RemoteApiServerUtils.unmarshalAuxiliaryActionArgs(typeConverter, actionAdapter, request.getParams().getCurrent(),
+                                request.getParams().getDynamicTypes()),
+                        request.getParams().getDynamicTypes(), unmarshalProvideArgsFeaturesMap(request.getParams().getArgFeatures()),
+                        request.getParams().getInitial()));
+        RemoteApiServerUtils.marshalProvidedActionArgValues(typeConverter, actionAdapter, provided, request.getParams().getDynamicTypes());
 
-            return setupSuccessResponse(new ProvideActionArgsResponse(provided), request);
-        } catch (Throwable e) {
-            if (actionAdapter != null) {
-                return handleError(actionAdapter, e, new ProvideActionArgsResponse(), request);
-            } else {
-                return handleError("Remote API provideActionArgs", e, new ProvideActionArgsResponse(), request);
-            }
-        }
+        return setupResponse(new ProvideActionArgsResponse(new ProvideActionArgsResult(provided)), request);
     }
 
     protected Map<String, Map<String, Object>> unmarshalProvideArgsFeaturesMap(Map<String, Map<String, Object>> featuresMap) {
@@ -596,43 +519,28 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
     @Override
     public GetEventTypesResponse getEventTypes(GetEventTypesRequest request) {
-        try {
-            if (request == null) {
-                request = new GetEventTypesRequest();
-            }
+        authenticateRequest(request);
 
-            authenticateRequest(request);
+        // Match all events types if the name pattern is null.
+        String eventNameRegExp = request.getParams().getName() != null ? request.getParams().getName() : ".*";
 
-            // Match all events types if the name pattern is null.
-            String eventNameRegExp = request.getBody().getName() != null ? request.getBody().getName() : ".*";
+        Map<String,
+                RecordType> marshalledEventTypes = getEngine().getEventTypes().entrySet().stream()
+                        .filter(entry -> getEngine().getPatternMatcher().matches(eventNameRegExp, entry.getKey())).collect(SpongeApiUtils
+                                .collectorToLinkedMap(entry -> entry.getKey(), entry -> (RecordType) marshalDataType(entry.getValue())));
 
-            Map<String, RecordType> marshalledEventTypes = getEngine().getEventTypes().entrySet().stream()
-                    .filter(entry -> getEngine().getPatternMatcher().matches(eventNameRegExp, entry.getKey())).collect(SpongeApiUtils
-                            .collectorToLinkedMap(entry -> entry.getKey(), entry -> (RecordType) marshalDataType(entry.getValue())));
-
-            return setupSuccessResponse(new GetEventTypesResponse(marshalledEventTypes), request);
-        } catch (Throwable e) {
-            return handleError("Remote API getEventTypes", e, new GetEventTypesResponse(), request);
-        }
+        return setupResponse(new GetEventTypesResponse(new GetEventTypesResult(marshalledEventTypes)), request);
     }
 
     @Override
     public ReloadResponse reload(ReloadRequest request) {
-        try {
-            if (request == null) {
-                request = new ReloadRequest();
-            }
+        UserContext userContext = authenticateRequest(request);
 
-            UserContext userContext = authenticateRequest(request);
+        Validate.isTrue(userContext.hasRole(settings.getAdminRole()), "No privileges to reload Sponge knowledge bases");
 
-            Validate.isTrue(userContext.hasRole(settings.getAdminRole()), "No privileges to reload Sponge knowledge bases");
+        getEngine().reload();
 
-            getEngine().reload();
-
-            return setupSuccessResponse(new ReloadResponse(), request);
-        } catch (Throwable e) {
-            return handleError("Remote API reload", e, new ReloadResponse(), request);
-        }
+        return setupResponse(new ReloadResponse(new ReloadResult(RemoteApiServerConstants.STATUS_OK)), request);
     }
 
     /**
@@ -646,8 +554,8 @@ public class DefaultRemoteApiService implements RemoteApiService {
         RemoteApiSession session = Validate.notNull(getSession(), "The session is not set");
 
         // Put reguest features to the thread local session.
-        if (request.getHeader().getFeatures() != null) {
-            session.getFeatures().putAll(request.getHeader().getFeatures());
+        if (request.getParams().getHeader() != null && request.getParams().getHeader().getFeatures() != null) {
+            session.getFeatures().putAll(request.getParams().getHeader().getFeatures());
         }
 
         UserAuthentication userAuthentication = requestAuthenticationService.authenticateRequest(request);
@@ -711,21 +619,11 @@ public class DefaultRemoteApiService implements RemoteApiService {
     }
 
     protected <T extends SpongeResponse, R extends SpongeRequest> T setupResponse(T response, R request) {
-        if (request != null && request.getHeader().getId() != null) {
-            response.getHeader().setId(request.getHeader().getId());
+        if (request != null && request.getId() != null) {
+            response.setId(request.getId());
         }
 
         return response;
-    }
-
-    protected <T extends SpongeResponse, R extends SpongeRequest> T setupSuccessResponse(T response, R request) {
-        return setupResponse(response, request);
-    }
-
-    protected <T extends SpongeResponse, R extends SpongeRequest> T setupErrorResponse(T response, R request, Throwable exception) {
-        errorResponseProvider.applyException(this, response, exception);
-
-        return setupResponse(response, request);
     }
 
     protected RemoteKnowledgeBaseMeta createRemoteKnowledgeBase(KnowledgeBase kb) {
@@ -749,9 +647,9 @@ public class DefaultRemoteApiService implements RemoteApiService {
     }
 
     @Override
-    public SpongeResponse createGenericErrorResponse(Throwable e) {
+    public SpongeResponse createErrorResponse(Throwable e) {
         Validate.notNull(e, "Exception should be not null");
-        SpongeResponse response = new SpongeResponse();
+        ErrorResponse response = new ErrorResponse();
 
         errorResponseProvider.applyException(this, response, e);
 

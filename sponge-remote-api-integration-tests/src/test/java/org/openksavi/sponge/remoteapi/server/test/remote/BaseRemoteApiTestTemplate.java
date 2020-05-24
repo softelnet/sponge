@@ -121,9 +121,9 @@ public abstract class BaseRemoteApiTestTemplate {
     public void testResponseTimes() {
         try (SpongeClient client = createClient()) {
             GetVersionResponse response = client.getVersion(new GetVersionRequest());
-            assertNotNull(response.getHeader().getRequestTime());
-            assertNotNull(response.getHeader().getResponseTime());
-            assertFalse(response.getHeader().getResponseTime().isBefore(response.getHeader().getRequestTime()));
+            assertNotNull(response.getResult().getHeader().getRequestTime());
+            assertNotNull(response.getResult().getHeader().getResponseTime());
+            assertFalse(response.getResult().getHeader().getResponseTime().isBefore(response.getResult().getHeader().getRequestTime()));
         }
     }
 
@@ -150,12 +150,10 @@ public abstract class BaseRemoteApiTestTemplate {
             GetVersionRequest request = new GetVersionRequest();
             GetVersionResponse response = client.getVersion(request);
 
-            assertEquals(null, response.getHeader().getErrorCode());
-            assertEquals(null, response.getHeader().getErrorMessage());
-            assertEquals(null, response.getHeader().getDetailedErrorMessage());
-            assertEquals(engine.getVersion(), response.getBody().getVersion());
-            assertEquals("1", response.getHeader().getId());
-            assertEquals(response.getHeader().getId(), request.getHeader().getId());
+            assertEquals(null, response.getError());
+            assertEquals(engine.getVersion(), response.getResult().getValue());
+            assertEquals("1", response.getId());
+            assertEquals(response.getId(), request.getId());
         }
     }
 
@@ -542,10 +540,10 @@ public abstract class BaseRemoteApiTestTemplate {
     public void testRegisteredTypeArgAction() {
         try (SpongeClient client = createClient()) {
             GetActionsRequest request = new GetActionsRequest();
-            request.getBody().setName("RegisteredTypeArgAction");
-            request.getBody().setRegisteredTypes(true);
+            request.getParams().setName("RegisteredTypeArgAction");
+            request.getParams().setRegisteredTypes(true);
 
-            Map<String, DataType<?>> types = client.getActions(request).getBody().getTypes();
+            Map<String, DataType<?>> types = client.getActions(request).getResult().getValue().getTypes();
             assertEquals(1, types.size());
             RemoteApiTestUtils.assertPersonRecordType((RecordType) types.get("Person"));
 
@@ -561,10 +559,10 @@ public abstract class BaseRemoteApiTestTemplate {
     public void testInheritedRegisteredTypeArgAction() {
         try (SpongeClient client = createClient()) {
             GetActionsRequest request = new GetActionsRequest();
-            request.getBody().setName("InheritedRegisteredTypeArgAction");
-            request.getBody().setRegisteredTypes(true);
+            request.getParams().setName("InheritedRegisteredTypeArgAction");
+            request.getParams().setRegisteredTypes(true);
 
-            Map<String, DataType<?>> types = client.getActions(request).getBody().getTypes();
+            Map<String, DataType<?>> types = client.getActions(request).getResult().getValue().getTypes();
             assertEquals(2, types.size());
             RemoteApiTestUtils.assertPersonRecordType((RecordType) types.get("Person"));
             RemoteApiTestUtils.assertCitizenRecordType((RecordType) types.get("Citizen"));

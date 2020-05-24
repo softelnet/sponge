@@ -19,37 +19,45 @@ package org.openksavi.sponge.remoteapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.response.LoginResponse.LoginResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.LoginResponse.LoginResult;
 
 @ApiModel(value = "LoginResponse", description = "A login response")
-public class LoginResponse extends BodySpongeResponse<LoginResponseBody> {
+public class LoginResponse extends BaseResponse<LoginResult> {
 
-    public LoginResponse(LoginResponseBody body) {
+    public LoginResponse(LoginResult body) {
         super(body);
     }
 
     public LoginResponse() {
-        this(new LoginResponseBody());
+        this(null);
     }
 
-    public LoginResponse(String authToken) {
-        this(new LoginResponseBody(authToken));
+    @ApiModel(value = "LoginResult", description = "A login response result")
+    public static class LoginResult extends BaseResponseResult<LoginValue> {
+
+        public LoginResult() {
+        }
+
+        public LoginResult(LoginValue data) {
+            super(data);
+        }
+
+        @Override
+        @ApiModelProperty(value = "The login data", required = true)
+        public LoginValue getValue() {
+            return super.getValue();
+        }
     }
 
-    @Override
-    public LoginResponseBody createBody() {
-        return new LoginResponseBody();
-    }
-
-    @ApiModel(value = "LoginResponseBody", description = "A login response body")
-    public static class LoginResponseBody implements ResponseBody {
+    @ApiModel(value = "LoginValue", description = "A login value")
+    public static class LoginValue {
 
         private String authToken;
 
-        public LoginResponseBody() {
+        public LoginValue() {
         }
 
-        public LoginResponseBody(String authToken) {
+        public LoginValue(String authToken) {
             this.authToken = authToken;
         }
 

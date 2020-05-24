@@ -22,6 +22,7 @@ import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 /**
  * A Remote API operation.
  */
+@SuppressWarnings("rawtypes")
 public class RemoteApiOperation<I extends SpongeRequest, O extends SpongeResponse> {
 
     private String name;

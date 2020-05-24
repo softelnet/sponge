@@ -23,7 +23,7 @@ public class ErrorResponseException extends SpongeClientException {
 
     private static final long serialVersionUID = 3962360804569372072L;
 
-    private String errorCode;
+    private Integer errorCode;
 
     private String detailedErrorMessage;
 
@@ -55,11 +55,11 @@ public class ErrorResponseException extends SpongeClientException {
         super(message, throwable);
     }
 
-    public String getErrorCode() {
+    public Integer getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(String errorCode) {
+    public void setErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
     }
 

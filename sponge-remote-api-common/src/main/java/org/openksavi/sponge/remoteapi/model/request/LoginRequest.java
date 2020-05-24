@@ -18,18 +18,21 @@ package org.openksavi.sponge.remoteapi.model.request;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "LoginRequest", description = "A login request")
-public class LoginRequest extends SpongeRequest {
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 
-    public LoginRequest() {
+@ApiModel(value = "LoginRequest", description = "A login request")
+public class LoginRequest extends BaseRequest<BaseRequestParams> {
+
+    public LoginRequest(BaseRequestParams body) {
+        super(RemoteApiConstants.OPERATION_LOGIN, body);
     }
 
-    public LoginRequest(String username, String password) {
-        if (getHeader() == null) {
-            setHeader(new RequestHeader());
-        }
+    public LoginRequest() {
+        this(new BaseRequestParams());
+    }
 
-        getHeader().setUsername(username);
-        getHeader().setPassword(password);
+    @Override
+    public BaseRequestParams createParams() {
+        return new BaseRequestParams();
     }
 }

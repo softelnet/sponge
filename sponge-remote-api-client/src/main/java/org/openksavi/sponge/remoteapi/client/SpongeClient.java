@@ -54,6 +54,7 @@ import org.openksavi.sponge.remoteapi.model.response.LoginResponse;
 import org.openksavi.sponge.remoteapi.model.response.LogoutResponse;
 import org.openksavi.sponge.remoteapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.remoteapi.model.response.ReloadResponse;
+import org.openksavi.sponge.remoteapi.model.response.ResponseError;
 import org.openksavi.sponge.remoteapi.model.response.SendEventResponse;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 import org.openksavi.sponge.remoteapi.type.converter.TypeConverter;
@@ -63,6 +64,7 @@ import org.openksavi.sponge.type.provided.ProvidedValue;
 /**
  * A Sponge Remote API client.
  */
+@SuppressWarnings("rawtypes")
 public interface SpongeClient extends Closeable {
 
     /**
@@ -712,7 +714,7 @@ public interface SpongeClient extends Closeable {
 
     <T extends SpongeRequest> T setupRequest(T request);
 
-    void handleResponseHeader(String operation, String errorCode, String errorMessage, String detailedErrorMessage);
+    void handleErrorResponse(String operation, ResponseError error);
 
     <T, X> X executeWithAuthentication(T request, String requestUsername, String requestPassword, String requestAuthToken,
             Function<T, X> onExecute, Supplier<T> onClearAuthToken);

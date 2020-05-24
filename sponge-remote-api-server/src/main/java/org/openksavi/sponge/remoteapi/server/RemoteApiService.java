@@ -53,8 +53,8 @@ import org.openksavi.sponge.remoteapi.server.listener.OnSessionCloseListener;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionOpenListener;
 import org.openksavi.sponge.remoteapi.server.security.AccessService;
 import org.openksavi.sponge.remoteapi.server.security.AuthTokenService;
-import org.openksavi.sponge.remoteapi.server.security.SecurityService;
 import org.openksavi.sponge.remoteapi.server.security.RequestAuthenticationService;
+import org.openksavi.sponge.remoteapi.server.security.SecurityService;
 import org.openksavi.sponge.remoteapi.server.security.UserContext;
 import org.openksavi.sponge.remoteapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataType;
@@ -64,6 +64,7 @@ import org.openksavi.sponge.util.Initializable;
 /**
  * Sponge Remote API service.
  */
+@SuppressWarnings("rawtypes")
 public interface RemoteApiService extends HasEngine, Initializable {
 
     RemoteApiSettings getSettings();
@@ -120,7 +121,7 @@ public interface RemoteApiService extends HasEngine, Initializable {
 
     Map<String, Object> getFeatures();
 
-    SpongeResponse createGenericErrorResponse(Throwable e);
+    SpongeResponse createErrorResponse(Throwable e);
 
     TypeConverter getTypeConverter();
 
@@ -147,7 +148,6 @@ public interface RemoteApiService extends HasEngine, Initializable {
      */
     void closeSession();
 
-    @SuppressWarnings("rawtypes")
     DataType marshalDataType(DataType type);
 
     RemoteActionMeta marshalActionMeta(RemoteActionMeta actionMeta);

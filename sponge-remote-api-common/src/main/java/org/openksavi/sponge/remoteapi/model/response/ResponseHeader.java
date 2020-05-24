@@ -19,6 +19,9 @@ package org.openksavi.sponge.remoteapi.model.response;
 import java.time.Instant;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -30,55 +33,14 @@ import org.openksavi.sponge.util.HasFeatures;
 @ApiModel(value = "ResponseHeader", description = "A response header")
 public class ResponseHeader implements HasFeatures {
 
-    private String id;
-
-    private String errorCode;
-
-    private String errorMessage;
-
-    private String detailedErrorMessage;
-
+    @JsonInclude(Include.NON_NULL)
     private Instant requestTime;
 
+    @JsonInclude(Include.NON_NULL)
     private Instant responseTime;
 
+    @JsonInclude(Include.NON_EMPTY)
     private Map<String, Object> features;
-
-    @ApiModelProperty(value = "The corresponding request id", required = false)
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @ApiModelProperty(value = "The optional error code in case of server side error", required = false)
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    @ApiModelProperty(value = "The optional error message in case of server side error", required = false)
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    @ApiModelProperty(value = "The optional detailed error message in case of server side error", required = false)
-    public String getDetailedErrorMessage() {
-        return detailedErrorMessage;
-    }
-
-    public void setDetailedErrorMessage(String detailedErrorMessage) {
-        this.detailedErrorMessage = detailedErrorMessage;
-    }
 
     @ApiModelProperty(value = "The optional request time", required = false)
     public Instant getRequestTime() {

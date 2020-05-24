@@ -42,7 +42,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
-import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
+import org.openksavi.sponge.remoteapi.model.response.ErrorResponse;
 import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -67,9 +67,9 @@ public class HttpTest extends BasicTestTemplate {
                 .post(RequestBody.create(MediaType.get(RemoteApiConstants.CONTENT_TYPE_JSON), requestBody)).build()).execute();
         assertEquals(500, okHttpResponse.code());
         ObjectMapper mapper = RemoteApiUtils.createObjectMapper();
-        SpongeResponse apiResponse = mapper.readValue(okHttpResponse.body().string(), SpongeResponse.class);
-        assertEquals(RemoteApiConstants.ERROR_CODE_GENERIC, apiResponse.getHeader().getErrorCode());
-        assertTrue(apiResponse.getHeader().getErrorMessage().contains("Unrecognized field \"error_property\""));
+        ErrorResponse apiResponse = mapper.readValue(okHttpResponse.body().string(), ErrorResponse.class);
+        assertEquals(RemoteApiConstants.ERROR_CODE_STANDARD_PARSE, apiResponse.getError().getCode());
+        assertTrue(apiResponse.getError().getMessage().contains("Unrecognized field \"error_property\""));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class HttpTest extends BasicTestTemplate {
 
         Response okHttpResponse = client.newCall(new Request.Builder()
                 .url(new HttpUrl.Builder().scheme("http").host("localhost").port(port).addPathSegment("call")
-                        .addQueryParameter("request", "{\"body\":{\"name\":\"OutputStreamResultAction\",\"args\":[]}}").build())
+                        .addQueryParameter("request", "{\"params\":{\"name\":\"OutputStreamResultAction\",\"args\":[]}}").build())
                 .get().build()).execute();
         assertEquals(200, okHttpResponse.code());
         byte[] responseBody = okHttpResponse.body().bytes();
@@ -105,7 +105,7 @@ public class HttpTest extends BasicTestTemplate {
         Response okHttpResponse = client.newCall(new Request.Builder().url(String.format("http://localhost:%d/call", port))
                 .headers(new Headers.Builder().add("Content-Type", RemoteApiConstants.CONTENT_TYPE_JSON).build())
                 .post(RequestBody.create(MediaType.get(RemoteApiConstants.CONTENT_TYPE_JSON),
-                        "{\"body\":{\"name\":\"OutputStreamResultAction\",\"args\":[]}}"))
+                        "{\"params\":{\"name\":\"OutputStreamResultAction\",\"args\":[]}}"))
                 .build()).execute();
         assertEquals(200, okHttpResponse.code());
         byte[] responseBody = okHttpResponse.body().bytes();

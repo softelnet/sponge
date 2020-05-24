@@ -45,7 +45,9 @@ import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityProvider;
 import org.openksavi.sponge.remoteapi.server.test.PortTestConfig;
 import org.openksavi.sponge.remoteapi.server.test.remote.delegate.UpperCaseRequest;
+import org.openksavi.sponge.remoteapi.server.test.remote.delegate.UpperCaseRequest.UpperCaseParams;
 import org.openksavi.sponge.remoteapi.server.test.remote.delegate.UpperCaseResponse;
+import org.openksavi.sponge.remoteapi.server.test.remote.delegate.UpperCaseResponse.UpperCaseResult;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @Execution(ExecutionMode.SAME_THREAD)
@@ -54,6 +56,8 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 @ContextConfiguration(classes = { ActionDelegateRemoteApiOperationTest.TestConfig.class })
 @DirtiesContext
 public class ActionDelegateRemoteApiOperationTest {
+
+    public static final String OPERATION = "upperCase";
 
     @Inject
     protected SpongeEngine engine;
@@ -101,9 +105,10 @@ public class ActionDelegateRemoteApiOperationTest {
         String text = "TeXt";
 
         try (SpongeClient client = createClient()) {
-            UpperCaseResponse response = client.execute("upperCase", new UpperCaseRequest(text), UpperCaseResponse.class);
+            UpperCaseResponse response =
+                    client.execute("upperCase", new UpperCaseRequest(new UpperCaseParams(text)), UpperCaseResponse.class);
 
-            assertEquals(text.toUpperCase(), response.getBody().getResult());
+            assertEquals(text.toUpperCase(), response.getResult().getValue());
         }
     }
 
@@ -111,10 +116,10 @@ public class ActionDelegateRemoteApiOperationTest {
 
         @Override
         protected void createCustomOperations() {
-            addOperation(ActionDelegateOperation.<UpperCaseRequest, UpperCaseResponse, String>builder().name("upperCase")
+            addOperation(ActionDelegateOperation.<UpperCaseRequest, UpperCaseResponse, String>builder().name(OPERATION)
                     .requestClass(UpperCaseRequest.class).requestDescription("Text").responseClass(UpperCaseResponse.class)
-                    .responseDescription("Result").argsMapper(request -> Arrays.asList(request.getBody().getText()))
-                    .resultMapper((response, result) -> response.getBody().setResult(result)).build());
+                    .responseDescription("Result").argsMapper(request -> Arrays.asList(request.getParams().getText()))
+                    .resultMapper((response, result) -> response.setResult(new UpperCaseResult(result))).build());
         }
     }
 }

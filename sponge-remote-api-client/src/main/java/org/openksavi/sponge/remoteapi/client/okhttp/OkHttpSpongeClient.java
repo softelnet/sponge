@@ -46,6 +46,7 @@ import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
  * A Sponge Remote API client that uses OkHttp. OkHttpSpongeClient performs best when you create a single OkHttpSpongeClient instance and
  * reuse it for all of your Remote API calls.
  */
+@SuppressWarnings("rawtypes")
 public class OkHttpSpongeClient extends BaseSpongeClient {
 
     private static final Logger logger = LoggerFactory.getLogger(OkHttpSpongeClient.class);

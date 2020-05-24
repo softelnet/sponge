@@ -22,6 +22,7 @@ import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
  * Error response provider.
  */
 @FunctionalInterface
+@SuppressWarnings("rawtypes")
 public interface ErrorResponseProvider {
 
     void applyException(RemoteApiService service, SpongeResponse response, Throwable exception);

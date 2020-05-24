@@ -25,6 +25,7 @@ import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
  * A Remote API operation handler.
  */
 @FunctionalInterface
+@SuppressWarnings("rawtypes")
 public interface RemoteApiOperationHandler<I extends SpongeRequest, O extends SpongeResponse> {
 
     O handle(RemoteApiService service, I request, Exchange exchange);

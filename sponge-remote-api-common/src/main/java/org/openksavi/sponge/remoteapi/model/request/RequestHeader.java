@@ -18,6 +18,9 @@ package org.openksavi.sponge.remoteapi.model.request;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -29,24 +32,17 @@ import org.openksavi.sponge.util.HasFeatures;
 @ApiModel(value = "RequestHeader", description = "A request header")
 public class RequestHeader implements HasFeatures {
 
-    private String id;
-
+    @JsonInclude(Include.NON_NULL)
     private String username;
 
+    @JsonInclude(Include.NON_NULL)
     private String password;
 
+    @JsonInclude(Include.NON_NULL)
     private String authToken;
 
+    @JsonInclude(Include.NON_EMPTY)
     private Map<String, Object> features;
-
-    @ApiModelProperty(value = "The request id", required = false)
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     @ApiModelProperty(value = "The username", required = false)
     public String getUsername() {

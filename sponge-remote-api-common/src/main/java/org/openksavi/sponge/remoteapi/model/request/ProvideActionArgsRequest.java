@@ -23,39 +23,29 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
-import org.openksavi.sponge.remoteapi.model.request.ProvideActionArgsRequest.ProvideActionArgsRequestBody;
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+import org.openksavi.sponge.remoteapi.model.request.ProvideActionArgsRequest.ProvideActionArgsParams;
 import org.openksavi.sponge.type.DataType;
 
 @ApiModel(value = "ProvideActionArgsRequest", description = "A provide action arguments request")
 @SuppressWarnings("rawtypes")
-public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArgsRequestBody> {
+public class ProvideActionArgsRequest extends BaseRequest<ProvideActionArgsParams> {
 
-    public ProvideActionArgsRequest(ProvideActionArgsRequestBody body) {
-        super(body);
+    public ProvideActionArgsRequest(ProvideActionArgsParams body) {
+        super(RemoteApiConstants.OPERATION_PROVIDE_ACTION_ARGS, body);
     }
 
     public ProvideActionArgsRequest() {
-        this(new ProvideActionArgsRequestBody());
-    }
-
-    public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
-            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> argFeatures, ProcessorQualifiedVersion qualifiedVersion,
-            Boolean initial) {
-        this(new ProvideActionArgsRequestBody(name, provide, submit, current, dynamicTypes, argFeatures, qualifiedVersion, initial));
-    }
-
-    public ProvideActionArgsRequest(String name, List<String> provide, List<String> submit, Map<String, Object> current,
-            Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> argFeatures) {
-        this(new ProvideActionArgsRequestBody(name, provide, submit, current, dynamicTypes, argFeatures, null, null));
+        this(new ProvideActionArgsParams());
     }
 
     @Override
-    public ProvideActionArgsRequestBody createBody() {
-        return new ProvideActionArgsRequestBody();
+    public ProvideActionArgsParams createParams() {
+        return new ProvideActionArgsParams();
     }
 
-    @ApiModel(value = "ProvideActionArgsRequestBody", description = "A provide action arguments request body")
-    public static class ProvideActionArgsRequestBody implements RequestBody, ActionExecutionInfo {
+    @ApiModel(value = "ProvideActionArgsParams", description = "A provide action arguments request params")
+    public static class ProvideActionArgsParams extends BaseRequestParams implements ActionExecutionInfo {
 
         private String name;
 
@@ -73,7 +63,7 @@ public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArg
 
         private Boolean initial;
 
-        public ProvideActionArgsRequestBody(String name, List<String> provide, List<String> submit, Map<String, Object> current,
+        public ProvideActionArgsParams(String name, List<String> provide, List<String> submit, Map<String, Object> current,
                 Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> argFeatures,
                 ProcessorQualifiedVersion qualifiedVersion, Boolean initial) {
             this.name = name;
@@ -86,12 +76,12 @@ public class ProvideActionArgsRequest extends BodySpongeRequest<ProvideActionArg
             this.initial = initial;
         }
 
-        public ProvideActionArgsRequestBody(String name, List<String> provide, List<String> submit, Map<String, Object> current,
+        public ProvideActionArgsParams(String name, List<String> provide, List<String> submit, Map<String, Object> current,
                 Map<String, DataType> dynamicTypes, Map<String, Map<String, Object>> features) {
             this(name, provide, submit, current, dynamicTypes, features, null, null);
         }
 
-        public ProvideActionArgsRequestBody() {
+        public ProvideActionArgsParams() {
         }
 
         @Override

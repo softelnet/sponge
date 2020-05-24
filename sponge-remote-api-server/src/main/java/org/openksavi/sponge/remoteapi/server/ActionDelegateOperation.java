@@ -28,6 +28,7 @@ import org.apache.commons.lang3.reflect.ConstructorUtils;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
+import org.openksavi.sponge.remoteapi.model.request.RequestHeader;
 import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 import org.openksavi.sponge.remoteapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
@@ -40,6 +41,7 @@ import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
  * @param <O> a response.
  * @param <A> an action result.
  */
+@SuppressWarnings("rawtypes")
 public class ActionDelegateOperation<I extends SpongeRequest, O extends SpongeResponse, A> extends RemoteApiOperation<I, O> {
 
     @SuppressWarnings("unchecked")
@@ -48,48 +50,36 @@ public class ActionDelegateOperation<I extends SpongeRequest, O extends SpongeRe
             BiConsumer<O, A> resultMapper) {
         super(name, description, requestClass, requestDescription, responseClass, responseDescription, (service, request, exchange) -> {
             ActionCallRequest actionCallRequest = new ActionCallRequest();
+            actionCallRequest.getParams().setHeader(new RequestHeader());
 
-            actionCallRequest.getHeader().setId(request.getHeader().getId());
-            actionCallRequest.getHeader().setUsername(request.getHeader().getUsername());
-            actionCallRequest.getHeader().setPassword(request.getHeader().getPassword());
-            actionCallRequest.getHeader().setAuthToken(request.getHeader().getAuthToken());
-            actionCallRequest.getHeader().setFeatures(request.getHeader().getFeatures());
+            actionCallRequest.setId(request.getId());
+            actionCallRequest.getParams().getHeader().setUsername(request.getParams().getHeader().getUsername());
+            actionCallRequest.getParams().getHeader().setPassword(request.getParams().getHeader().getPassword());
+            actionCallRequest.getParams().getHeader().setAuthToken(request.getParams().getHeader().getAuthToken());
+            actionCallRequest.getParams().getHeader().setFeatures(request.getParams().getHeader().getFeatures());
 
             // The default naming convention for an action name if not provided.
             final String delegateActionName = actionName != null ? actionName : StringUtils.capitalize(name);
 
-            actionCallRequest.getBody().setName(delegateActionName);
-            actionCallRequest.getBody().setArgs(argsMapper != null ? argsMapper.apply(request) : Arrays.asList(request));
+            actionCallRequest.getParams().setName(delegateActionName);
+            actionCallRequest.getParams().setArgs(argsMapper != null ? argsMapper.apply(request) : Arrays.asList(request));
 
             ActionCallResponse actionCallResponse = service.call(actionCallRequest);
 
-            Object rawResult = actionCallResponse.getBody().getResult();
+            Object rawResult = actionCallResponse.getResult().getValue();
+
             O response;
-            if (resultMapper != null) {
-                try {
-                    response = ConstructorUtils.invokeConstructor(responseClass);
-                } catch (NoSuchMethodException | IllegalAccessException | InstantiationException e) {
-                    throw SpongeUtils.wrapException(e);
-                } catch (InvocationTargetException e) {
-                    throw SpongeUtils.wrapException(e.getTargetException());
-                }
-
-                resultMapper.accept(response, (A) rawResult);
-            } else {
-                Validate.isInstanceOf(responseClass, rawResult, "The %s action result class is %s but should be %s", delegateActionName,
-                        rawResult != null ? rawResult.getClass() : null, responseClass);
-
-                response = (O) rawResult;
+            try {
+                response = ConstructorUtils.invokeConstructor(responseClass);
+            } catch (NoSuchMethodException | IllegalAccessException | InstantiationException e) {
+                throw SpongeUtils.wrapException(e);
+            } catch (InvocationTargetException e) {
+                throw SpongeUtils.wrapException(e.getTargetException());
             }
 
-            // An action shouldn't set the base response properties.
-            response.getHeader().setId(actionCallResponse.getHeader().getId());
-            response.getHeader().setErrorMessage(actionCallResponse.getHeader().getErrorMessage());
-            response.getHeader().setErrorCode(actionCallResponse.getHeader().getErrorCode());
-            response.getHeader().setDetailedErrorMessage(actionCallResponse.getHeader().getDetailedErrorMessage());
-            response.getHeader().setRequestTime(actionCallResponse.getHeader().getRequestTime());
-            response.getHeader().setResponseTime(actionCallResponse.getHeader().getResponseTime());
-            response.getHeader().setFeatures(actionCallResponse.getHeader().getFeatures());
+            resultMapper.accept(response, (A) rawResult);
+
+            response.setId(actionCallResponse.getId());
 
             return response;
         });
@@ -173,8 +163,8 @@ public class ActionDelegateOperation<I extends SpongeRequest, O extends SpongeRe
             Validate.notNull(argsMapper, "The action args mapper must be set");
             Validate.notNull(resultMapper, "The action result mapper must be set");
 
-            return new ActionDelegateOperation<>(name, description, requestClass, requestDescription, responseClass,
-                    responseDescription, actionName, argsMapper, resultMapper);
+            return new ActionDelegateOperation<>(name, description, requestClass, requestDescription, responseClass, responseDescription,
+                    actionName, argsMapper, resultMapper);
         }
     }
 }

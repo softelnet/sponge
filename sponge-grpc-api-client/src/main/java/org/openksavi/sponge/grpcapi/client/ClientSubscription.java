@@ -24,7 +24,9 @@ import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
 
 import org.openksavi.sponge.grpcapi.client.util.GrpcClientUtils;
+import org.openksavi.sponge.grpcapi.proto.RequestHeader;
 import org.openksavi.sponge.grpcapi.proto.SubscribeRequest;
+import org.openksavi.sponge.grpcapi.proto.SubscribeRequest.Builder;
 import org.openksavi.sponge.grpcapi.proto.SubscribeResponse;
 import org.openksavi.sponge.remoteapi.model.RemoteEvent;
 
@@ -122,8 +124,14 @@ public class ClientSubscription {
             grpcClient.getVersion();
         }
 
-        return SubscribeRequest.newBuilder().setHeader(GrpcClientUtils.createRequestHeader(grpcClient.getSpongeClient()))
-                .addAllEventNames(eventNames).setRegisteredTypeRequired(registeredTypeRequired).build();
+        Builder subscribeBuilder = SubscribeRequest.newBuilder();
+
+        RequestHeader header = GrpcClientUtils.createRequestHeader(grpcClient.getSpongeClient());
+        if (header != null) {
+            subscribeBuilder.setHeader(header);
+        }
+
+        return subscribeBuilder.addAllEventNames(eventNames).setRegisteredTypeRequired(registeredTypeRequired).build();
     }
 
     /**

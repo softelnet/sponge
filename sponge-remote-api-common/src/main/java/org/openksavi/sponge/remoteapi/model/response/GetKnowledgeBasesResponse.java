@@ -22,47 +22,33 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.remoteapi.model.RemoteKnowledgeBaseMeta;
-import org.openksavi.sponge.remoteapi.model.response.GetKnowledgeBasesResponse.GetKnowledgeBasesResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.GetKnowledgeBasesResponse.GetKnowledgeBasesResult;
 
 @ApiModel(value = "GetKnowledgeBasesResponse", description = "A get knowledge bases response")
-public class GetKnowledgeBasesResponse extends BodySpongeResponse<GetKnowledgeBasesResponseBody> {
+public class GetKnowledgeBasesResponse extends BaseResponse<GetKnowledgeBasesResult> {
 
-    public GetKnowledgeBasesResponse(GetKnowledgeBasesResponseBody body) {
-        super(body);
+    public GetKnowledgeBasesResponse(GetKnowledgeBasesResult result) {
+        super(result);
     }
 
     public GetKnowledgeBasesResponse() {
-        this(new GetKnowledgeBasesResponseBody());
+        this(null);
     }
 
-    public GetKnowledgeBasesResponse(List<RemoteKnowledgeBaseMeta> knowledgeBases) {
-        this(new GetKnowledgeBasesResponseBody(knowledgeBases));
-    }
+    @ApiModel(value = "GetKnowledgeBasesResult", description = "A get knowledge bases response result")
+    public static class GetKnowledgeBasesResult extends BaseResponseResult<List<RemoteKnowledgeBaseMeta>> {
 
-    @Override
-    public GetKnowledgeBasesResponseBody createBody() {
-        return new GetKnowledgeBasesResponseBody();
-    }
-
-    @ApiModel(value = "GetKnowledgeBasesResponseBody", description = "A get knowledge bases response body")
-    public static class GetKnowledgeBasesResponseBody implements ResponseBody {
-
-        private List<RemoteKnowledgeBaseMeta> knowledgeBases;
-
-        public GetKnowledgeBasesResponseBody() {
+        public GetKnowledgeBasesResult() {
         }
 
-        public GetKnowledgeBasesResponseBody(List<RemoteKnowledgeBaseMeta> knowledgeBases) {
-            this.knowledgeBases = knowledgeBases;
+        public GetKnowledgeBasesResult(List<RemoteKnowledgeBaseMeta> knowledgeBases) {
+            super(knowledgeBases);
         }
 
+        @Override
         @ApiModelProperty(value = "The available knowledge bases", required = true)
-        public List<RemoteKnowledgeBaseMeta> getKnowledgeBases() {
-            return knowledgeBases;
-        }
-
-        public void setKnowledgeBases(List<RemoteKnowledgeBaseMeta> knowledgeBases) {
-            this.knowledgeBases = knowledgeBases;
+        public List<RemoteKnowledgeBaseMeta> getValue() {
+            return super.getValue();
         }
     }
 }

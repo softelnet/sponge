@@ -129,6 +129,8 @@ public final class RemoteApiServerConstants {
 
     public static final String PROP_SERVICE_DISCOVERY_URL = "sponge.remoteApiServer.serviceDiscoveryUrl";
 
+    public static final String STATUS_OK = "ok";
+
     private RemoteApiServerConstants() {
         //
     }

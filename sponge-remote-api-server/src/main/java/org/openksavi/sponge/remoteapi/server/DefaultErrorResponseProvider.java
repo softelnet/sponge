@@ -16,28 +16,35 @@
 
 package org.openksavi.sponge.remoteapi.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.openksavi.sponge.action.InactiveActionException;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+import org.openksavi.sponge.remoteapi.model.response.ResponseError;
+import org.openksavi.sponge.remoteapi.model.response.ResponseError.ErrorData;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
 
 /**
  * A default error response provider.
  */
+@SuppressWarnings("rawtypes")
 public class DefaultErrorResponseProvider implements ErrorResponseProvider {
 
     @Override
     public void applyException(RemoteApiService service, SpongeResponse response, Throwable exception) {
-        response.getHeader().setErrorCode(RemoteApiConstants.ERROR_CODE_GENERIC);
+        response.setError(new ResponseError());
+
+        response.getError().setCode(RemoteApiConstants.ERROR_CODE_GENERIC);
 
         // There is a possibility that exceptions thrown in Camel would contain a full request with a password, so it must be hidden
         // here because it could be sent to a client.
-        response.getHeader().setErrorMessage(RemoteApiUtils.obfuscatePassword(exception.getMessage()));
+        response.getError().setMessage(RemoteApiUtils.obfuscatePassword(exception.getMessage()));
 
         if (service.getSettings().isIncludeDetailedErrorMessage()) {
-            response.getHeader().setDetailedErrorMessage(RemoteApiUtils.obfuscatePassword(ExceptionUtils.getStackTrace(exception)));
+            response.getError().setData(new ErrorData(RemoteApiUtils.obfuscatePassword(ExceptionUtils.getStackTrace(exception))));
         }
 
         // Specific error codes.
@@ -45,14 +52,16 @@ public class DefaultErrorResponseProvider implements ErrorResponseProvider {
     }
 
     protected void applySpecificErrorCodes(RemoteApiService service, SpongeResponse response, Throwable exception) {
-        if (exception instanceof InvalidAuthTokenServerException) {
-            response.getHeader().setErrorCode(RemoteApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN);
+        if (exception instanceof JsonProcessingException) {
+            response.getError().setCode(RemoteApiConstants.ERROR_CODE_STANDARD_PARSE);
+        } else if (exception instanceof InvalidAuthTokenServerException) {
+            response.getError().setCode(RemoteApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN);
         } else if (exception instanceof InvalidKnowledgeBaseVersionServerException) {
-            response.getHeader().setErrorCode(RemoteApiConstants.ERROR_CODE_INVALID_KB_VERSION);
+            response.getError().setCode(RemoteApiConstants.ERROR_CODE_INVALID_KB_VERSION);
         } else if (exception instanceof InvalidUsernamePasswordServerException) {
-            response.getHeader().setErrorCode(RemoteApiConstants.ERROR_CODE_INVALID_USERNAME_PASSWORD);
+            response.getError().setCode(RemoteApiConstants.ERROR_CODE_INVALID_USERNAME_PASSWORD);
         } else if (exception instanceof InactiveActionException) {
-            response.getHeader().setErrorCode(RemoteApiConstants.ERROR_CODE_INACTIVE_ACTION);
+            response.getError().setCode(RemoteApiConstants.ERROR_CODE_INACTIVE_ACTION);
         }
     }
 }

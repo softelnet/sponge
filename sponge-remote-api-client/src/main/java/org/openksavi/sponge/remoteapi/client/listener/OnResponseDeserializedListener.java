@@ -20,6 +20,7 @@ import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 
 @FunctionalInterface
+@SuppressWarnings("rawtypes")
 public interface OnResponseDeserializedListener {
 
     /**

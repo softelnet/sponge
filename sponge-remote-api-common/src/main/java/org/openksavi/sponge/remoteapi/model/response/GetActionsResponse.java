@@ -23,42 +23,49 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
-import org.openksavi.sponge.remoteapi.model.response.GetActionsResponse.GetActionsResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.GetActionsResponse.GetActionsResult;
 import org.openksavi.sponge.type.DataType;
 
 @ApiModel(value = "GetActionsResponse", description = "A get actions response")
-public class GetActionsResponse extends BodySpongeResponse<GetActionsResponseBody> {
+public class GetActionsResponse extends BaseResponse<GetActionsResult> {
 
-    public GetActionsResponse(GetActionsResponseBody body) {
+    public GetActionsResponse(GetActionsResult body) {
         super(body);
     }
 
     public GetActionsResponse() {
-        this(new GetActionsResponseBody());
+        this(null);
     }
 
-    public GetActionsResponse(List<RemoteActionMeta> actions, Map<String, DataType<?>> types) {
-        this(new GetActionsResponseBody(actions, types));
+    @ApiModel(value = "GetActionsResult", description = "A get actions response result")
+    public static class GetActionsResult extends BaseResponseResult<GetActionsValue> {
+
+        public GetActionsResult() {
+        }
+
+        public GetActionsResult(GetActionsValue value) {
+            super(value);
+        }
+
+        @Override
+        @ApiModelProperty(value = "The actions metadata", required = true)
+        public GetActionsValue getValue() {
+            return super.getValue();
+        }
     }
 
-    @Override
-    public GetActionsResponseBody createBody() {
-        return new GetActionsResponseBody();
-    }
-
-    @ApiModel(value = "GetActionsResponseBody", description = "A get actions response body")
-    public static class GetActionsResponseBody implements ResponseBody {
+    public static class GetActionsValue {
 
         private List<RemoteActionMeta> actions;
 
         private Map<String, DataType<?>> types;
 
-        public GetActionsResponseBody(List<RemoteActionMeta> actions, Map<String, DataType<?>> types) {
+        public GetActionsValue(List<RemoteActionMeta> actions, Map<String, DataType<?>> types) {
             this.actions = actions;
             this.types = types;
         }
 
-        public GetActionsResponseBody() {
+        public GetActionsValue() {
         }
 
         @ApiModelProperty(value = "The available actions", required = true)

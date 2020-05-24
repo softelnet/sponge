@@ -21,30 +21,27 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.request.SendEventRequest.SendEventRequestBody;
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+import org.openksavi.sponge.remoteapi.model.request.SendEventRequest.SendEventParams;
 
 @ApiModel(value = "SendEventRequest", description = "A send event request")
-public class SendEventRequest extends BodySpongeRequest<SendEventRequestBody> {
+public class SendEventRequest extends BaseRequest<SendEventParams> {
 
-    public SendEventRequest(SendEventRequestBody body) {
-        super(body);
+    public SendEventRequest(SendEventParams body) {
+        super(RemoteApiConstants.OPERATION_SEND, body);
     }
 
     public SendEventRequest() {
-        this(new SendEventRequestBody());
-    }
-
-    public SendEventRequest(String name, Map<String, Object> attributes, String label, String description, Map<String, Object> features) {
-        this(new SendEventRequestBody(name, attributes, label, description, features));
+        this(new SendEventParams());
     }
 
     @Override
-    public SendEventRequestBody createBody() {
-        return new SendEventRequestBody();
+    public SendEventParams createParams() {
+        return new SendEventParams();
     }
 
-    @ApiModel(value = "SendEventRequestBody", description = "A send event request body")
-    public static class SendEventRequestBody implements RequestBody {
+    @ApiModel(value = "SendEventParams", description = "A send event request params")
+    public static class SendEventParams extends BaseRequestParams {
 
         private String name;
 
@@ -56,7 +53,7 @@ public class SendEventRequest extends BodySpongeRequest<SendEventRequestBody> {
 
         private Map<String, Object> features;
 
-        public SendEventRequestBody(String name, Map<String, Object> attributes, String label, String description,
+        public SendEventParams(String name, Map<String, Object> attributes, String label, String description,
                 Map<String, Object> features) {
             this.name = name;
             this.attributes = attributes;
@@ -65,7 +62,7 @@ public class SendEventRequest extends BodySpongeRequest<SendEventRequestBody> {
             this.features = features;
         }
 
-        public SendEventRequestBody() {
+        public SendEventParams() {
         }
 
         @ApiModelProperty(value = "The event name", required = true)

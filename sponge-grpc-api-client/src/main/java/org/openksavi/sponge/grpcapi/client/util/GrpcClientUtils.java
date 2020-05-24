@@ -18,9 +18,13 @@ package org.openksavi.sponge.grpcapi.client.util;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.rpc.Status;
+
+import io.grpc.protobuf.StatusProto;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -29,7 +33,7 @@ import org.openksavi.sponge.grpcapi.proto.Event;
 import org.openksavi.sponge.grpcapi.proto.ObjectValue;
 import org.openksavi.sponge.grpcapi.proto.RequestHeader;
 import org.openksavi.sponge.grpcapi.proto.RequestHeader.Builder;
-import org.openksavi.sponge.grpcapi.proto.ResponseHeader;
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 import org.openksavi.sponge.remoteapi.client.SpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClientException;
 import org.openksavi.sponge.remoteapi.feature.converter.FeaturesUtils;
@@ -125,12 +129,14 @@ public abstract class GrpcClientUtils {
      */
     public static RequestHeader createRequestHeader(SpongeClient spongeClient) {
         // Create a fake request to obtain a header.
-        org.openksavi.sponge.remoteapi.model.request.RequestHeader header = spongeClient.setupRequest(new GetVersionRequest()).getHeader();
+        org.openksavi.sponge.remoteapi.model.request.RequestHeader header =
+                spongeClient.setupRequest(new GetVersionRequest()).getParams().getHeader();
+
+        if (header == null) {
+            return null;
+        }
 
         Builder builder = RequestHeader.newBuilder();
-        if (header.getId() != null) {
-            builder.setId(header.getId());
-        }
         if (header.getUsername() != null) {
             builder.setUsername(header.getUsername());
         }
@@ -152,13 +158,26 @@ public abstract class GrpcClientUtils {
         return builder.build();
     }
 
-    public static void handleResponseHeader(SpongeClient spongeClient, String operation, ResponseHeader header) {
-        if (header == null) {
-            return;
+    public static boolean isPredefinedGrpcStatusCode(int code) {
+        return Arrays.stream(io.grpc.Status.Code.values()).map(s -> s.value()).anyMatch(c -> c == code);
+    }
+
+    public static void handleError(SpongeClient spongeClient, String operation, Exception e) {
+        Status status = StatusProto.fromThrowable(e);
+
+        org.openksavi.sponge.remoteapi.model.response.ResponseError responseError;
+
+        if (status != null) {
+            if (isPredefinedGrpcStatusCode(status.getCode()) && e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+            }
+
+            responseError = new org.openksavi.sponge.remoteapi.model.response.ResponseError(status.getCode(), status.getMessage());
         }
 
-        spongeClient.handleResponseHeader(operation, StringUtils.isNotEmpty(header.getErrorCode()) ? header.getErrorCode() : null,
-                StringUtils.isNotEmpty(header.getErrorMessage()) ? header.getErrorMessage() : null,
-                StringUtils.isNotEmpty(header.getDetailedErrorMessage()) ? header.getDetailedErrorMessage() : null);
+        responseError =
+                new org.openksavi.sponge.remoteapi.model.response.ResponseError(RemoteApiConstants.ERROR_CODE_GENERIC, e.getMessage());
+
+        spongeClient.handleErrorResponse(operation, responseError);
     }
 }

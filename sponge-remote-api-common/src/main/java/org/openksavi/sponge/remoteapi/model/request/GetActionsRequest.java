@@ -19,26 +19,27 @@ package org.openksavi.sponge.remoteapi.model.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest.GetActionsRequestBody;
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest.GetActionsParams;
 
 @ApiModel(value = "GetActionsRequest", description = "A get actions request")
-public class GetActionsRequest extends BodySpongeRequest<GetActionsRequestBody> {
+public class GetActionsRequest extends BaseRequest<GetActionsParams> {
 
-    public GetActionsRequest(GetActionsRequestBody body) {
-        super(body);
+    public GetActionsRequest(GetActionsParams body) {
+        super(RemoteApiConstants.OPERATION_ACTIONS, body);
     }
 
     public GetActionsRequest() {
-        super(new GetActionsRequestBody());
+        this(new GetActionsParams());
     }
 
     @Override
-    public GetActionsRequestBody createBody() {
-        return new GetActionsRequestBody();
+    public GetActionsParams createParams() {
+        return new GetActionsParams();
     }
 
-    @ApiModel(value = "GetActionsRequestBody", description = "A get actions request body")
-    public static class GetActionsRequestBody implements RequestBody {
+    @ApiModel(value = "GetActionsParams", description = "A get actions request params")
+    public static class GetActionsParams extends BaseRequestParams {
 
         private String name;
 

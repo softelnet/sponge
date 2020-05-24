@@ -53,7 +53,6 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
-import org.openksavi.sponge.remoteapi.model.request.BodySpongeRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetEventTypesRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetFeaturesRequest;
@@ -78,11 +77,13 @@ import org.openksavi.sponge.remoteapi.model.response.LoginResponse;
 import org.openksavi.sponge.remoteapi.model.response.LogoutResponse;
 import org.openksavi.sponge.remoteapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.remoteapi.model.response.ReloadResponse;
+import org.openksavi.sponge.remoteapi.model.response.ResponseHeader;
 import org.openksavi.sponge.remoteapi.model.response.SendEventResponse;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
 import org.openksavi.sponge.type.value.OutputStreamValue;
 
+@SuppressWarnings("rawtypes")
 public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiService {
 
     private static final Logger logger = LoggerFactory.getLogger(RemoteApiRouteBuilder.class);
@@ -140,7 +141,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                         Validate.notNull(exchange.getIn().getHeader(RemoteApiServerConstants.EXCHANGE_HEADER_OPERATION_NAME, String.class),
                                 "The operation name is not set in the Camel route");
 
-                setupResponse(operationName, exchange, apiService.createGenericErrorResponse(processingException));
+                setupResponse(operationName, exchange, apiService.createErrorResponse(processingException));
 
                 exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, RemoteApiConstants.HTTP_CODE_ERROR);
             } catch (Throwable e) {
@@ -204,16 +205,26 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
 
     protected void setupResponse(String operationName, Exchange exchange, SpongeResponse response) {
         try {
-            if (apiService.getSettings().isIncludeResponseTimes()) {
-                response.getHeader()
-                        .setRequestTime(exchange.getIn().getHeader(RemoteApiServerConstants.EXCHANGE_HEADER_REQUEST_TIME, Instant.class));
-                response.getHeader().setResponseTime(Instant.now());
-            }
+            if (response.getResult() != null) {
+                if (apiService.getSettings().isIncludeResponseTimes()) {
+                    if (response.getResult().getHeader() == null) {
+                        response.getResult().setHeader(new ResponseHeader());
+                    }
 
-            // Put response features from the session to the response header.
-            RemoteApiSession session = apiService.getSession();
-            if (session != null && !session.getResponseFeatures().isEmpty()) {
-                response.getHeader().setFeatures(session.getResponseFeatures());
+                    response.getResult().getHeader().setRequestTime(
+                            exchange.getIn().getHeader(RemoteApiServerConstants.EXCHANGE_HEADER_REQUEST_TIME, Instant.class));
+                    response.getResult().getHeader().setResponseTime(Instant.now());
+                }
+
+                // Put response features from the session to the response header.
+                RemoteApiSession session = apiService.getSession();
+                if (session != null && !session.getResponseFeatures().isEmpty()) {
+                    if (response.getResult().getHeader() == null) {
+                        response.getResult().setHeader(new ResponseHeader());
+                    }
+
+                    response.getResult().getHeader().setFeatures(session.getResponseFeatures());
+                }
             }
 
             String responseBody = getObjectMapper().writeValueAsString(response);
@@ -313,7 +324,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
 
     private <O extends SpongeResponse> OutputStreamValue getActionCallOutputStreamResponse(O response) {
         if (response instanceof ActionCallResponse) {
-            Object actionCallResult = ((ActionCallResponse) response).getBody().getResult();
+            Object actionCallResult = ((ActionCallResponse) response).getResult().getValue();
             if (actionCallResult instanceof OutputStreamValue) {
                 return (OutputStreamValue) actionCallResult;
             }
@@ -326,7 +337,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         return new CamelRemoteApiSession(null, exchange);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     protected <I extends SpongeRequest, O extends SpongeResponse> Processor
             createOperationExecutionProcessor(Function<Message, String> requestBodyProvider, RemoteApiOperation<I, O> operation) {
         return exchange -> {
@@ -349,16 +360,14 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
 
                 I request = getObjectMapper().readValue(requestBody, operation.getRequestClass());
 
-                // Set empty header if none.
-                if (request != null && request.getHeader() == null) {
-                    request.setHeader(new RequestHeader());
-                }
+                // Set empty params and header if none.
+                if (request != null) {
+                    if (request.getParams() == null) {
+                        request.setParams(request.createParams());
+                    }
 
-                // Set empty body if none.
-                if (request instanceof BodySpongeRequest) {
-                    BodySpongeRequest bodyRequest = (BodySpongeRequest) request;
-                    if (bodyRequest.getBody() == null) {
-                        bodyRequest.setBody(bodyRequest.createBody());
+                    if (request.getParams().getHeader() == null) {
+                        request.getParams().setHeader(new RequestHeader());
                     }
                 }
 

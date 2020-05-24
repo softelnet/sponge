@@ -18,7 +18,21 @@ package org.openksavi.sponge.remoteapi.model.request;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "GetKnowledgeBasesRequest", description = "A get knowledge bases request")
-public class GetKnowledgeBasesRequest extends SpongeRequest {
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 
+@ApiModel(value = "GetKnowledgeBasesRequest", description = "A get knowledge bases request")
+public class GetKnowledgeBasesRequest extends BaseRequest<BaseRequestParams> {
+
+    public GetKnowledgeBasesRequest(BaseRequestParams body) {
+        super(RemoteApiConstants.OPERATION_KNOWLEDGE_BASES, body);
+    }
+
+    public GetKnowledgeBasesRequest() {
+        this(new BaseRequestParams());
+    }
+
+    @Override
+    public BaseRequestParams createParams() {
+        return new BaseRequestParams();
+    }
 }

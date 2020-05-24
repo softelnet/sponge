@@ -36,24 +36,21 @@ public class ServerSubscription {
 
     private UserContext userContext;
 
-    private String requestId;
-
     private boolean active;
 
     public ServerSubscription(long id, List<String> eventNames, boolean registeredTypeRequired,
-            StreamObserver<SubscribeResponse> responseObserver, UserContext userContext, String requestId, boolean active) {
+            StreamObserver<SubscribeResponse> responseObserver, UserContext userContext, boolean active) {
         this.id = id;
         setEventNames(eventNames);
         this.registeredTypeRequired = registeredTypeRequired;
         this.responseObserver = responseObserver;
         this.userContext = userContext;
-        this.requestId = requestId;
         this.active = active;
     }
 
     public ServerSubscription(long id, List<String> eventNames, boolean registeredTypeRequired,
-            StreamObserver<SubscribeResponse> responseObserver, UserContext userContext, String requestId) {
-        this(id, eventNames, registeredTypeRequired, responseObserver, userContext, requestId, true);
+            StreamObserver<SubscribeResponse> responseObserver, UserContext userContext) {
+        this(id, eventNames, registeredTypeRequired, responseObserver, userContext, true);
     }
 
     public long getId() {
@@ -102,13 +99,5 @@ public class ServerSubscription {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
     }
 }

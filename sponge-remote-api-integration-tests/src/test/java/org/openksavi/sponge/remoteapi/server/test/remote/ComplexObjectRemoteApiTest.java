@@ -39,6 +39,7 @@ import org.openksavi.sponge.remoteapi.client.DefaultSpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
+import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest.ActionCallParams;
 import org.openksavi.sponge.remoteapi.server.test.RemoteApiTestUtils;
 import org.openksavi.sponge.remoteapi.test.base.CompoundComplexObject;
 import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
@@ -76,7 +77,9 @@ public class ComplexObjectRemoteApiTest extends BasicTestTemplate {
         CompoundComplexObject compoundObject = RemoteApiTestUtils.createCompoundComplexObject();
 
         try (SpongeClient client = createClient()) {
-            Object value = client.call(new ActionCallRequest(actionName, Arrays.asList(compoundObject)), null, false).getBody().getResult();
+            Object value =
+                    client.call(new ActionCallRequest(new ActionCallParams(actionName, Arrays.asList(compoundObject), null)), null, false)
+                            .getResult().getValue();
 
             assertTrue(value instanceof Map);
 

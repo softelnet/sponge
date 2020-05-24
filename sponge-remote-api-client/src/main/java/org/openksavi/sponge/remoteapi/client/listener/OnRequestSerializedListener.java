@@ -19,6 +19,7 @@ package org.openksavi.sponge.remoteapi.client.listener;
 import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 
 @FunctionalInterface
+@SuppressWarnings("rawtypes")
 public interface OnRequestSerializedListener {
 
     /**

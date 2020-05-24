@@ -19,24 +19,28 @@ package org.openksavi.sponge.remoteapi.server.security;
 import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.remoteapi.model.request.RequestHeader;
 import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 import org.openksavi.sponge.remoteapi.server.RemoteApiService;
 import org.openksavi.sponge.remoteapi.server.util.RemoteApiServerUtils;
 
+@SuppressWarnings("rawtypes")
 public class DefaultRequestAuthenticationService extends BaseRequestAuthenticationService {
 
     @Override
     public UserAuthentication authenticateRequest(SpongeRequest request) {
         RemoteApiService apiService = getRemoteApiService();
 
-        if (request.getHeader().getAuthToken() != null) {
-            Validate.isTrue(request.getHeader().getUsername() == null, "Username is not allowed when using a token-based auhentication");
-            Validate.isTrue(request.getHeader().getPassword() == null, "Password is not allowed when using a token-based auhentication");
+        RequestHeader header = request.getParams().getHeader();
+
+        if (header.getAuthToken() != null) {
+            Validate.isTrue(header.getUsername() == null, "Username is not allowed when using a token-based auhentication");
+            Validate.isTrue(header.getPassword() == null, "Password is not allowed when using a token-based auhentication");
 
             return Validate.notNull(apiService.getAuthTokenService(), "Auth token service not configured")
-                    .validateAuthToken(request.getHeader().getAuthToken());
+                    .validateAuthToken(header.getAuthToken());
         } else {
-            if (request.getHeader().getUsername() == null) {
+            if (header.getUsername() == null) {
                 if (apiService.getSettings().isAllowAnonymous()) {
                     return apiService.getSecurityService()
                             .authenticateAnonymous(RemoteApiServerUtils.createAnonymousUser(apiService.getSettings().getAnonymousRole()));
@@ -44,8 +48,8 @@ public class DefaultRequestAuthenticationService extends BaseRequestAuthenticati
                     throw new SpongeException("Anonymous access is not allowed");
                 }
             } else {
-                return apiService.getSecurityService().authenticateUser(new UserAuthenticationQuery(request.getHeader().getUsername(),
-                        request.getHeader().getPassword(), request.getHeader().getAuthToken(), apiService.getSession()));
+                return apiService.getSecurityService().authenticateUser(new UserAuthenticationQuery(header.getUsername(),
+                        header.getPassword(), header.getAuthToken(), apiService.getSession()));
             }
         }
     }

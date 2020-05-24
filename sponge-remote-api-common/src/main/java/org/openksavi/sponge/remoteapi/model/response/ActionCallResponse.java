@@ -19,47 +19,32 @@ package org.openksavi.sponge.remoteapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.response.ActionCallResponse.ActionCallResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.ActionCallResponse.ActionCallResult;
 
 @ApiModel(value = "ActionCallResponse", description = "An action call response")
-public class ActionCallResponse extends BodySpongeResponse<ActionCallResponseBody> {
+public class ActionCallResponse extends BaseResponse<ActionCallResult> {
 
-    public ActionCallResponse(ActionCallResponseBody body) {
-        super(body);
+    public ActionCallResponse(ActionCallResult result) {
+        super(result);
     }
 
     public ActionCallResponse() {
-        this(new ActionCallResponseBody());
     }
 
-    public ActionCallResponse(Object result) {
-        this(new ActionCallResponseBody(result));
-    }
+    @ApiModel(value = "ActionCallResult", description = "An action call response result")
+    public static class ActionCallResult extends BaseResponseResult<Object> {
 
-    @Override
-    public ActionCallResponseBody createBody() {
-        return new ActionCallResponseBody();
-    }
-
-    @ApiModel(value = "ActionCallResponseBody", description = "An action call response body")
-    public static class ActionCallResponseBody implements ResponseBody {
-
-        private Object result;
-
-        public ActionCallResponseBody() {
+        public ActionCallResult() {
         }
 
-        public ActionCallResponseBody(Object result) {
-            this.result = result;
+        public ActionCallResult(Object result) {
+            super(result);
         }
 
+        @Override
         @ApiModelProperty(value = "The action result", required = true)
-        public Object getResult() {
-            return result;
-        }
-
-        public void setResult(Object result) {
-            this.result = result;
+        public Object getValue() {
+            return super.getValue();
         }
     }
 }

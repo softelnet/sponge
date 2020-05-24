@@ -21,48 +21,34 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.response.ProvideActionArgsResponse.ProvideActionArgsResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.ProvideActionArgsResponse.ProvideActionArgsResult;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
 @ApiModel(value = "ProvideActionArgsResponse", description = "A provide action arguments response")
-public class ProvideActionArgsResponse extends BodySpongeResponse<ProvideActionArgsResponseBody> {
+public class ProvideActionArgsResponse extends BaseResponse<ProvideActionArgsResult> {
 
-    public ProvideActionArgsResponse(ProvideActionArgsResponseBody body) {
-        super(body);
+    public ProvideActionArgsResponse(ProvideActionArgsResult result) {
+        super(result);
     }
 
     public ProvideActionArgsResponse() {
-        this(new ProvideActionArgsResponseBody());
+        this(null);
     }
 
-    public ProvideActionArgsResponse(Map<String, ProvidedValue<?>> provided) {
-        this(new ProvideActionArgsResponseBody(provided));
-    }
+    @ApiModel(value = "ProvideActionArgsResult", description = "A provide action arguments response result")
+    public static class ProvideActionArgsResult extends BaseResponseResult<Map<String, ProvidedValue<?>>> {
 
-    @Override
-    public ProvideActionArgsResponseBody createBody() {
-        return new ProvideActionArgsResponseBody();
-    }
-
-    @ApiModel(value = "ProvideActionArgsResponseBody", description = "A provide action arguments response body")
-    public static class ProvideActionArgsResponseBody implements ResponseBody {
-
-        private Map<String, ProvidedValue<?>> provided;
-
-        public ProvideActionArgsResponseBody() {
+        public ProvideActionArgsResult() {
         }
 
-        public ProvideActionArgsResponseBody(Map<String, ProvidedValue<?>> provided) {
-            this.provided = provided;
+        public ProvideActionArgsResult(Map<String, ProvidedValue<?>> provided) {
+            super(provided);
         }
 
+        @Override
         @ApiModelProperty(value = "The provided action arguments", required = true)
-        public Map<String, ProvidedValue<?>> getProvided() {
-            return provided;
-        }
-
-        public void setProvided(Map<String, ProvidedValue<?>> provided) {
-            this.provided = provided;
+        public Map<String, ProvidedValue<?>> getValue() {
+            return super.getValue();
         }
     }
 }

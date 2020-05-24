@@ -17,10 +17,35 @@
 package org.openksavi.sponge.remoteapi.model.response;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+import org.openksavi.sponge.remoteapi.model.response.LogoutResponse.LogoutResult;
 
 @ApiModel(value = "LogoutResponse", description = "A logout response")
-public class LogoutResponse extends SpongeResponse {
+public class LogoutResponse extends BaseResponse<LogoutResult> {
+
+    public LogoutResponse(LogoutResult body) {
+        super(body);
+    }
 
     public LogoutResponse() {
+        this(null);
+    }
+
+    @ApiModel(value = "LogoutResult", description = "A logout response result")
+    public static class LogoutResult extends BaseResponseResult<String> {
+
+        public LogoutResult() {
+        }
+
+        public LogoutResult(String status) {
+            super(status);
+        }
+
+        @Override
+        @ApiModelProperty(value = "The logout status", required = true)
+        public String getValue() {
+            return super.getValue();
+        }
     }
 }

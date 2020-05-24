@@ -143,9 +143,6 @@ public class ServerSubscriptionManager {
 
     protected SubscribeResponse createSubscribeResponse(ServerSubscription subscription, org.openksavi.sponge.event.Event event) {
         ResponseHeader.Builder headerBuilder = ResponseHeader.newBuilder();
-        if (subscription.getRequestId() != null) {
-            headerBuilder.setId(subscription.getRequestId());
-        }
 
         return SubscribeResponse.newBuilder().setHeader(headerBuilder.build()).setSubscriptionId(subscription.getId())
                 .setEvent(createEvent(event)).build();

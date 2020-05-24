@@ -22,34 +22,27 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
-import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest.ActionCallRequestBody;
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest.ActionCallParams;
 
 @ApiModel(value = "ActionCallRequest", description = "An action call request")
-public class ActionCallRequest extends BodySpongeRequest<ActionCallRequestBody> {
+public class ActionCallRequest extends BaseRequest<ActionCallParams> {
 
-    public ActionCallRequest(ActionCallRequestBody body) {
-        super(body);
+    public ActionCallRequest(ActionCallParams params) {
+        super(RemoteApiConstants.OPERATION_CALL, params);
     }
 
     public ActionCallRequest() {
-        this(new ActionCallRequestBody());
-    }
-
-    public ActionCallRequest(String name, List<Object> args, ProcessorQualifiedVersion qualifiedVersion) {
-        this(new ActionCallRequestBody(name, args, qualifiedVersion));
-    }
-
-    public ActionCallRequest(String name, List<Object> args) {
-        this(name, args, null);
+        this(new ActionCallParams());
     }
 
     @Override
-    public ActionCallRequestBody createBody() {
-        return new ActionCallRequestBody();
+    public ActionCallParams createParams() {
+        return new ActionCallParams();
     }
 
-    @ApiModel(value = "ActionCallRequestBody", description = "An action call request body")
-    public static class ActionCallRequestBody implements RequestBody, ActionExecutionInfo {
+    @ApiModel(value = "ActionCallParams", description = "Action call request params")
+    public static class ActionCallParams extends BaseRequestParams implements ActionExecutionInfo {
 
         private String name;
 
@@ -57,13 +50,13 @@ public class ActionCallRequest extends BodySpongeRequest<ActionCallRequestBody> 
 
         private ProcessorQualifiedVersion qualifiedVersion;
 
-        public ActionCallRequestBody(String name, List<Object> args, ProcessorQualifiedVersion qualifiedVersion) {
+        public ActionCallParams(String name, List<Object> args, ProcessorQualifiedVersion qualifiedVersion) {
             this.name = name;
             this.args = args;
             this.qualifiedVersion = qualifiedVersion;
         }
 
-        public ActionCallRequestBody() {
+        public ActionCallParams() {
         }
 
         @Override

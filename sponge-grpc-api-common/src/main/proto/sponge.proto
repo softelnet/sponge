@@ -57,19 +57,14 @@ message Event {
 }
 
 message RequestHeader {
-   string id = 1;
-   string username = 2;
-   string password = 3;
-   string auth_token = 4;
-   ObjectValue features = 5;
+   string username = 1;
+   string password = 2;
+   string auth_token = 3;
+   ObjectValue features = 4;
 }
 
 message ResponseHeader {
-   string id = 1;
-   string error_code = 2;
-   string error_message = 3;
-   string detailed_error_message = 4;
-   ObjectValue features = 5;
+   ObjectValue features = 1;
 }
 
 message VersionRequest {

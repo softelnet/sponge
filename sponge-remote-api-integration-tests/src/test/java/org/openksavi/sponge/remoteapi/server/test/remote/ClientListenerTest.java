@@ -71,11 +71,9 @@ public class ClientListenerTest extends BasicTestTemplate {
 
             assertEquals(3, requestStringList.size());
             assertEquals(3, responseStringList.size());
-            assertEquals("{\"header\":{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null,\"features\":null}}",
-                    normalizeJson(requestStringList.get(0)));
+            assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"version\",\"params\":{},\"id\":null}", normalizeJson(requestStringList.get(0)));
             assertTrue(normalizeJson(responseStringList.get(0)).matches(
-                    "\\{\"header\":\\{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null,\"requestTime\":\".*\",\"responseTime\":\".*\",\"features\":null\\},\"body\":\\{\"version\":\""
-                            + engine.getVersion() + "\"\\}\\}"));
+                    "\\{\"jsonrpc\":\"2.0\",\"result\":\\{\"header\":\\{\"requestTime\":\".*\",\"responseTime\":\".*\"},\"value\":\".*\"\\},\"id\":null\\}"));
         }
     }
 
@@ -91,18 +89,17 @@ public class ClientListenerTest extends BasicTestTemplate {
                     .onRequestSerializedListener((request, requestString) -> requestStringHolder.set(requestString))
                     .onResponseDeserializedListener((request, response, responseString) -> responseStringHolder.set(responseString))
                     .build();
-            String version = client.getVersion(new GetVersionRequest(), context).getBody().getVersion();
+            String version = client.getVersion(new GetVersionRequest(), context).getResult().getValue();
 
             // Works only if the API version is not set manually in the service.
             assertEquals(engine.getVersion(), version);
 
             client.getVersion();
 
-            assertEquals("{\"header\":{\"id\":null,\"username\":null,\"password\":null,\"authToken\":null,\"features\":null}}",
+            assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"version\",\"params\":{},\"id\":null}",
                     normalizeJson(requestStringHolder.get()));
             assertTrue(normalizeJson(responseStringHolder.get()).matches(
-                    "\\{\"header\":\\{\"id\":null,\"errorCode\":null,\"errorMessage\":null,\"detailedErrorMessage\":null,\"requestTime\":\".*\",\"responseTime\":\".*\",\"features\":null\\},\"body\":\\{\"version\":\""
-                            + engine.getVersion() + "\"\\}\\}"));
+                    "\\{\"jsonrpc\":\"2.0\",\"result\":\\{\"header\":\\{\"requestTime\":\".*\",\"responseTime\":\".*\"},\"value\":\".*\"\\},\"id\":null\\}"));
         }
     }
 }

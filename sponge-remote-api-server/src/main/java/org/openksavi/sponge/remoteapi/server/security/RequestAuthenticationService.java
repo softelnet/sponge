@@ -20,6 +20,7 @@ import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 import org.openksavi.sponge.remoteapi.server.HasRemoteApiService;
 import org.openksavi.sponge.util.Initializable;
 
+@SuppressWarnings("rawtypes")
 public interface RequestAuthenticationService extends HasRemoteApiService, Initializable {
 
     UserAuthentication authenticateRequest(SpongeRequest request);

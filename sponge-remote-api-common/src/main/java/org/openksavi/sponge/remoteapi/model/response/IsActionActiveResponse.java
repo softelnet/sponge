@@ -16,53 +16,38 @@
 
 package org.openksavi.sponge.remoteapi.model.response;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.response.IsActionActiveResponse.IsActionActiveResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.IsActionActiveResponse.IsActionActiveResult;
 
 @ApiModel(value = "IsActionActiveResponse", description = "An action active response")
-public class IsActionActiveResponse extends BodySpongeResponse<IsActionActiveResponseBody> {
+public class IsActionActiveResponse extends BaseResponse<IsActionActiveResult> {
 
-    public IsActionActiveResponse(IsActionActiveResponseBody body) {
-        super(body);
+    public IsActionActiveResponse(IsActionActiveResult result) {
+        super(result);
     }
 
     public IsActionActiveResponse() {
-        this(new IsActionActiveResponseBody());
+        this(null);
     }
 
-    public IsActionActiveResponse(List<Boolean> active) {
-        this(new IsActionActiveResponseBody(active));
-    }
+    @ApiModel(value = "IsActionActiveResult", description = "An action active response result")
+    public static class IsActionActiveResult extends BaseResponseResult<List<Boolean>> {
 
-    @Override
-    public IsActionActiveResponseBody createBody() {
-        return new IsActionActiveResponseBody();
-    }
-
-    @ApiModel(value = "IsActionActiveResponseBody", description = "An action active response body")
-    public static class IsActionActiveResponseBody implements ResponseBody {
-
-        private List<Boolean> active = new ArrayList<>();
-
-        public IsActionActiveResponseBody() {
+        public IsActionActiveResult() {
         }
 
-        public IsActionActiveResponseBody(List<Boolean> active) {
-            this.active = active;
+        public IsActionActiveResult(List<Boolean> active) {
+            super(active);
         }
 
+        @Override
         @ApiModelProperty(value = "The actions activity statuses", required = true)
-        public List<Boolean> getActive() {
-            return active;
-        }
-
-        public void setActive(List<Boolean> active) {
-            this.active = active;
+        public List<Boolean> getValue() {
+            return super.getValue();
         }
     }
 }

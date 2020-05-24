@@ -26,40 +26,37 @@ import io.swagger.annotations.ApiModelProperty;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.SpongeException;
-import org.openksavi.sponge.remoteapi.model.request.IsActionActiveRequest.IsActionActiveRequestBody;
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+import org.openksavi.sponge.remoteapi.model.request.IsActionActiveRequest.IsActionActiveParams;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.util.HasFeatures;
 
 @ApiModel(value = "IsActionActiveRequest", description = "An action active request")
-public class IsActionActiveRequest extends BodySpongeRequest<IsActionActiveRequestBody> {
+public class IsActionActiveRequest extends BaseRequest<IsActionActiveParams> {
 
-    public IsActionActiveRequest(IsActionActiveRequestBody body) {
-        super(body);
+    public IsActionActiveRequest(IsActionActiveParams body) {
+        super(RemoteApiConstants.OPERATION_IS_ACTION_ACTIVE, body);
     }
 
     public IsActionActiveRequest() {
-        this(new IsActionActiveRequestBody());
-    }
-
-    public IsActionActiveRequest(List<IsActionActiveEntry> entries) {
-        this(new IsActionActiveRequestBody(entries));
+        this(new IsActionActiveParams());
     }
 
     @Override
-    public IsActionActiveRequestBody createBody() {
-        return new IsActionActiveRequestBody();
+    public IsActionActiveParams createParams() {
+        return new IsActionActiveParams();
     }
 
-    @ApiModel(value = "IsActionActiveRequestBody", description = "An action active request body")
-    public static class IsActionActiveRequestBody implements RequestBody {
+    @ApiModel(value = "IsActionActiveParams", description = "An action active request params")
+    public static class IsActionActiveParams extends BaseRequestParams {
 
         private List<IsActionActiveEntry> entries;
 
-        public IsActionActiveRequestBody(List<IsActionActiveEntry> entries) {
+        public IsActionActiveParams(List<IsActionActiveEntry> entries) {
             this.entries = entries;
         }
 
-        public IsActionActiveRequestBody() {
+        public IsActionActiveParams() {
         }
 
         @ApiModelProperty(value = "The entries", required = true)

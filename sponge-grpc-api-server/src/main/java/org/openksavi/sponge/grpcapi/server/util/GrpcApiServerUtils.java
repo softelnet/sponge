@@ -19,7 +19,6 @@ package org.openksavi.sponge.grpcapi.server.util;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.rpc.Code;
 import com.google.rpc.Status;
 
 import io.grpc.StatusRuntimeException;
@@ -37,11 +36,13 @@ import org.openksavi.sponge.grpcapi.proto.VersionResponse;
 import org.openksavi.sponge.remoteapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 import org.openksavi.sponge.remoteapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.remoteapi.server.RemoteApiService;
 import org.openksavi.sponge.remoteapi.type.converter.TypeConverter;
 
 /**
  * A set of common gRPC API utility methods.
  */
+@SuppressWarnings("rawtypes")
 public abstract class GrpcApiServerUtils {
 
     private GrpcApiServerUtils() {
@@ -49,25 +50,28 @@ public abstract class GrpcApiServerUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends SpongeRequest> T setupRemoteApiRequestHeader(TypeConverter typeConverter, T remoteApiRequest, RequestHeader header) {
+    public static <T extends SpongeRequest> T setupRemoteApiRequestHeader(TypeConverter typeConverter, T remoteApiRequest,
+            RequestHeader header) {
+
+        if (remoteApiRequest.getParams().getHeader() == null) {
+            remoteApiRequest.getParams().setHeader(new org.openksavi.sponge.remoteapi.model.request.RequestHeader());
+        }
+
         if (header != null) {
-            if (!StringUtils.isEmpty(header.getId())) {
-                remoteApiRequest.getHeader().setId(header.getId());
-            }
             if (!StringUtils.isEmpty(header.getUsername())) {
-                remoteApiRequest.getHeader().setUsername(header.getUsername());
+                remoteApiRequest.getParams().getHeader().setUsername(header.getUsername());
             }
             if (!StringUtils.isEmpty(header.getPassword())) {
-                remoteApiRequest.getHeader().setPassword(header.getPassword());
+                remoteApiRequest.getParams().getHeader().setPassword(header.getPassword());
             }
             if (!StringUtils.isEmpty(header.getAuthToken())) {
-                remoteApiRequest.getHeader().setAuthToken(header.getAuthToken());
+                remoteApiRequest.getParams().getHeader().setAuthToken(header.getAuthToken());
             }
             if (header.hasFeatures()) {
                 try {
                     Map<String, Object> jsonFeatures =
                             (Map<String, Object>) typeConverter.getObjectMapper().readValue(header.getFeatures().getValueJson(), Map.class);
-                    remoteApiRequest.getHeader().setFeatures(jsonFeatures);
+                    remoteApiRequest.getParams().getHeader().setFeatures(jsonFeatures);
                 } catch (JsonProcessingException e) {
                     throw SpongeUtils.wrapException(e);
                 }
@@ -86,25 +90,20 @@ public abstract class GrpcApiServerUtils {
         return setupRemoteApiRequestHeader(typeConverter, new GetVersionRequest(), request.hasHeader() ? request.getHeader() : null);
     }
 
-    public static ResponseHeader createResponseHeader(TypeConverter typeConverter,
-            org.openksavi.sponge.remoteapi.model.response.ResponseHeader remoteApiHeader) {
+    public static ResponseHeader createResponseHeader(RemoteApiService remoteApiService, TypeConverter typeConverter,
+            org.openksavi.sponge.remoteapi.model.response.SpongeResponse remoteApiResponse) {
         ResponseHeader.Builder headerBuilder = ResponseHeader.newBuilder();
-        if (remoteApiHeader.getId() != null) {
-            headerBuilder.setId(remoteApiHeader.getId());
+        if (remoteApiResponse.getError() != null) {
+            throw createStatusException(remoteApiService, remoteApiResponse.getError());
         }
-        if (remoteApiHeader.getErrorCode() != null) {
-            headerBuilder.setErrorCode(remoteApiHeader.getErrorCode());
-        }
-        if (remoteApiHeader.getErrorMessage() != null) {
-            headerBuilder.setErrorMessage(remoteApiHeader.getErrorMessage());
-        }
-        if (remoteApiHeader.getDetailedErrorMessage() != null) {
-            headerBuilder.setDetailedErrorMessage(remoteApiHeader.getDetailedErrorMessage());
-        }
-        if (remoteApiHeader.getFeatures() != null) {
+
+        if (remoteApiResponse.getResult() != null && remoteApiResponse.getResult().getHeader() != null
+                && remoteApiResponse.getResult().getHeader().getFeatures() != null) {
             try {
                 headerBuilder.setFeatures(ObjectValue.newBuilder()
-                        .setValueJson(typeConverter.getObjectMapper().writeValueAsString(remoteApiHeader.getFeatures())).build());
+                        .setValueJson(
+                                typeConverter.getObjectMapper().writeValueAsString(remoteApiResponse.getResult().getHeader().getFeatures()))
+                        .build());
             } catch (JsonProcessingException e) {
                 throw SpongeUtils.wrapException(e);
             }
@@ -113,19 +112,24 @@ public abstract class GrpcApiServerUtils {
         return headerBuilder.build();
     }
 
-    public static VersionResponse createResponse(TypeConverter typeConverter, GetVersionResponse remoteApiResponse) {
-        VersionResponse.Builder builder =
-                VersionResponse.newBuilder().setHeader(createResponseHeader(typeConverter, remoteApiResponse.getHeader()));
+    public static VersionResponse createResponse(RemoteApiService remoteApiService, GetVersionResponse remoteApiResponse) {
+        VersionResponse.Builder builder = VersionResponse.newBuilder()
+                .setHeader(createResponseHeader(remoteApiService, remoteApiService.getTypeConverter(), remoteApiResponse));
 
-        if (remoteApiResponse.getBody().getVersion() != null) {
-            builder.setVersion(remoteApiResponse.getBody().getVersion());
+        if (remoteApiResponse.getResult().getValue() != null) {
+            builder.setVersion(remoteApiResponse.getResult().getValue());
         }
 
         return builder.build();
     }
 
-    public static StatusRuntimeException createInternalException(Throwable e) {
-        return StatusProto.toStatusRuntimeException(Status.newBuilder().setCode(Code.INTERNAL.getNumber())
-                .setMessage(e.getMessage() != null ? e.getMessage() : e.toString()).build());
+    public static StatusRuntimeException createStatusException(RemoteApiService remoteApiService, Throwable e) {
+        return createStatusException(remoteApiService, remoteApiService.createErrorResponse(e).getError());
+    }
+
+    public static StatusRuntimeException createStatusException(RemoteApiService remoteApiService,
+            org.openksavi.sponge.remoteapi.model.response.ResponseError responseError) {
+        return StatusProto.toStatusRuntimeException(
+                Status.newBuilder().setCode(responseError.getCode()).setMessage(responseError.getMessage()).build());
     }
 }

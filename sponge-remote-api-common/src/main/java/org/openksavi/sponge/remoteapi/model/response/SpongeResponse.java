@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,21 @@
 
 package org.openksavi.sponge.remoteapi.model.response;
 
-import io.swagger.annotations.ApiModelProperty;
-
 /**
- * A base response.
+ * A Remote API response.
  */
-public class SpongeResponse {
+@SuppressWarnings("rawtypes")
+public interface SpongeResponse<T extends ResponseResult> {
 
-    private ResponseHeader header = new ResponseHeader();
+    T getResult();
 
-    @ApiModelProperty(value = "The response header", required = false)
-    public ResponseHeader getHeader() {
-        return header;
-    }
+    void setResult(T result);
 
-    public void setHeader(ResponseHeader header) {
-        this.header = header;
-    }
+    ResponseError getError();
+
+    void setError(ResponseError error);
+
+    Object getId();
+
+    void setId(Object id);
 }

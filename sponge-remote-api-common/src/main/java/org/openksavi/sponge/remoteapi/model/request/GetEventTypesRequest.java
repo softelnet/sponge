@@ -19,38 +19,35 @@ package org.openksavi.sponge.remoteapi.model.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.request.GetEventTypesRequest.GetEventTypesRequestBody;
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+import org.openksavi.sponge.remoteapi.model.request.GetEventTypesRequest.GetEventTypesParams;
 
 @ApiModel(value = "GetEventTypesRequest", description = "A get event types request")
-public class GetEventTypesRequest extends BodySpongeRequest<GetEventTypesRequestBody> {
+public class GetEventTypesRequest extends BaseRequest<GetEventTypesParams> {
 
-    public GetEventTypesRequest(GetEventTypesRequestBody body) {
-        super(body);
+    public GetEventTypesRequest(GetEventTypesParams body) {
+        super(RemoteApiConstants.OPERATION_EVENT_TYPES, body);
     }
 
     public GetEventTypesRequest() {
-        this(new GetEventTypesRequestBody());
-    }
-
-    public GetEventTypesRequest(String name) {
-        this(new GetEventTypesRequestBody(name));
+        this(new GetEventTypesParams());
     }
 
     @Override
-    public GetEventTypesRequestBody createBody() {
-        return new GetEventTypesRequestBody();
+    public GetEventTypesParams createParams() {
+        return new GetEventTypesParams();
     }
 
-    @ApiModel(value = "GetEventTypesRequestBody", description = "A get event types request body")
-    public static class GetEventTypesRequestBody implements RequestBody {
+    @ApiModel(value = "GetEventTypesParams", description = "A get event types request params")
+    public static class GetEventTypesParams extends BaseRequestParams {
 
         private String name;
 
-        public GetEventTypesRequestBody(String name) {
+        public GetEventTypesParams(String name) {
             this.name = name;
         }
 
-        public GetEventTypesRequestBody() {
+        public GetEventTypesParams() {
         }
 
         @ApiModelProperty(

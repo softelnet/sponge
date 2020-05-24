@@ -37,11 +37,12 @@ import org.openksavi.sponge.grpcapi.proto.RequestHeader;
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc;
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiBlockingStub;
 import org.openksavi.sponge.grpcapi.proto.SpongeGrpcApiGrpc.SpongeGrpcApiStub;
+import org.openksavi.sponge.grpcapi.proto.VersionRequest;
+import org.openksavi.sponge.grpcapi.proto.VersionRequest.Builder;
+import org.openksavi.sponge.grpcapi.proto.VersionResponse;
 import org.openksavi.sponge.remoteapi.client.SpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClientException;
 import org.openksavi.sponge.remoteapi.model.RemoteEvent;
-import org.openksavi.sponge.grpcapi.proto.VersionRequest;
-import org.openksavi.sponge.grpcapi.proto.VersionResponse;
 
 /**
  * A base Sponge gRPC API client.
@@ -234,14 +235,24 @@ public abstract class BaseSpongeGrpcClient<T extends ManagedChannelBuilder<?>> i
 
     @Override
     public String getVersion() {
-        VersionRequest request = VersionRequest.newBuilder().setHeader(GrpcClientUtils.createRequestHeader(spongeClient)).build();
+        Builder versionBuilder = VersionRequest.newBuilder();
+
+        RequestHeader header = GrpcClientUtils.createRequestHeader(spongeClient);
+        if (header != null) {
+            versionBuilder.setHeader(header);
+        }
+
+        VersionRequest request = versionBuilder.build();
 
         VersionResponse response = spongeClient.executeWithAuthentication(request, request.getHeader().getUsername(),
                 request.getHeader().getPassword(), request.getHeader().getAuthToken(), (VersionRequest req) -> {
-                    VersionResponse versionResponse = serviceBlockingStub.getVersion(req);
-                    GrpcClientUtils.handleResponseHeader(spongeClient, "getVersion",
-                            versionResponse.hasHeader() ? versionResponse.getHeader() : null);
-                    return versionResponse;
+                    try {
+                        return serviceBlockingStub.getVersion(req);
+                    } catch (Exception e) {
+                        GrpcClientUtils.handleError(spongeClient, "getVersion", e);
+
+                        throw e;
+                    }
                 }, () -> {
                     RequestHeader newHeader = RequestHeader.newBuilder(request.getHeader()).setAuthToken(null).build();
                     return VersionRequest.newBuilder(request).setHeader(newHeader).build();

@@ -19,47 +19,33 @@ package org.openksavi.sponge.remoteapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.response.GetVersionResponse.GetVersionResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.GetVersionResponse.GetVersionResult;
 
 @ApiModel(value = "GetVersionResponse", description = "A get version response")
-public class GetVersionResponse extends BodySpongeResponse<GetVersionResponseBody> {
+public class GetVersionResponse extends BaseResponse<GetVersionResult> {
 
-    public GetVersionResponse(GetVersionResponseBody body) {
-        super(body);
+    public GetVersionResponse(GetVersionResult result) {
+        super(result);
     }
 
     public GetVersionResponse() {
-        this(new GetVersionResponseBody());
+        this(null);
     }
 
-    public GetVersionResponse(String version) {
-        this(new GetVersionResponseBody(version));
-    }
+    @ApiModel(value = "GetVersionResult", description = "A get version response result")
+    public static class GetVersionResult extends BaseResponseResult<String> {
 
-    @Override
-    public GetVersionResponseBody createBody() {
-        return new GetVersionResponseBody();
-    }
-
-    @ApiModel(value = "GetVersionResponseBody", description = "A get version response body")
-    public static class GetVersionResponseBody implements ResponseBody {
-
-        private String version;
-
-        public GetVersionResponseBody() {
+        public GetVersionResult() {
         }
 
-        public GetVersionResponseBody(String version) {
-            this.version = version;
+        public GetVersionResult(String version) {
+            super(version);
         }
 
+        @Override
         @ApiModelProperty(value = "The Sponge version", required = true)
-        public String getVersion() {
-            return version;
-        }
-
-        public void setVersion(String version) {
-            this.version = version;
+        public String getValue() {
+            return super.getValue();
         }
     }
 }

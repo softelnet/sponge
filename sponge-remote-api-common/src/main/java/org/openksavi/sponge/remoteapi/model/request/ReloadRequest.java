@@ -18,7 +18,21 @@ package org.openksavi.sponge.remoteapi.model.request;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "ReloadRequest", description = "A reload request")
-public class ReloadRequest extends SpongeRequest {
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 
+@ApiModel(value = "ReloadRequest", description = "A reload request")
+public class ReloadRequest extends BaseRequest<BaseRequestParams> {
+
+    public ReloadRequest(BaseRequestParams body) {
+        super(RemoteApiConstants.OPERATION_RELOAD, body);
+    }
+
+    public ReloadRequest() {
+        this(new BaseRequestParams());
+    }
+
+    @Override
+    public BaseRequestParams createParams() {
+        return new BaseRequestParams();
+    }
 }

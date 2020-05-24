@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,24 @@
 
 package org.openksavi.sponge.remoteapi.model.request;
 
-/**
- * A request body.
- */
-public interface RequestBody {
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.swagger.annotations.ApiModelProperty;
+
+public class BaseRequestParams implements RequestParams {
+
+    @JsonInclude(Include.NON_NULL)
+    private RequestHeader header;
+
+    @Override
+    @ApiModelProperty(value = "The request header", required = false)
+    public RequestHeader getHeader() {
+        return header;
+    }
+
+    @Override
+    public void setHeader(RequestHeader header) {
+        this.header = header;
+    }
 }

@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
-import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 
 public class RemoteApiUtilsTest {

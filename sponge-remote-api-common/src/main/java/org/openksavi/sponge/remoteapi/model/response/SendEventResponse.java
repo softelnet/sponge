@@ -19,47 +19,33 @@ package org.openksavi.sponge.remoteapi.model.response;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.response.SendEventResponse.SendEventResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.SendEventResponse.SendEventResult;
 
 @ApiModel(value = "SendEventResponse", description = "A send event response")
-public class SendEventResponse extends BodySpongeResponse<SendEventResponseBody> {
+public class SendEventResponse extends BaseResponse<SendEventResult> {
 
-    public SendEventResponse(SendEventResponseBody body) {
-        super(body);
+    public SendEventResponse(SendEventResult result) {
+        super(result);
     }
 
     public SendEventResponse() {
-        this(new SendEventResponseBody());
+        this(null);
     }
 
-    public SendEventResponse(String eventId) {
-        this(new SendEventResponseBody(eventId));
-    }
+    @ApiModel(value = "SendEventResult", description = "A send event response result")
+    public static class SendEventResult extends BaseResponseResult<String> {
 
-    @Override
-    public SendEventResponseBody createBody() {
-        return new SendEventResponseBody();
-    }
-
-    @ApiModel(value = "SendEventResponseBody", description = "A send event response body")
-    public static class SendEventResponseBody implements ResponseBody {
-
-        private String eventId;
-
-        public SendEventResponseBody() {
+        public SendEventResult() {
         }
 
-        public SendEventResponseBody(String eventId) {
-            this.eventId = eventId;
+        public SendEventResult(String eventId) {
+            super(eventId);
         }
 
+        @Override
         @ApiModelProperty(value = "The event id", required = true)
-        public String getEventId() {
-            return eventId;
-        }
-
-        public void setEventId(String eventId) {
-            this.eventId = eventId;
+        public String getValue() {
+            return super.getValue();
         }
     }
 }

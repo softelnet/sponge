@@ -19,48 +19,35 @@ package org.openksavi.sponge.remoteapi.server.test.remote.delegate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.response.BodySpongeResponse;
-import org.openksavi.sponge.remoteapi.model.response.ResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.BaseResponse;
+import org.openksavi.sponge.remoteapi.model.response.BaseResponseResult;
+import org.openksavi.sponge.remoteapi.server.test.remote.delegate.UpperCaseResponse.UpperCaseResult;
 
 @ApiModel(value = "UpperCaseResponse", description = "An UpperCase response")
-public class UpperCaseResponse extends BodySpongeResponse<UpperCaseResponse.UpperCaseResponseBody> {
+public class UpperCaseResponse extends BaseResponse<UpperCaseResult> {
 
-    public UpperCaseResponse(UpperCaseResponse.UpperCaseResponseBody body) {
-        super(body);
-    }
-
-    public UpperCaseResponse(String result) {
-        this(new UpperCaseResponseBody(result));
+    public UpperCaseResponse(UpperCaseResult result) {
+        super(result);
     }
 
     public UpperCaseResponse() {
-        this(new UpperCaseResponseBody());
+        this(null);
     }
 
-    @Override
-    public UpperCaseResponse.UpperCaseResponseBody createBody() {
-        return new UpperCaseResponseBody();
-    }
+    @ApiModel(value = "UpperCaseResult", description = "An UpperCase response result")
+    public static class UpperCaseResult extends BaseResponseResult<String> {
 
-    @ApiModel(value = "UpperCaseResponseBody", description = "An UpperCase response body")
-    public static class UpperCaseResponseBody implements ResponseBody {
-
-        private String result;
-
-        public UpperCaseResponseBody() {
+        public UpperCaseResult() {
         }
 
-        public UpperCaseResponseBody(String result) {
-            this.result = result;
+        public UpperCaseResult(String result) {
+            super(result);
         }
 
+        @Override
         @ApiModelProperty(value = "The result", required = true)
-        public String getResult() {
-            return result;
-        }
-
-        public void setResult(String result) {
-            this.result = result;
+        public String getValue() {
+            return super.getValue();
         }
     }
 }

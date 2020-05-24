@@ -17,10 +17,35 @@
 package org.openksavi.sponge.remoteapi.model.response;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+import org.openksavi.sponge.remoteapi.model.response.ReloadResponse.ReloadResult;
 
 @ApiModel(value = "ReloadResponse", description = "A reload response")
-public class ReloadResponse extends SpongeResponse {
+public class ReloadResponse extends BaseResponse<ReloadResult> {
+
+    public ReloadResponse(ReloadResult body) {
+        super(body);
+    }
 
     public ReloadResponse() {
+        this(null);
+    }
+
+    @ApiModel(value = "ReloadResult", description = "A reload response result")
+    public static class ReloadResult extends BaseResponseResult<String> {
+
+        public ReloadResult() {
+        }
+
+        public ReloadResult(String status) {
+            super(status);
+        }
+
+        @Override
+        @ApiModelProperty(value = "The reload status", required = true)
+        public String getValue() {
+            return super.getValue();
+        }
     }
 }

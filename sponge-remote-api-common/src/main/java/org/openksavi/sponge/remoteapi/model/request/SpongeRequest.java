@@ -16,21 +16,22 @@
 
 package org.openksavi.sponge.remoteapi.model.request;
 
-import io.swagger.annotations.ApiModelProperty;
-
 /**
- * A base request.
+ * A request.
  */
-public abstract class SpongeRequest {
+public interface SpongeRequest<T extends RequestParams> {
 
-    private RequestHeader header = new RequestHeader();
+    String getMethod();
 
-    @ApiModelProperty(value = "The request header", required = false)
-    public RequestHeader getHeader() {
-        return header;
-    }
+    void setMethod(String method);
 
-    public void setHeader(RequestHeader header) {
-        this.header = header;
-    }
+    T getParams();
+
+    void setParams(T params);
+
+    Object getId();
+
+    void setId(Object id);
+
+    T createParams();
 }

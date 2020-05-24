@@ -55,18 +55,28 @@ public final class RemoteApiConstants {
 
     public static final String OPERATION_DOC = "doc";
 
-    public static final String OPERATION_RPC = "rpc";
+    public static final String OPERATION_JSON_RPC = "jsonrpc";
 
     /** A generic error code. */
-    public static final String ERROR_CODE_GENERIC = "GENERIC";
+    public static final int ERROR_CODE_GENERIC = 1001;
 
-    public static final String ERROR_CODE_INVALID_AUTH_TOKEN = "INVALID_AUTH_TOKEN";
+    public static final int ERROR_CODE_INVALID_AUTH_TOKEN = 1002;
 
-    public static final String ERROR_CODE_INVALID_KB_VERSION = "INVALID_KB_VERSION";
+    public static final int ERROR_CODE_INVALID_KB_VERSION = 1003;
 
-    public static final String ERROR_CODE_INVALID_USERNAME_PASSWORD = "INVALID_USERNAME_PASSWORD";
+    public static final int ERROR_CODE_INVALID_USERNAME_PASSWORD = 1004;
 
-    public static final String ERROR_CODE_INACTIVE_ACTION = "INACTIVE_ACTION";
+    public static final int ERROR_CODE_INACTIVE_ACTION = 1005;
+
+    public static final int ERROR_CODE_STANDARD_PARSE = -32700;
+
+    public static final int ERROR_CODE_STANDARD_INVALID_REQUEST = -32600;
+
+    public static final int ERROR_CODE_STANDARD_METHOD_NOT_FOUND = -32601;
+
+    public static final int ERROR_CODE_STANDARD_INVALID_PARAMS = -32602;
+
+    public static final int ERROR_CODE_STANDARD_INTERNAL = -32603;
 
     public static final String REMOTE_API_FEATURE_SPONGE_VERSION = "spongeVersion";
 

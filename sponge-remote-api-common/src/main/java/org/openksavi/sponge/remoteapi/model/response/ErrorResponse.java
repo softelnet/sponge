@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,19 @@
 
 package org.openksavi.sponge.remoteapi.model.response;
 
-/**
- * A response body.
- */
-public interface ResponseBody {
+import io.swagger.annotations.ApiModel;
 
+@SuppressWarnings("rawtypes")
+@ApiModel(value = "ErrorResponse", description = "An error response")
+public class ErrorResponse extends BaseResponse<BaseResponseResult> {
+
+    public ErrorResponse() {
+        super(null);
+    }
+
+    public ErrorResponse(ResponseError error) {
+        super(null);
+
+        setError(error);
+    }
 }

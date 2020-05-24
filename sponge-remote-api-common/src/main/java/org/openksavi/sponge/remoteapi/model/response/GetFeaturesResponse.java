@@ -16,53 +16,38 @@
 
 package org.openksavi.sponge.remoteapi.model.response;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.response.GetFeaturesResponse.GetFeaturesResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.GetFeaturesResponse.GetFeaturesResult;
 
 @ApiModel(value = "GetFeaturesResponse", description = "A get features response")
-public class GetFeaturesResponse extends BodySpongeResponse<GetFeaturesResponseBody> {
+public class GetFeaturesResponse extends BaseResponse<GetFeaturesResult> {
 
-    public GetFeaturesResponse(GetFeaturesResponseBody body) {
-        super(body);
+    public GetFeaturesResponse(GetFeaturesResult result) {
+        super(result);
     }
 
     public GetFeaturesResponse() {
-        this(new GetFeaturesResponseBody());
+        this(null);
     }
 
-    public GetFeaturesResponse(Map<String, Object> features) {
-        this(new GetFeaturesResponseBody(features));
-    }
+    @ApiModel(value = "GetFeaturesResult", description = "A get features response result")
+    public static class GetFeaturesResult extends BaseResponseResult<Map<String, Object>> {
 
-    @Override
-    public GetFeaturesResponseBody createBody() {
-        return new GetFeaturesResponseBody();
-    }
-
-    @ApiModel(value = "GetFeaturesResponseBody", description = "A get features response body")
-    public static class GetFeaturesResponseBody implements ResponseBody {
-
-        private Map<String, Object> features = new LinkedHashMap<>();
-
-        public GetFeaturesResponseBody() {
+        public GetFeaturesResult() {
         }
 
-        public GetFeaturesResponseBody(Map<String, Object> features) {
-            this.features.putAll(features);
+        public GetFeaturesResult(Map<String, Object> features) {
+            super(features);
         }
 
+        @Override
         @ApiModelProperty(value = "The API features", required = true)
-        public Map<String, Object> getFeatures() {
-            return features;
-        }
-
-        public void setFeatures(Map<String, Object> features) {
-            this.features = features;
+        public Map<String, Object> getValue() {
+            return super.getValue();
         }
     }
 }

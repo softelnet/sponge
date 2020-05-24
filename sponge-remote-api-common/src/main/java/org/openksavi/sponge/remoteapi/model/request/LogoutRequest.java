@@ -18,7 +18,21 @@ package org.openksavi.sponge.remoteapi.model.request;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(value = "LogoutRequest", description = "A logout request")
-public class LogoutRequest extends SpongeRequest {
+import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 
+@ApiModel(value = "LogoutRequest", description = "A logout request")
+public class LogoutRequest extends BaseRequest<BaseRequestParams> {
+
+    public LogoutRequest(BaseRequestParams body) {
+        super(RemoteApiConstants.OPERATION_LOGOUT, body);
+    }
+
+    public LogoutRequest() {
+        this(new BaseRequestParams());
+    }
+
+    @Override
+    public BaseRequestParams createParams() {
+        return new BaseRequestParams();
+    }
 }

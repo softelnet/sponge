@@ -19,7 +19,6 @@ package org.openksavi.sponge.grpcapi.server;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,14 +80,14 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
             remoteApiService.openSession(createSession());
             GetVersionResponse remoteApiResponse = remoteApiService.getVersion(remoteApiRequest);
 
-            VersionResponse response = GrpcApiServerUtils.createResponse(remoteApiService.getTypeConverter(), remoteApiResponse);
+            VersionResponse response = GrpcApiServerUtils.createResponse(remoteApiService, remoteApiResponse);
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (Throwable e) {
-            // The internal error.
-            logger.error("getVersion internal error", e);
-            responseObserver.onError(GrpcApiServerUtils.createInternalException(e));
+            logger.error("getVersion error", e);
+
+            responseObserver.onError(GrpcApiServerUtils.createStatusException(remoteApiService, e));
         } finally {
             // Close the session.
             remoteApiService.closeSession();
@@ -105,8 +104,7 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
 
             logger.debug("New subscription {}", subscriptionId);
             subscriptionManager.putSubscription(new ServerSubscription(subscriptionId, request.getEventNamesList(),
-                    request.getRegisteredTypeRequired(), responseObserver, userContext,
-                    request.hasHeader() && !StringUtils.isEmpty(request.getHeader().getId()) ? request.getHeader().getId() : null));
+                    request.getRegisteredTypeRequired(), responseObserver, userContext));
         } finally {
             // Close the session.
             remoteApiService.closeSession();

@@ -21,48 +21,34 @@ import java.util.Map;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.response.GetEventTypesResponse.GetEventTypesResponseBody;
+import org.openksavi.sponge.remoteapi.model.response.GetEventTypesResponse.GetEventTypesResult;
 import org.openksavi.sponge.type.RecordType;
 
 @ApiModel(value = "GetEventTypesResponse", description = "A get event types response")
-public class GetEventTypesResponse extends BodySpongeResponse<GetEventTypesResponseBody> {
+public class GetEventTypesResponse extends BaseResponse<GetEventTypesResult> {
 
-    public GetEventTypesResponse(GetEventTypesResponseBody body) {
-        super(body);
+    public GetEventTypesResponse(GetEventTypesResult result) {
+        super(result);
     }
 
     public GetEventTypesResponse() {
-        this(new GetEventTypesResponseBody());
+        this(null);
     }
 
-    public GetEventTypesResponse(Map<String, RecordType> eventTypes) {
-        this(new GetEventTypesResponseBody(eventTypes));
-    }
+    @ApiModel(value = "GetEventTypesResult", description = "A get event types response result")
+    public static class GetEventTypesResult extends BaseResponseResult<Map<String, RecordType>> {
 
-    @Override
-    public GetEventTypesResponseBody createBody() {
-        return new GetEventTypesResponseBody();
-    }
-
-    @ApiModel(value = "GetEventTypesResponseBody", description = "A get event types response body")
-    public static class GetEventTypesResponseBody implements ResponseBody {
-
-        private Map<String, RecordType> eventTypes;
-
-        public GetEventTypesResponseBody() {
+        public GetEventTypesResult() {
         }
 
-        public GetEventTypesResponseBody(Map<String, RecordType> eventTypes) {
-            this.eventTypes = eventTypes;
+        public GetEventTypesResult(Map<String, RecordType> eventTypes) {
+            super(eventTypes);
         }
 
+        @Override
         @ApiModelProperty(value = "The available event types", required = true)
-        public Map<String, RecordType> getEventTypes() {
-            return eventTypes;
-        }
-
-        public void setEventTypes(Map<String, RecordType> eventTypes) {
-            this.eventTypes = eventTypes;
+        public Map<String, RecordType> getValue() {
+            return super.getValue();
         }
     }
 }

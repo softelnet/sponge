@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2019 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,16 @@
 
 package org.openksavi.sponge.remoteapi.model.response;
 
-import io.swagger.annotations.ApiModelProperty;
-
 /**
- * A response with a body.
+ * A response result.
  */
-public abstract class BodySpongeResponse<T extends ResponseBody> extends SpongeResponse {
+public interface ResponseResult<T> {
 
-    private T body;
+    ResponseHeader getHeader();
 
-    protected BodySpongeResponse(T body) {
-        this.body = body;
-    }
+    void setHeader(ResponseHeader header);
 
-    @ApiModelProperty(value = "The response body", required = true)
-    public T getBody() {
-        return body;
-    }
+    T getValue();
 
-    public void setBody(T body) {
-        this.body = body;
-    }
-
-    public abstract T createBody();
+    void setValue(T value);
 }
