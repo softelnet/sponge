@@ -14,31 +14,19 @@
  * limitations under the License.
  */
 
-package org.openksavi.sponge.remoteapi.model.response;
+package org.openksavi.sponge.remoteapi.server;
 
-import io.swagger.annotations.ApiModelProperty;
+import org.apache.camel.Exchange;
+
+import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
+import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 
 /**
- * A Remote API response.
+ * A Remote API method handler.
  */
+@FunctionalInterface
 @SuppressWarnings("rawtypes")
-public interface SpongeResponse<T extends ResponseResult> {
+public interface RemoteApiMethodHandler<I extends SpongeRequest, O extends SpongeResponse> {
 
-    @ApiModelProperty(value = "The JSON-RPC version", required = true)
-    String getJsonrpc();
-
-    @ApiModelProperty(value = "The result", required = false)
-    T getResult();
-
-    void setResult(T result);
-
-    @ApiModelProperty(value = "The error", required = false)
-    ResponseError getError();
-
-    void setError(ResponseError error);
-
-    @ApiModelProperty(value = "The JSON-RPC id", required = false)
-    Object getId();
-
-    void setId(Object id);
+    O handle(RemoteApiService service, I request, Exchange exchange);
 }

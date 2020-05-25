@@ -19,7 +19,7 @@ package org.openksavi.sponge.remoteapi.model.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import io.swagger.annotations.ApiModelProperty;
+import org.openksavi.sponge.remoteapi.JsonRpcConstants;
 
 /**
  * A base response.
@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiModelProperty;
 @SuppressWarnings("rawtypes")
 public abstract class BaseResponse<T extends ResponseResult> implements SpongeResponse<T> {
 
-    private String jsonrpc = "2.0";
+    private String jsonrpc = JsonRpcConstants.VERSION;
 
     @JsonInclude(Include.NON_NULL)
     private T result;
@@ -44,7 +44,7 @@ public abstract class BaseResponse<T extends ResponseResult> implements SpongeRe
     protected BaseResponse() {
     }
 
-    @ApiModelProperty(value = "The JSON-RPC version", required = true)
+    @Override
     public String getJsonrpc() {
         return jsonrpc;
     }
@@ -54,7 +54,6 @@ public abstract class BaseResponse<T extends ResponseResult> implements SpongeRe
     }
 
     @Override
-    @ApiModelProperty(value = "The result", required = false)
     public T getResult() {
         return result;
     }
@@ -65,7 +64,6 @@ public abstract class BaseResponse<T extends ResponseResult> implements SpongeRe
     }
 
     @Override
-    @ApiModelProperty(value = "The error", required = false)
     public ResponseError getError() {
         return error;
     }
@@ -76,7 +74,6 @@ public abstract class BaseResponse<T extends ResponseResult> implements SpongeRe
     }
 
     @Override
-    @ApiModelProperty(value = "The JSON-RPC id", required = false)
     public Object getId() {
         return id;
     }

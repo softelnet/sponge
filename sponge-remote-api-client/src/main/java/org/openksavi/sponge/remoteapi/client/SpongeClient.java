@@ -28,7 +28,6 @@ import org.openksavi.sponge.remoteapi.client.listener.OnResponseDeserializedList
 import org.openksavi.sponge.remoteapi.feature.converter.FeatureConverter;
 import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
 import org.openksavi.sponge.remoteapi.model.RemoteKnowledgeBaseMeta;
-import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetEventTypesRequest;
@@ -364,6 +363,28 @@ public interface SpongeClient extends Closeable {
      * Calls the action. For more information see {@link #call(ActionCallRequest,RemoteActionMeta,boolean,SpongeRequestContext) call}.
      *
      * @param actionName the action name.
+     * @param args the named action arguments.
+     *
+     * @return the action result.
+     */
+    Object call(String actionName, Map<String, ?> args);
+
+    /**
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RemoteActionMeta,boolean,SpongeRequestContext) call}.
+     *
+     * @param resultClass the result class.
+     * @param actionName the action name.
+     * @param args the named action arguments.
+     *
+     * @return the action result.
+     * @param <T> the result type.
+     */
+    <T> T call(Class<T> resultClass, String actionName, Map<String, ?> args);
+
+    /**
+     * Calls the action. For more information see {@link #call(ActionCallRequest,RemoteActionMeta,boolean,SpongeRequestContext) call}.
+     *
+     * @param actionName the action name.
      *
      * @return the action result.
      */
@@ -379,75 +400,6 @@ public interface SpongeClient extends Closeable {
      * @param <T> the result type.
      */
     <T> T call(Class<T> resultClass, String actionName);
-
-    /**
-     * Calls the action with named arguments. Marshals the arguments and unmarshals the result using a best effort strategy, i.e. when a
-     * metadata is defined.
-     *
-     * @param request the request.
-     * @param actionMeta the action metadata that will be used for marshalling and unmarshalling. If the value is {@code null}, this method
-     *        may fetch the action metadata from the server if the action metadata cache is turned off or is not populated.
-     * @param allowFetchMetadata if {@code true} (the default value), the action metadata (if {@code null}) may be fetched from the server
-     *        by sending an additional request. If {@code false} and the action metadata is {@code null} or is not in the cache, the
-     *        marshalling of arguments and unmarshalling of the result will be suppressed.
-     * @param context the context.
-     *
-     * @return the response.
-     */
-    ActionCallResponse callNamed(ActionCallNamedRequest request, RemoteActionMeta actionMeta, boolean allowFetchMetadata,
-            SpongeRequestContext context);
-
-    /**
-     * Calls the action with named arguments.
-     *
-     * @param request the request.
-     * @param actionMeta the action metadata.
-     * @param allowFetchMetadata the flag for fetching the metadata.
-     *
-     * @return the response.
-     */
-    ActionCallResponse callNamed(ActionCallNamedRequest request, RemoteActionMeta actionMeta, boolean allowFetchMetadata);
-
-    /**
-     * Calls the action with named arguments. Allows fetching the action metadata.
-     *
-     * @param request the request.
-     * @param actionMeta the action metadata.
-     *
-     * @return the response.
-     */
-    ActionCallResponse callNamed(ActionCallNamedRequest request, RemoteActionMeta actionMeta);
-
-    /**
-     * Calls the action with named arguments. Allows fetching the action metadata.
-     *
-     * @param request the request.
-     *
-     * @return the response.
-     */
-    ActionCallResponse callNamed(ActionCallNamedRequest request);
-
-    /**
-     * Calls the action with named arguments.
-     *
-     * @param actionName the action name.
-     * @param args the action arguments.
-     *
-     * @return the action result.
-     */
-    Object callNamed(String actionName, Map<String, ?> args);
-
-    /**
-     * Calls the action with named arguments.
-     *
-     * @param resultClass the result class.
-     * @param actionName the action name.
-     * @param args the action arguments.
-     *
-     * @return the action result.
-     * @param <T> the result type.
-     */
-    <T> T callNamed(Class<T> resultClass, String actionName, Map<String, ?> args);
 
     /**
      * Sends the event to the server.
@@ -646,7 +598,6 @@ public interface SpongeClient extends Closeable {
     /**
      * Sends the request to the server.
      *
-     * @param operationType the operationType.
      * @param request the request.
      * @param responseClass the response class.
      * @param context the context.
@@ -654,20 +605,18 @@ public interface SpongeClient extends Closeable {
      * @param <T> a request type.
      * @param <R> a response type.
      */
-    <T extends SpongeRequest, R extends SpongeResponse> R execute(String operationType, T request, Class<R> responseClass,
-            SpongeRequestContext context);
+    <T extends SpongeRequest, R extends SpongeResponse> R execute(T request, Class<R> responseClass, SpongeRequestContext context);
 
     /**
      * Sends the request to the server.
      *
-     * @param operationType the operationType.
      * @param request the request.
      * @param responseClass the response class.
      * @return the response.
      * @param <T> a request type.
      * @param <R> a response type.
      */
-    <T extends SpongeRequest, R extends SpongeResponse> R execute(String operationType, T request, Class<R> responseClass);
+    <T extends SpongeRequest, R extends SpongeResponse> R execute(T request, Class<R> responseClass);
 
     /**
      * Clears caches.
@@ -714,7 +663,7 @@ public interface SpongeClient extends Closeable {
 
     <T extends SpongeRequest> T setupRequest(T request);
 
-    void handleErrorResponse(String operation, ResponseError error);
+    void handleErrorResponse(String method, ResponseError error);
 
     <T, X> X executeWithAuthentication(T request, String requestUsername, String requestPassword, String requestAuthToken,
             Function<T, X> onExecute, Supplier<T> onClearAuthToken);

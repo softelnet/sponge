@@ -33,18 +33,18 @@ public class LogoutResponse extends BaseResponse<LogoutResult> {
     }
 
     @ApiModel(value = "LogoutResult", description = "A logout response result")
-    public static class LogoutResult extends BaseResponseResult<String> {
+    public static class LogoutResult extends BaseResponseResult<Boolean> {
 
         public LogoutResult() {
         }
 
-        public LogoutResult(String status) {
+        public LogoutResult(Boolean status) {
             super(status);
         }
 
         @Override
         @ApiModelProperty(value = "The logout status", required = true)
-        public String getValue() {
+        public Boolean getValue() {
             return super.getValue();
         }
     }

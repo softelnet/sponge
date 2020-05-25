@@ -32,10 +32,10 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.util.HasFeatures;
 
 @ApiModel(value = "IsActionActiveRequest", description = "An action active request")
-public class IsActionActiveRequest extends BaseRequest<IsActionActiveParams> {
+public class IsActionActiveRequest extends TypedParamsRequest<IsActionActiveParams> {
 
-    public IsActionActiveRequest(IsActionActiveParams body) {
-        super(RemoteApiConstants.OPERATION_IS_ACTION_ACTIVE, body);
+    public IsActionActiveRequest(IsActionActiveParams params) {
+        super(RemoteApiConstants.METHOD_IS_ACTION_ACTIVE, params);
     }
 
     public IsActionActiveRequest() {

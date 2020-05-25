@@ -122,7 +122,7 @@ public abstract class SpongeClientUtils {
 
         try {
             Response okHttpResponse = client
-                    .newCall(new Request.Builder().url(baseRemoteApiUrl + "/" + RemoteApiConstants.OPERATION_DOC)
+                    .newCall(new Request.Builder().url(baseRemoteApiUrl + "/" + RemoteApiConstants.ENDPOINT_DOC)
                             .headers(new Headers.Builder().add("Content-Type", RemoteApiConstants.CONTENT_TYPE_JSON).build()).get().build())
                     .execute();
 

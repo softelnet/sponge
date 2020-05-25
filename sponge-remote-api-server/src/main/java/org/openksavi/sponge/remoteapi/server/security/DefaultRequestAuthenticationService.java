@@ -31,7 +31,7 @@ public class DefaultRequestAuthenticationService extends BaseRequestAuthenticati
     public UserAuthentication authenticateRequest(SpongeRequest request) {
         RemoteApiService apiService = getRemoteApiService();
 
-        RequestHeader header = request.getParams().getHeader();
+        RequestHeader header = request.getHeader();
 
         if (header.getAuthToken() != null) {
             Validate.isTrue(header.getUsername() == null, "Username is not allowed when using a token-based auhentication");

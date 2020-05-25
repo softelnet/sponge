@@ -17,19 +17,25 @@
 package org.openksavi.sponge.remoteapi.model.request;
 
 import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.ProcessorQualifiedVersion;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest.ActionCallParams;
 
 @ApiModel(value = "ActionCallRequest", description = "An action call request")
-public class ActionCallRequest extends BaseRequest<ActionCallParams> {
+public class ActionCallRequest extends TypedParamsRequest<ActionCallParams> {
 
     public ActionCallRequest(ActionCallParams params) {
-        super(RemoteApiConstants.OPERATION_CALL, params);
+        super(RemoteApiConstants.METHOD_CALL, params);
     }
 
     public ActionCallRequest() {
@@ -46,11 +52,13 @@ public class ActionCallRequest extends BaseRequest<ActionCallParams> {
 
         private String name;
 
-        private List<Object> args;
+        @JsonInclude(Include.NON_NULL)
+        private Object args;
 
+        @JsonInclude(Include.NON_NULL)
         private ProcessorQualifiedVersion qualifiedVersion;
 
-        public ActionCallParams(String name, List<Object> args, ProcessorQualifiedVersion qualifiedVersion) {
+        public ActionCallParams(String name, Object args, ProcessorQualifiedVersion qualifiedVersion) {
             this.name = name;
             this.args = args;
             this.qualifiedVersion = qualifiedVersion;
@@ -71,11 +79,14 @@ public class ActionCallRequest extends BaseRequest<ActionCallParams> {
         }
 
         @ApiModelProperty(value = "The action arguments", required = false)
-        public List<Object> getArgs() {
+        public Object getArgs() {
             return args;
         }
 
-        public void setArgs(List<Object> args) {
+        public void setArgs(Object args) {
+            Validate.isTrue(args == null || args instanceof List || args instanceof Map,
+                    "Action args should be an instance of a List or a Map");
+
             this.args = args;
         }
 

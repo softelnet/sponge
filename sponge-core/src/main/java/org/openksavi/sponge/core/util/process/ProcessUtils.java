@@ -17,6 +17,7 @@
 package org.openksavi.sponge.core.util.process;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -108,7 +109,7 @@ public abstract class ProcessUtils {
         }
         String inputBinaryString = configuration.getString(TAG_PROCESS_INPUT_BINARY, null);
         if (inputBinaryString != null) {
-            builder.inputAsBinary(Base64.getDecoder().decode(inputBinaryString));
+            builder.inputAsBinary(Base64.getDecoder().decode(inputBinaryString.getBytes(StandardCharsets.UTF_8)));
         }
 
         builder.waitForPositiveLineRegexp(configuration.getString(TAG_PROCESS_WAIT_FOR_POSITIVE_LINE_REGEXP, null))

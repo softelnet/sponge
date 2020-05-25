@@ -20,16 +20,18 @@ import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 
 /**
- * A Remote API operation.
+ * Defines a Remote API method.
  */
 @SuppressWarnings("rawtypes")
-public class RemoteApiOperation<I extends SpongeRequest, O extends SpongeResponse> {
+public class RemoteApiOperation<I extends SpongeRequest<P>, P, O extends SpongeResponse> {
 
-    private String name;
+    private String method;
 
     private String description;
 
     private Class<I> requestClass;
+
+    private Class<P> requestParamsClass;
 
     private String requestDescription;
 
@@ -37,25 +39,26 @@ public class RemoteApiOperation<I extends SpongeRequest, O extends SpongeRespons
 
     private String responseDescription;
 
-    private RemoteApiOperationHandler<I, O> operationHandler;
+    private RemoteApiMethodHandler<I, O> handler;
 
-    public RemoteApiOperation(String name, String description, Class<I> requestClass, String requestDescription, Class<O> responseClass,
-            String responseDescription, RemoteApiOperationHandler<I, O> operationHandler) {
-        this.name = name;
+    public RemoteApiOperation(String method, String description, Class<I> requestClass, Class<P> requestParamsClass,
+            String requestDescription, Class<O> responseClass, String responseDescription, RemoteApiMethodHandler<I, O> handler) {
+        this.method = method;
         this.description = description;
         this.requestClass = requestClass;
+        this.requestParamsClass = requestParamsClass;
         this.requestDescription = requestDescription;
         this.responseClass = responseClass;
         this.responseDescription = responseDescription;
-        this.operationHandler = operationHandler;
+        this.handler = handler;
     }
 
-    public String getName() {
-        return name;
+    public String getMethod() {
+        return method;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public String getDescription() {
@@ -72,6 +75,14 @@ public class RemoteApiOperation<I extends SpongeRequest, O extends SpongeRespons
 
     public void setRequestClass(Class<I> requestClass) {
         this.requestClass = requestClass;
+    }
+
+    public Class<P> getRequestParamsClass() {
+        return requestParamsClass;
+    }
+
+    public void setRequestParamsClass(Class<P> requestParamsClass) {
+        this.requestParamsClass = requestParamsClass;
     }
 
     public String getRequestDescription() {
@@ -98,11 +109,11 @@ public class RemoteApiOperation<I extends SpongeRequest, O extends SpongeRespons
         this.responseDescription = responseDescription;
     }
 
-    public RemoteApiOperationHandler<I, O> getOperationHandler() {
-        return operationHandler;
+    public RemoteApiMethodHandler<I, O> getHandler() {
+        return handler;
     }
 
-    public void setOperationHandler(RemoteApiOperationHandler<I, O> operationHandler) {
-        this.operationHandler = operationHandler;
+    public void setHandler(RemoteApiMethodHandler<I, O> handler) {
+        this.handler = handler;
     }
 }

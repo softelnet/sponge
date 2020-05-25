@@ -149,7 +149,7 @@ Deploy the web application as `sponge-demo-api` using the Tomcat Web Application
 
 [source,bash]
 ----
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8080/version
+curl http://localhost:8080/version
 ----
 
 [discrete]

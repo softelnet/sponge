@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2020 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,29 @@
 
 package org.openksavi.sponge.remoteapi.model.request;
 
-import io.swagger.annotations.ApiModel;
+/**
+ * A request with typed parameters.
+ */
+public abstract class TypedParamsRequest<T extends RequestParams> extends BaseRequest<T> {
 
-import org.openksavi.sponge.remoteapi.RemoteApiConstants;
-
-@ApiModel(value = "GetKnowledgeBasesRequest", description = "A get knowledge bases request")
-public class GetKnowledgeBasesRequest extends TypedParamsRequest<BaseRequestParams> {
-
-    public GetKnowledgeBasesRequest(BaseRequestParams params) {
-        super(RemoteApiConstants.METHOD_KNOWLEDGE_BASES, params);
+    protected TypedParamsRequest(String method, T params) {
+        super(method, params);
     }
 
-    public GetKnowledgeBasesRequest() {
-        this(new BaseRequestParams());
+    protected TypedParamsRequest() {
     }
 
     @Override
-    public BaseRequestParams createParams() {
-        return new BaseRequestParams();
+    public RequestHeader getHeader() {
+        return getParams() != null ? getParams().getHeader() : null;
+    }
+
+    @Override
+    public void setHeader(RequestHeader header) {
+        if (getParams() == null) {
+            setParams(createParams());
+        }
+
+        getParams().setHeader(header);
     }
 }

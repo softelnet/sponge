@@ -19,6 +19,9 @@ package org.openksavi.sponge.remoteapi.model.request;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -29,10 +32,10 @@ import org.openksavi.sponge.type.DataType;
 
 @ApiModel(value = "ProvideActionArgsRequest", description = "A provide action arguments request")
 @SuppressWarnings("rawtypes")
-public class ProvideActionArgsRequest extends BaseRequest<ProvideActionArgsParams> {
+public class ProvideActionArgsRequest extends TypedParamsRequest<ProvideActionArgsParams> {
 
-    public ProvideActionArgsRequest(ProvideActionArgsParams body) {
-        super(RemoteApiConstants.OPERATION_PROVIDE_ACTION_ARGS, body);
+    public ProvideActionArgsRequest(ProvideActionArgsParams params) {
+        super(RemoteApiConstants.METHOD_PROVIDE_ACTION_ARGS, params);
     }
 
     public ProvideActionArgsRequest() {
@@ -51,16 +54,22 @@ public class ProvideActionArgsRequest extends BaseRequest<ProvideActionArgsParam
 
         private List<String> provide;
 
+        @JsonInclude(Include.NON_NULL)
         private List<String> submit;
 
+        @JsonInclude(Include.NON_NULL)
         private Map<String, Object> current;
 
+        @JsonInclude(Include.NON_NULL)
         private Map<String, DataType> dynamicTypes;
 
+        @JsonInclude(Include.NON_NULL)
         private Map<String, Map<String, Object>> argFeatures;
 
+        @JsonInclude(Include.NON_NULL)
         private ProcessorQualifiedVersion qualifiedVersion;
 
+        @JsonInclude(Include.NON_NULL)
         private Boolean initial;
 
         public ProvideActionArgsParams(String name, List<String> provide, List<String> submit, Map<String, Object> current,

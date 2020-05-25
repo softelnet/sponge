@@ -18,6 +18,7 @@ import org.openksavi.sponge.logging.LoggingUtils;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 import org.openksavi.sponge.remoteapi.client.util.SpongeClientUtils;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
+import org.openksavi.sponge.remoteapi.server.security.NoSecuritySecurityProvider;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 /**
@@ -48,6 +49,8 @@ public class RemoteApiServiceGenerateOpenApiSpecificationMain {
 
             plugin.getSettings().setName("Sponge Remote API");
             plugin.getSettings().setDescription(plugin.getSettings().getName());
+
+            plugin.setSecurityProvider(new NoSecuritySecurityProvider());
 
             return plugin;
         }

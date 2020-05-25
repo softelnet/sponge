@@ -19,17 +19,19 @@ package org.openksavi.sponge.remoteapi.model.request;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import io.swagger.annotations.ApiModelProperty;
+public abstract class BaseRequest<T> implements SpongeRequest<T> {
 
-public abstract class BaseRequest<T extends RequestParams> implements SpongeRequest<T> {
-
+    /** The JSON-RPC version. */
     private String jsonrpc = "2.0";
 
+    /** The JSON-RPC method. */
     private String method;
 
+    /** The JSON-RPC parameters. */
     @JsonInclude(Include.NON_NULL)
     private T params;
 
+    /** The JSON-RPC request id. */
     private Object id;
 
     protected BaseRequest(String method, T params) {
@@ -40,7 +42,7 @@ public abstract class BaseRequest<T extends RequestParams> implements SpongeRequ
     protected BaseRequest() {
     }
 
-    @ApiModelProperty(value = "The JSON-RPC version", required = true)
+    @Override
     public String getJsonrpc() {
         return jsonrpc;
     }
@@ -50,7 +52,6 @@ public abstract class BaseRequest<T extends RequestParams> implements SpongeRequ
     }
 
     @Override
-    @ApiModelProperty(value = "The JSON-RPC method", required = true)
     public String getMethod() {
         return method;
     }
@@ -61,7 +62,6 @@ public abstract class BaseRequest<T extends RequestParams> implements SpongeRequ
     }
 
     @Override
-    @ApiModelProperty(value = "The JSON-RPC params", required = false)
     public T getParams() {
         return params;
     }
@@ -72,7 +72,6 @@ public abstract class BaseRequest<T extends RequestParams> implements SpongeRequ
     }
 
     @Override
-    @ApiModelProperty(value = "The JSON-RPC id", required = false)
     public Object getId() {
         return id;
     }

@@ -22,7 +22,6 @@ import java.util.Map;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
-import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetEventTypesRequest;
@@ -98,8 +97,6 @@ public interface RemoteApiService extends HasEngine, Initializable {
     LogoutResponse logout(LogoutRequest request);
 
     ActionCallResponse call(ActionCallRequest request);
-
-    ActionCallResponse callNamed(ActionCallNamedRequest request);
 
     SendEventResponse send(SendEventRequest request);
 

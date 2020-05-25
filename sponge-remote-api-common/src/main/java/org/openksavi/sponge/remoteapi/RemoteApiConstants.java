@@ -27,35 +27,33 @@ public final class RemoteApiConstants {
 
     public static final int DEFAULT_PORT = 1836;
 
-    public static final String OPERATION_VERSION = "version";
+    public static final String ENDPOINT_JSONRPC = "jsonrpc";
 
-    public static final String OPERATION_FEATURES = "features";
+    public static final String ENDPOINT_DOC = "doc";
 
-    public static final String OPERATION_LOGIN = "login";
+    public static final String METHOD_VERSION = "version";
 
-    public static final String OPERATION_LOGOUT = "logout";
+    public static final String METHOD_FEATURES = "features";
 
-    public static final String OPERATION_KNOWLEDGE_BASES = "knowledgeBases";
+    public static final String METHOD_LOGIN = "login";
 
-    public static final String OPERATION_ACTIONS = "actions";
+    public static final String METHOD_LOGOUT = "logout";
 
-    public static final String OPERATION_CALL = "call";
+    public static final String METHOD_KNOWLEDGE_BASES = "knowledgeBases";
 
-    public static final String OPERATION_CALL_NAMED = "callNamed";
+    public static final String METHOD_ACTIONS = "actions";
 
-    public static final String OPERATION_SEND = "send";
+    public static final String METHOD_CALL = "call";
 
-    public static final String OPERATION_IS_ACTION_ACTIVE = "isActionActive";
+    public static final String METHOD_SEND = "send";
 
-    public static final String OPERATION_PROVIDE_ACTION_ARGS = "provideActionArgs";
+    public static final String METHOD_IS_ACTION_ACTIVE = "isActionActive";
 
-    public static final String OPERATION_EVENT_TYPES = "eventTypes";
+    public static final String METHOD_PROVIDE_ACTION_ARGS = "provideActionArgs";
 
-    public static final String OPERATION_RELOAD = "reload";
+    public static final String METHOD_EVENT_TYPES = "eventTypes";
 
-    public static final String OPERATION_DOC = "doc";
-
-    public static final String OPERATION_JSON_RPC = "jsonrpc";
+    public static final String METHOD_RELOAD = "reload";
 
     /** A generic error code. */
     public static final int ERROR_CODE_GENERIC = 1001;
@@ -67,16 +65,6 @@ public final class RemoteApiConstants {
     public static final int ERROR_CODE_INVALID_USERNAME_PASSWORD = 1004;
 
     public static final int ERROR_CODE_INACTIVE_ACTION = 1005;
-
-    public static final int ERROR_CODE_STANDARD_PARSE = -32700;
-
-    public static final int ERROR_CODE_STANDARD_INVALID_REQUEST = -32600;
-
-    public static final int ERROR_CODE_STANDARD_METHOD_NOT_FOUND = -32601;
-
-    public static final int ERROR_CODE_STANDARD_INVALID_PARAMS = -32602;
-
-    public static final int ERROR_CODE_STANDARD_INTERNAL = -32603;
 
     public static final String REMOTE_API_FEATURE_SPONGE_VERSION = "spongeVersion";
 

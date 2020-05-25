@@ -16,17 +16,24 @@
 
 package org.openksavi.sponge.remoteapi.server;
 
-import org.apache.camel.Exchange;
+public class JsonRpcServerException extends ApplicationServerSpongeException {
 
-import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
-import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
+    private static final long serialVersionUID = -8115477757815409520L;
 
-/**
- * A Remote API operation handler.
- */
-@FunctionalInterface
-@SuppressWarnings("rawtypes")
-public interface RemoteApiOperationHandler<I extends SpongeRequest, O extends SpongeResponse> {
+    private int code;
 
-    O handle(RemoteApiService service, I request, Exchange exchange);
+    /**
+     * Creates a new exception.
+     *
+     * @param message exception message.
+     */
+    public JsonRpcServerException(int code, String message) {
+        super(message);
+
+        this.code = code;
+    }
+
+    public int getCode() {
+        return code;
+    }
 }

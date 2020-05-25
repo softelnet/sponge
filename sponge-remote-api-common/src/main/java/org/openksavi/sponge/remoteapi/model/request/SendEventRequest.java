@@ -18,6 +18,9 @@ package org.openksavi.sponge.remoteapi.model.request;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -25,10 +28,10 @@ import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 import org.openksavi.sponge.remoteapi.model.request.SendEventRequest.SendEventParams;
 
 @ApiModel(value = "SendEventRequest", description = "A send event request")
-public class SendEventRequest extends BaseRequest<SendEventParams> {
+public class SendEventRequest extends TypedParamsRequest<SendEventParams> {
 
-    public SendEventRequest(SendEventParams body) {
-        super(RemoteApiConstants.OPERATION_SEND, body);
+    public SendEventRequest(SendEventParams params) {
+        super(RemoteApiConstants.METHOD_SEND, params);
     }
 
     public SendEventRequest() {
@@ -45,12 +48,16 @@ public class SendEventRequest extends BaseRequest<SendEventParams> {
 
         private String name;
 
+        @JsonInclude(Include.NON_NULL)
         private Map<String, Object> attributes;
 
+        @JsonInclude(Include.NON_NULL)
         private String label;
 
+        @JsonInclude(Include.NON_NULL)
         private String description;
 
+        @JsonInclude(Include.NON_NULL)
         private Map<String, Object> features;
 
         public SendEventParams(String name, Map<String, Object> attributes, String label, String description,

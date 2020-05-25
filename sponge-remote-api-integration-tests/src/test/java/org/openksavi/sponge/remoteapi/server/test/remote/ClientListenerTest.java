@@ -71,9 +71,10 @@ public class ClientListenerTest extends BasicTestTemplate {
 
             assertEquals(3, requestStringList.size());
             assertEquals(3, responseStringList.size());
-            assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"version\",\"params\":{},\"id\":null}", normalizeJson(requestStringList.get(0)));
+            assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"version\",\"params\":{},\"id\":\"1\"}",
+                    normalizeJson(requestStringList.get(0)));
             assertTrue(normalizeJson(responseStringList.get(0)).matches(
-                    "\\{\"jsonrpc\":\"2.0\",\"result\":\\{\"header\":\\{\"requestTime\":\".*\",\"responseTime\":\".*\"},\"value\":\".*\"\\},\"id\":null\\}"));
+                    "\\{\"jsonrpc\":\"2.0\",\"result\":\\{\"header\":\\{\"requestTime\":\".*\",\"responseTime\":\".*\"},\"value\":\".*\"\\},\"id\":\"1\"\\}"));
         }
     }
 
@@ -96,10 +97,10 @@ public class ClientListenerTest extends BasicTestTemplate {
 
             client.getVersion();
 
-            assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"version\",\"params\":{},\"id\":null}",
+            assertEquals("{\"jsonrpc\":\"2.0\",\"method\":\"version\",\"params\":{},\"id\":\"2\"}",
                     normalizeJson(requestStringHolder.get()));
             assertTrue(normalizeJson(responseStringHolder.get()).matches(
-                    "\\{\"jsonrpc\":\"2.0\",\"result\":\\{\"header\":\\{\"requestTime\":\".*\",\"responseTime\":\".*\"},\"value\":\".*\"\\},\"id\":null\\}"));
+                    "\\{\"jsonrpc\":\"2.0\",\"result\":\\{\"header\":\\{\"requestTime\":\".*\",\"responseTime\":\".*\"},\"value\":\".*\"\\},\"id\":\"2\"\\}"));
         }
     }
 }

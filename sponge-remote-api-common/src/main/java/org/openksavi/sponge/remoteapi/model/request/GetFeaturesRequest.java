@@ -21,10 +21,10 @@ import io.swagger.annotations.ApiModel;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 
 @ApiModel(value = "GetFeaturesRequest", description = "A get features request")
-public class GetFeaturesRequest extends BaseRequest<BaseRequestParams> {
+public class GetFeaturesRequest extends TypedParamsRequest<BaseRequestParams> {
 
-    public GetFeaturesRequest(BaseRequestParams body) {
-        super(RemoteApiConstants.OPERATION_FEATURES, body);
+    public GetFeaturesRequest(BaseRequestParams params) {
+        super(RemoteApiConstants.METHOD_FEATURES, params);
     }
 
     public GetFeaturesRequest() {

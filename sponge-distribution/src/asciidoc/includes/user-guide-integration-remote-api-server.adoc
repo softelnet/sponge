@@ -58,7 +58,7 @@ The default name of the Remote API plugin (which can be used in knowledge bases)
 
 |`publishReload`
 |`boolean`
-|If `true` then the reload operation will be published. Defaults to `false`.
+|If `true` then the `reload` method will be published. Defaults to `false`.
 
 |`routeBuilderClass`
 |`String`

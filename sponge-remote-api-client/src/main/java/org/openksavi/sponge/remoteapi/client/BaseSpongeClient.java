@@ -51,8 +51,6 @@ import org.openksavi.sponge.remoteapi.feature.converter.FeaturesUtils;
 import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
 import org.openksavi.sponge.remoteapi.model.RemoteEvent;
 import org.openksavi.sponge.remoteapi.model.RemoteKnowledgeBaseMeta;
-import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest;
-import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest.ActionCallNamedParams;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest.ActionCallParams;
 import org.openksavi.sponge.remoteapi.model.request.ActionExecutionInfo;
@@ -332,27 +330,27 @@ public abstract class BaseSpongeClient implements SpongeClient {
         return typeConverter.getObjectMapper();
     }
 
-    protected final String getUrl(String operation) {
+    protected final String getUrl() {
         String baseUrl = configuration.getUrl();
 
-        return baseUrl + (baseUrl.endsWith("/") ? "" : "/") + operation;
+        return baseUrl + (baseUrl.endsWith("/") ? "" : "/") + RemoteApiConstants.ENDPOINT_JSONRPC;
     }
 
-    protected abstract <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operationType, T request,
-            Class<R> responseClass, SpongeRequestContext context);
+    protected abstract <T extends SpongeRequest, R extends SpongeResponse> R doExecute(T request, Class<R> responseClass,
+            SpongeRequestContext context);
 
     @Override
     public <T extends SpongeRequest> T setupRequest(T request) {
-        if (configuration.isUseRequestId()) {
+        if (request.getId() == null) {
             request.setId(String.valueOf(currentRequestId.incrementAndGet()));
         }
 
         // Set empty header if none.
-        if (request.getParams().getHeader() == null) {
-            request.getParams().setHeader(new RequestHeader());
+        if (request.getHeader() == null) {
+            request.setHeader(new RequestHeader());
         }
 
-        RequestHeader header = request.getParams().getHeader();
+        RequestHeader header = request.getHeader();
 
         // Must be thread-safe.
         String authToken = currentAuthToken.get();
@@ -377,27 +375,27 @@ public abstract class BaseSpongeClient implements SpongeClient {
         // Clear header if it is empty.
         if (header.getUsername() == null && header.getPassword() == null && header.getAuthToken() == null
                 && (header.getFeatures() == null || header.getFeatures().isEmpty())) {
-            request.getParams().setHeader(null);
+            request.setHeader(null);
         }
 
         return request;
     }
 
-    protected <T extends SpongeResponse> T setupResponse(String operation, T response) {
+    protected <T extends SpongeResponse> T setupResponse(String method, T response) {
         // Set empty header if none.
         if (response.getResult() != null && response.getResult().getHeader() == null) {
             response.getResult().setHeader(new ResponseHeader());
         }
 
         if (response.getError() != null) {
-            handleErrorResponse(operation, response.getError());
+            handleErrorResponse(method, response.getError());
         }
 
         return response;
     }
 
     @Override
-    public void handleErrorResponse(String operation, ResponseError error) {
+    public void handleErrorResponse(String method, ResponseError error) {
         if (error.getCode() != null) {
             if (configuration.isThrowExceptionOnErrorResponse()) {
                 String message = error.getMessage() != null ? error.getMessage() : String.format("Error code: %s", error.getCode());
@@ -433,31 +431,30 @@ public abstract class BaseSpongeClient implements SpongeClient {
     }
 
     @Override
-    public <T extends SpongeRequest, R extends SpongeResponse> R execute(String operationType, T request, Class<R> responseClass,
-            SpongeRequestContext context) {
+    public <T extends SpongeRequest, R extends SpongeResponse> R execute(T request, Class<R> responseClass, SpongeRequestContext context) {
         if (context == null) {
             context = SpongeRequestContext.builder().build();
         }
 
         // Set empty header if none.
-        if (request.getParams().getHeader() == null) {
-            request.getParams().setHeader(new RequestHeader());
+        if (request.getHeader() == null) {
+            request.setHeader(new RequestHeader());
         }
 
-        RequestHeader header = request.getParams().getHeader();
+        RequestHeader header = request.getHeader();
 
         final SpongeRequestContext finalContext = context;
 
         return executeWithAuthentication(request, header.getUsername(), header.getPassword(), header.getAuthToken(),
-                (req) -> executeDelegate(operationType, req, responseClass, finalContext), () -> {
+                (req) -> executeDelegate(req, responseClass, finalContext), () -> {
                     header.setAuthToken(null);
                     return request;
                 });
     }
 
     @Override
-    public <T extends SpongeRequest, R extends SpongeResponse> R execute(String operationType, T request, Class<R> responseClass) {
-        return execute(operationType, request, responseClass, null);
+    public <T extends SpongeRequest, R extends SpongeResponse> R execute(T request, Class<R> responseClass) {
+        return execute(request, responseClass, null);
     }
 
     protected boolean isRequestAnonymous(String requestUsername, String requestPassword) {
@@ -490,18 +487,18 @@ public abstract class BaseSpongeClient implements SpongeClient {
         }
     }
 
-    protected <T extends SpongeRequest, R extends SpongeResponse> R executeDelegate(String operationType, T request, Class<R> responseClass,
+    protected <T extends SpongeRequest, R extends SpongeResponse> R executeDelegate(T request, Class<R> responseClass,
             SpongeRequestContext context) {
         if (context == null) {
             context = SpongeRequestContext.builder().build();
         }
 
-        return setupResponse(operationType, doExecute(operationType, setupRequest(request), responseClass, context));
+        return setupResponse(request.getMethod(), doExecute(setupRequest(request), responseClass, context));
     }
 
     @Override
     public GetVersionResponse getVersion(GetVersionRequest request, SpongeRequestContext context) {
-        return execute(RemoteApiConstants.OPERATION_VERSION, request, GetVersionResponse.class, context);
+        return execute(request, GetVersionResponse.class, context);
     }
 
     @Override
@@ -516,7 +513,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
 
     @Override
     public GetFeaturesResponse getFeatures(GetFeaturesRequest request, SpongeRequestContext context) {
-        return execute(RemoteApiConstants.OPERATION_FEATURES, request, GetFeaturesResponse.class, context);
+        return execute(request, GetFeaturesResponse.class, context);
     }
 
     @Override
@@ -547,7 +544,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
 
         try {
             currentAuthToken.set(null);
-            response = executeDelegate(RemoteApiConstants.OPERATION_LOGIN, request, LoginResponse.class, context);
+            response = executeDelegate(request, LoginResponse.class, context);
             currentAuthToken.set(response.getResult().getValue().getAuthToken());
         } finally {
             lock.unlock();
@@ -579,7 +576,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
         lock.lock();
 
         try {
-            response = execute(RemoteApiConstants.OPERATION_LOGOUT, request, LogoutResponse.class, context);
+            response = execute(request, LogoutResponse.class, context);
             currentAuthToken.set(null);
         } finally {
             lock.unlock();
@@ -600,7 +597,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
 
     @Override
     public GetKnowledgeBasesResponse getKnowledgeBases(GetKnowledgeBasesRequest request, SpongeRequestContext context) {
-        return execute(RemoteApiConstants.OPERATION_KNOWLEDGE_BASES, request, GetKnowledgeBasesResponse.class, context);
+        return execute(request, GetKnowledgeBasesResponse.class, context);
     }
 
     @Override
@@ -614,7 +611,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
     }
 
     protected GetActionsResponse doGetActions(GetActionsRequest request, boolean populateCache, SpongeRequestContext context) {
-        GetActionsResponse response = execute(RemoteApiConstants.OPERATION_ACTIONS, request, GetActionsResponse.class, context);
+        GetActionsResponse response = execute(request, GetActionsResponse.class, context);
         GetActionsResult result = response.getResult();
 
         if (result.getValue().getActions() != null) {
@@ -758,14 +755,23 @@ public abstract class BaseSpongeClient implements SpongeClient {
                 actionMeta != null ? actionMeta.getName() : null, info.getName());
     }
 
+    @SuppressWarnings("unchecked")
     protected ActionCallResponse doCall(RemoteActionMeta actionMeta, ActionCallRequest request, SpongeRequestContext context) {
         setupActionExecutionInfo(actionMeta, request.getParams());
 
-        validateCallArgs(actionMeta, request.getParams().getArgs());
+        Object args = request.getParams().getArgs();
 
-        request.getParams().setArgs(marshalActionCallArgs(actionMeta, request.getParams().getArgs()));
+        if (args instanceof List || args == null) {
+            validateCallArgs(actionMeta, (List) args);
+            request.getParams().setArgs(marshalActionCallArgs(actionMeta, (List) args));
+        } else if (args instanceof Map) {
+            validateCallArgs(actionMeta, (Map<String, ?>) args);
+            request.getParams().setArgs(marshalActionCallArgs(actionMeta, (Map<String, ?>) args));
+        } else {
+            throw new IllegalArgumentException("Action args should be an instance of a List or a Map");
+        }
 
-        ActionCallResponse response = execute(RemoteApiConstants.OPERATION_CALL, request, ActionCallResponse.class, context);
+        ActionCallResponse response = execute(request, ActionCallResponse.class, context);
 
         unmarshalCallResult(actionMeta, response);
 
@@ -884,6 +890,17 @@ public abstract class BaseSpongeClient implements SpongeClient {
     }
 
     @Override
+    public Object call(String actionName, Map<String, ?> args) {
+        return call(new ActionCallRequest(new ActionCallParams(actionName, args, null))).getResult().getValue();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T call(Class<T> resultClass, String actionName, Map<String, ?> args) {
+        return (T) call(actionName, args);
+    }
+
+    @Override
     public SendEventResponse send(SendEventRequest request, SpongeRequestContext context) {
         SendEventParams params = request.getParams();
 
@@ -896,7 +913,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
         params.setAttributes(event.getAttributes());
         params.setFeatures(event.getFeatures());
 
-        return execute(RemoteApiConstants.OPERATION_SEND, request, SendEventResponse.class, context);
+        return execute(request, SendEventResponse.class, context);
     }
 
     @Override
@@ -947,7 +964,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
             });
         }
 
-        return execute(RemoteApiConstants.OPERATION_IS_ACTION_ACTIVE, request, IsActionActiveResponse.class, context);
+        return execute(request, IsActionActiveResponse.class, context);
     }
 
     @Override
@@ -989,8 +1006,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
         // Clone and marshal all argument features.
         request.getParams().setArgFeatures(marshalProvideArgsFeaturesMap(request.getParams().getArgFeatures()));
 
-        ProvideActionArgsResponse response =
-                execute(RemoteApiConstants.OPERATION_PROVIDE_ACTION_ARGS, request, ProvideActionArgsResponse.class, context);
+        ProvideActionArgsResponse response = execute(request, ProvideActionArgsResponse.class, context);
 
         if (actionMeta != null) {
             unmarshalProvidedActionArgValues(actionMeta, response.getResult().getValue());
@@ -1025,7 +1041,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
     }
 
     protected GetEventTypesResponse doGetEventTypes(GetEventTypesRequest request, boolean populateCache, SpongeRequestContext context) {
-        GetEventTypesResponse response = execute(RemoteApiConstants.OPERATION_EVENT_TYPES, request, GetEventTypesResponse.class, context);
+        GetEventTypesResponse response = execute(request, GetEventTypesResponse.class, context);
 
         Map<String, RecordType> eventTypes = response.getResult().getValue();
         if (eventTypes != null) {
@@ -1086,7 +1102,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
 
     @Override
     public ReloadResponse reload(ReloadRequest request, SpongeRequestContext context) {
-        return execute(RemoteApiConstants.OPERATION_RELOAD, request, ReloadResponse.class, context);
+        return execute(request, ReloadResponse.class, context);
     }
 
     @Override
@@ -1118,52 +1134,5 @@ public abstract class BaseSpongeClient implements SpongeClient {
     @Override
     public String getCurrentAuthToken() {
         return currentAuthToken.get();
-    }
-
-    @Override
-    public ActionCallResponse callNamed(ActionCallNamedRequest request, RemoteActionMeta actionMeta, boolean allowFetchMetadata,
-            SpongeRequestContext context) {
-        return doCallNamed(actionMeta != null ? actionMeta : getActionMeta(request.getParams().getName(), allowFetchMetadata), request,
-                context);
-    }
-
-    @Override
-    public ActionCallResponse callNamed(ActionCallNamedRequest request, RemoteActionMeta actionMeta, boolean allowFetchMetadata) {
-        return callNamed(request, actionMeta, allowFetchMetadata, null);
-    }
-
-    @Override
-    public ActionCallResponse callNamed(ActionCallNamedRequest request, RemoteActionMeta actionMeta) {
-        return callNamed(request, actionMeta, true);
-    }
-
-    @Override
-    public ActionCallResponse callNamed(ActionCallNamedRequest request) {
-        return callNamed(request, null);
-    }
-
-    @Override
-    public Object callNamed(String actionName, Map<String, ?> args) {
-        return callNamed(new ActionCallNamedRequest(new ActionCallNamedParams(actionName, args, null))).getResult().getValue();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T callNamed(Class<T> resultClass, String actionName, Map<String, ?> args) {
-        return (T) callNamed(actionName, args);
-    }
-
-    protected ActionCallResponse doCallNamed(RemoteActionMeta actionMeta, ActionCallNamedRequest request, SpongeRequestContext context) {
-        setupActionExecutionInfo(actionMeta, request.getParams());
-
-        validateCallArgs(actionMeta, request.getParams().getArgs());
-
-        request.getParams().setArgs(marshalActionCallArgs(actionMeta, request.getParams().getArgs()));
-
-        ActionCallResponse response = execute(RemoteApiConstants.OPERATION_CALL_NAMED, request, ActionCallResponse.class, context);
-
-        unmarshalCallResult(actionMeta, response);
-
-        return response;
     }
 }

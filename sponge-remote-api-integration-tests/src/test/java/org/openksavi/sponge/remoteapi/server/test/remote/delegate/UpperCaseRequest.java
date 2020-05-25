@@ -19,16 +19,16 @@ package org.openksavi.sponge.remoteapi.server.test.remote.delegate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.openksavi.sponge.remoteapi.model.request.BaseRequest;
 import org.openksavi.sponge.remoteapi.model.request.BaseRequestParams;
+import org.openksavi.sponge.remoteapi.model.request.TypedParamsRequest;
 import org.openksavi.sponge.remoteapi.server.test.remote.ActionDelegateRemoteApiOperationTest;
 import org.openksavi.sponge.remoteapi.server.test.remote.delegate.UpperCaseRequest.UpperCaseParams;
 
 @ApiModel(value = "UpperCaseRequest", description = "An UpperCase request")
-public class UpperCaseRequest extends BaseRequest<UpperCaseParams> {
+public class UpperCaseRequest extends TypedParamsRequest<UpperCaseParams> {
 
     public UpperCaseRequest(UpperCaseParams params) {
-        super(ActionDelegateRemoteApiOperationTest.OPERATION, params);
+        super(ActionDelegateRemoteApiOperationTest.METHOD, params);
     }
 
     public UpperCaseRequest() {

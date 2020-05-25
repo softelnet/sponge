@@ -33,18 +33,18 @@ public class ReloadResponse extends BaseResponse<ReloadResult> {
     }
 
     @ApiModel(value = "ReloadResult", description = "A reload response result")
-    public static class ReloadResult extends BaseResponseResult<String> {
+    public static class ReloadResult extends BaseResponseResult<Boolean> {
 
         public ReloadResult() {
         }
 
-        public ReloadResult(String status) {
+        public ReloadResult(Boolean status) {
             super(status);
         }
 
         @Override
         @ApiModelProperty(value = "The reload status", required = true)
-        public String getValue() {
+        public Boolean getValue() {
             return super.getValue();
         }
     }

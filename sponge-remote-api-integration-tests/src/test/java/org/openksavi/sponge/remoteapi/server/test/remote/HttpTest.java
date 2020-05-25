@@ -20,7 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Base64;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,6 +44,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import org.openksavi.sponge.remoteapi.JsonRpcConstants;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 import org.openksavi.sponge.remoteapi.model.response.ErrorResponse;
 import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
@@ -65,10 +69,10 @@ public class HttpTest extends BasicTestTemplate {
         Response okHttpResponse = client.newCall(new Request.Builder().url(String.format("http://localhost:%d/actions", port))
                 .headers(new Headers.Builder().add("Content-Type", RemoteApiConstants.CONTENT_TYPE_JSON).build())
                 .post(RequestBody.create(MediaType.get(RemoteApiConstants.CONTENT_TYPE_JSON), requestBody)).build()).execute();
-        assertEquals(500, okHttpResponse.code());
+        assertEquals(RemoteApiConstants.HTTP_CODE_ERROR, okHttpResponse.code());
         ObjectMapper mapper = RemoteApiUtils.createObjectMapper();
         ErrorResponse apiResponse = mapper.readValue(okHttpResponse.body().string(), ErrorResponse.class);
-        assertEquals(RemoteApiConstants.ERROR_CODE_STANDARD_PARSE, apiResponse.getError().getCode());
+        assertEquals(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, apiResponse.getError().getCode());
         assertTrue(apiResponse.getError().getMessage().contains("Unrecognized field \"error_property\""));
     }
 
@@ -87,10 +91,12 @@ public class HttpTest extends BasicTestTemplate {
     public void testOutputStreamResultActionGet() throws IOException {
         OkHttpClient client = createOkHttpClient();
 
-        Response okHttpResponse = client.newCall(new Request.Builder()
-                .url(new HttpUrl.Builder().scheme("http").host("localhost").port(port).addPathSegment("call")
-                        .addQueryParameter("request", "{\"params\":{\"name\":\"OutputStreamResultAction\",\"args\":[]}}").build())
-                .get().build()).execute();
+        String params = "{\"name\":\"OutputStreamResultAction\",\"args\":[]}";
+        params = new String(Base64.getEncoder().encode(params.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        params = URLEncoder.encode(params, StandardCharsets.UTF_8.name());
+
+        Response okHttpResponse = client.newCall(new Request.Builder().url(new HttpUrl.Builder().scheme("http").host("localhost").port(port)
+                .addPathSegment("call").addQueryParameter("params", params).build()).get().build()).execute();
         assertEquals(200, okHttpResponse.code());
         byte[] responseBody = okHttpResponse.body().bytes();
         String responseString = new String(responseBody);

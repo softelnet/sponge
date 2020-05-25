@@ -88,7 +88,7 @@ public class OkHttpSpongeClient extends BaseSpongeClient {
 
     @Override
     @SuppressWarnings("deprecation")
-    protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(String operationType, T request, Class<R> responseClass,
+    protected <T extends SpongeRequest, R extends SpongeResponse> R doExecute(T request, Class<R> responseClass,
             SpongeRequestContext context) {
         Headers headers = new Headers.Builder().add("Content-Type", RemoteApiConstants.CONTENT_TYPE_JSON).build();
 
@@ -96,7 +96,7 @@ public class OkHttpSpongeClient extends BaseSpongeClient {
             String requestBody = getObjectMapper().writeValueAsString(request);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("Remote API {} request: {}", operationType, RemoteApiUtils.obfuscatePassword(requestBody));
+                logger.debug("Remote API {} request: {}", request.getMethod(), RemoteApiUtils.obfuscatePassword(requestBody));
             }
 
             Stream.concat(Stream.of(context.getOnRequestSerializedListener()), onRequestSerializedListeners.stream())
@@ -104,14 +104,14 @@ public class OkHttpSpongeClient extends BaseSpongeClient {
 
             Response httpResponse =
                     okHttpClient
-                            .newCall(new Request.Builder().url(getUrl(operationType)).headers(headers)
+                            .newCall(new Request.Builder().url(getUrl()).headers(headers)
                                     .post(RequestBody.create(MediaType.get(RemoteApiConstants.CONTENT_TYPE_JSON), requestBody)).build())
                             .execute();
 
             ResponseBody httpResponseBody = httpResponse.body();
             String responseBody = httpResponseBody != null ? httpResponseBody.string() : null;
             if (logger.isDebugEnabled()) {
-                logger.debug("Remote API {} response: {})", operationType, RemoteApiUtils.obfuscatePassword(responseBody));
+                logger.debug("Remote API {} response: {})", request.getMethod(), RemoteApiUtils.obfuscatePassword(responseBody));
             }
 
             Validate.isTrue(

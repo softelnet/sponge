@@ -303,7 +303,7 @@ class Mpc:
 
     def startEventLoop(self):
         self.eventLoopProcess = self.__createProcess().arguments("idleloop").outputAsConsumer(
-                PyConsumer(lambda line: self.__onMpdEvent(line))).outputLoggingConsumerNone().errorAsConsumer().run()
+                PyConsumer(lambda line: self.__onMpdEvent(line))).outputLoggingConsumerNone().errorAsConsumer().runAsync()
     def stopEventLoop(self):
         if self.eventLoopProcess:
             self.eventLoopProcess.destroy()

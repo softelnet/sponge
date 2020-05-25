@@ -1,20 +1,33 @@
 = {sponge} Remote API
-The {sponge} Remote API provides users a remote access to the key {sponge} functionalities.
+The {sponge} Remote API provides users a remote access to key {sponge} functionalities.
 
-The {sponge} Remote API is an RPC (remote procedure call) style API similar (but not compatible) to JSON-RPC that adopts some REST concepts:
+== Endpoints
+The {sponge} Remote API supports a JSON-RPC 2.0 endpoint and method endpoints that accept simplified (non strict) JSON-RPC 2.0 messages.
 
-* a request is sent the same way (e.g. via HTTP POST or GET) like JSON-RPC but doesn't contain a method name,
-* it uses different URLs for different operations like REST.
+The reason that the API supports both styles is that the JSON-RPC 2.0 compatibility is intended for applications that connect to {sponge} while the non strict JSON-RPC 2.0 API is rather intended for manual, command-line uses.
 
-The reason that the API is a mix of JSON-RPC and REST is that the key {sponge} Remote API operation is the {sponge} action call that is a kind of an RPC in itself.
+=== JSON-RPC 2.0 endpoint
+The `/jsonrpc` endpoint is intended to be JSON-RPC 2.0 compatible, however:
 
-== Operations summary
-The following table contains a summary of the Remote API operations. For a complete list of operations see the <<_swagger_overview, specification>> generated using Swagger and https://github.com/Swagger2Markup/swagger2markup[Swagger2Markup].
+* only named JSON-RPC 2.0 params are supported (params as a list are not supported),
+* batch requests are not supported.
 
-.The Remote API operations summary
+=== Method endpoints
+The other endpoints correspond to the supported Remote API methods and provide an RPC style API based on JSON-RPC 2.0 that adopts some REST concepts:
+
+* a request doesn't have to contain a method name (because it is is defined by a particular endpoint) nor the `jsonrpc` field,
+* it uses different endpoints for different methods like REST,
+* requests with no `id` are not regarded as notifications.
+
+The method endpoints metadata is used when the OpenAPI specification for the service is generated.
+
+== Methods summary
+The following table contains a summary of the Remote API methods. For a complete specification see the <<_swagger_overview, specification>> generated using Swagger and https://github.com/Swagger2Markup/swagger2markup[Swagger2Markup].
+
+.The Remote API methods summary
 [cols="2,1,4"]
 |===
-|Name |URI |Description
+|Name |Method |Description
 
 |Get the Sponge Remote API version
 |`version`
@@ -44,10 +57,6 @@ The following table contains a summary of the Remote API operations. For a compl
 |`call`
 |Calls an action.
 
-|Call an action with named arguments
-|`callNamed`
-|Calls an action with named arguments (as a map). The action is required to have arguments metadata.
-
 |Provide action arguments
 |`actionArgs`
 |Returns _provided arguments_, i.e. values along with value sets of action arguments. The request accepts the following properties: `name` - the action name, `argNames` -  the optional list of argument names that are to be provided (if `null`, all provided arguments will be produced), `current` - the optional map of argument names and their current values passed from a client code.
@@ -62,19 +71,19 @@ The following table contains a summary of the Remote API operations. For a compl
 
 |Reload knowledge bases
 |`reload`
-|Reloads all knowledge bases. Depending on the configuration, this operation may not be published. It should be available only to administrators.
+|Reloads all knowledge bases. Depending on the configuration, this method may not be published. It should be available only to administrators.
 |===
 
 The OpenAPI specification of the Remote API is included in the Appendix A of the {sponge} Reference Documentation.
 
-The {sponge} Remote API service can publish custom Remote API operations as well.
+The {sponge} Remote API service can publish custom Remote API methods as well.
 
 In case of an error, a response HTTP status code will be `500`.
 
 == OpenAPI specification
 An online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be available, depending on the configuration, at URL `http://localhost:1836/doc`.
 
-NOTE: The generated OpenAPI specification is currently limited. For example it doesn't support inheritance e.g. for {sponge} data types. Therefore it is most useful for simple customized operations.
+NOTE: The generated OpenAPI specification is currently limited. For example it doesn't support inheritance e.g. for {sponge} data types. Therefore it is most useful for customized methods.
 
 == Request
 A request may contain base properties.
@@ -128,22 +137,40 @@ NOTE: Request and response features are not converted by the feature converter.
 
 The {sponge} Remote API supports both POST and GET methods.
 
-.Examples of Remote API requests
+.Examples of Remote API JSON-RPC 2.0 requests
 [source,bash]
 ----
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/version
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/knowledgeBases
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/actions
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/actions -d '{"header":{"username":"john","password":"password"}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/actions -d '{"body":{"name":".*Case"}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/call -d '{"body":{"name":"UpperCase","args":["test1"]}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/callNamed -d '{"body":{"name":"UpperCase","args":{"text":"test1"}}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/send -d '{"header":{"username":"john","password":"password"},"body":{"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/reload
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"version","id":1}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"knowledgeBases","id":1}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"actions","id":1}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"actions","params":{"header":{"username":"john","password":"password"}},"id":1}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"actions","params":{"name":".*Case"},"id":1}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"call","params":{"name":"UpperCase","args":["test1"]},"id":1}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"call","params":{"name":"UpperCase","args":{"text":"test1"}},"id":1}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"send","params":{"header":{"username":"john","password":"password"},"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}},"id":1}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"reload","params":{"header":{"username":"john","password":"password"}},"id":1}'
 
-curl http://localhost:1836/version
-curl http://localhost:1836/knowledgeBases
-curl -G "http://localhost:1836/call" --data-urlencode 'request={"body":{"name":"OutputStreamResultAction","args":[]}}'
+curl http://localhost:8888/jsonrpc?jsonrpc=2.0&method=version&id=1
+curl http://localhost:8888/jsonrpc?jsonrpc=2.0&method=knowledgeBases&id=1
+curl -G "http://localhost:8888/jsonrpc?jsonrpc=2.0&method=call&id=1" --data-urlencode "params=`echo '{"name":"OutputStreamResultAction"}' | base64`"
+----
+
+.Examples of simplified Remote API method requests
+[source,bash]
+----
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/version
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/knowledgeBases
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/actions
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/actions -d '{"params":{"header":{"username":"john","password":"password"}}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/actions -d '{"params":{"name":".*Case"}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/call -d '{"params":{"name":"UpperCase","args":["test1"]}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/call -d '{"params":{"name":"UpperCase","args":{"text":"test1"}}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/send -d '{"params":{"header":{"username":"john","password":"password"},"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}}'
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/reload -d '{"params":{"header":{"username":"john","password":"password"}}}'
+
+curl http://localhost:8888/version
+curl http://localhost:8888/knowledgeBases
+curl -G "http://localhost:8888/call?" --data-urlencode "params=`echo '{"name":"OutputStreamResultAction"}' | base64`"
 ----
 
 == Response
@@ -225,10 +252,10 @@ The Remote API supports a username/password and an authentication token authenti
 |Name |Description
 
 |Username/password
-|Every request has to contain a username and a password. Invoking the `login` operation switches to the authentication token mode.
+|Every request has to contain a username and a password. Invoking the `login` method switches to the authentication token mode.
 
 |Authentication token
-|Every request has to contain an authentication token, returned by the `login` operation that has to be invoked earlier. It may not contain neither username nor password. The authentication token has an expiration time. When an operation returns an error message with an error code `INVALID_AUTH_TOKEN` you have to invoke the `login` operation once more to obtain a new authentication token.
+|Every request has to contain an authentication token, returned by the `login` method that has to be invoked earlier. It may not contain neither username nor password. The authentication token has an expiration time. When a method returns an error message with an error code `INVALID_AUTH_TOKEN` you have to invoke the `login` method once more to obtain a new authentication token.
 |===
 
 == API features
@@ -270,18 +297,18 @@ The Remote API supports a username/password and an authentication token authenti
 |===
 |Code |Description
 
-|`GENERIC`
+|1001
 |A generic error.
 
-|`INVALID_AUTH_TOKEN`
+|1002
 |Invalid or expired authentication token.
 
-|`INVALID_KB_VERSION`
+|1003
 |An action version in the engine differs from the one passed to the Remote API from a client code.
 
-|`INVALID_USERNAME_PASSWORD`
+|1004
 |Invalid username or password.
 
-|`INACTIVE_ACTION`
+|1005
 |An action to be called is inactive.
 |===

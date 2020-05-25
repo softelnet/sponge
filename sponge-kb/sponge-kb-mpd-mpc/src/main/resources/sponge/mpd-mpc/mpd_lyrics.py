@@ -26,7 +26,7 @@ class LyricsService:
         request = Request.Builder().url(url).build()
         response = OkHttpClient().newCall(request).execute()
         responseString = response.body().string()
-        sponge.logger.debug(responseString)
+        #sponge.logger.debug(responseString)
         responseMap = ObjectMapper().readValue(responseString, Map)
         statusCode = responseMap["message"]["header"]["status_code"]
         if statusCode == 200:
