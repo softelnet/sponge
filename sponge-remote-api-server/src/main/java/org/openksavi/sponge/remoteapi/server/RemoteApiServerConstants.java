@@ -109,11 +109,11 @@ public final class RemoteApiServerConstants {
 
     public static final boolean DEFAULT_INCLUDE_RESPONSE_TIMES = false;
 
-    public static final String EXCHANGE_HEADER_OPERATION_NAME = "spongeOperationName";
+    public static final String EXCHANGE_PROPERTY_METHOD_NAME = "methodName";
 
-    public static final String EXCHANGE_HEADER_EXCEPTION = "spongeException";
+    public static final String EXCHANGE_PROPERTY_REQUEST_ID = "requestId";
 
-    public static final String EXCHANGE_HEADER_REQUEST_TIME = "requestTime";
+    public static final String EXCHANGE_PROPERTY_REQUEST_TIME = "requestTime";
 
     public static final String PROP_HOST = "sponge.remoteApiServer.host";
 
@@ -128,8 +128,6 @@ public final class RemoteApiServerConstants {
     public static final String PROP_REGISTER_SERVICE_DISCOVERY = "sponge.remoteApiServer.registerServiceDiscovery";
 
     public static final String PROP_SERVICE_DISCOVERY_URL = "sponge.remoteApiServer.serviceDiscoveryUrl";
-
-    public static final String STATUS_OK = "ok";
 
     private RemoteApiServerConstants() {
         //

@@ -24,8 +24,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -33,6 +33,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.camel.Exchange;
@@ -50,21 +51,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.remoteapi.JsonRpcConstants;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
-import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
+import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest.ActionCallParams;
+import org.openksavi.sponge.remoteapi.model.request.BaseRequestParams;
+import org.openksavi.sponge.remoteapi.model.request.GenericRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest;
+import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest.GetActionsParams;
 import org.openksavi.sponge.remoteapi.model.request.GetEventTypesRequest;
+import org.openksavi.sponge.remoteapi.model.request.GetEventTypesRequest.GetEventTypesParams;
 import org.openksavi.sponge.remoteapi.model.request.GetFeaturesRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetKnowledgeBasesRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.remoteapi.model.request.IsActionActiveRequest;
+import org.openksavi.sponge.remoteapi.model.request.IsActionActiveRequest.IsActionActiveParams;
 import org.openksavi.sponge.remoteapi.model.request.LoginRequest;
 import org.openksavi.sponge.remoteapi.model.request.LogoutRequest;
 import org.openksavi.sponge.remoteapi.model.request.ProvideActionArgsRequest;
+import org.openksavi.sponge.remoteapi.model.request.ProvideActionArgsRequest.ProvideActionArgsParams;
 import org.openksavi.sponge.remoteapi.model.request.ReloadRequest;
 import org.openksavi.sponge.remoteapi.model.request.RequestHeader;
+import org.openksavi.sponge.remoteapi.model.request.RequestParams;
 import org.openksavi.sponge.remoteapi.model.request.SendEventRequest;
+import org.openksavi.sponge.remoteapi.model.request.SendEventRequest.SendEventParams;
 import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 import org.openksavi.sponge.remoteapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.remoteapi.model.response.GetActionsResponse;
@@ -90,7 +100,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
 
     private RemoteApiService apiService;
 
-    private List<RemoteApiOperation<?, ?>> operations = new ArrayList<>();
+    private Map<String, RemoteApiOperation<?, ?, ?>> operations = new LinkedHashMap<>();
 
     public RemoteApiRouteBuilder() {
         //
@@ -129,19 +139,15 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
     protected Processor createDefaultOnExceptionProcessor() {
         return exchange -> {
             try {
-                Throwable processingException =
-                        exchange.getIn().getHeader(RemoteApiServerConstants.EXCHANGE_HEADER_EXCEPTION, Throwable.class);
-                if (processingException == null) {
-                    processingException = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class);
-                }
+                Throwable processingException = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class);
 
                 logger.info("Remote API error", processingException);
 
-                String operationName =
-                        Validate.notNull(exchange.getIn().getHeader(RemoteApiServerConstants.EXCHANGE_HEADER_OPERATION_NAME, String.class),
-                                "The operation name is not set in the Camel route");
+                String methodName =
+                        Validate.notNull(exchange.getProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_METHOD_NAME, String.class),
+                                "The method name is not set in the Camel route");
 
-                setupResponse(operationName, exchange, apiService.createErrorResponse(processingException));
+                setupResponse(methodName, exchange, apiService.createErrorResponse(processingException));
 
                 exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, RemoteApiConstants.HTTP_CODE_ERROR);
             } catch (Throwable e) {
@@ -163,7 +169,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
             .enableCORS(true)
             .contextPath("/" + (getSettings().getPath() != null ? getSettings().getPath() : ""))
             // Add swagger api doc out of the box.
-            .apiContextPath("/" + RemoteApiConstants.OPERATION_DOC)
+            .apiContextPath("/" + RemoteApiConstants.ENDPOINT_DOC)
                 .apiVendorExtension(false);
         // @formatter:on
 
@@ -203,16 +209,18 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         }
     }
 
-    protected void setupResponse(String operationName, Exchange exchange, SpongeResponse response) {
+    protected void setupResponse(String method, Exchange exchange, SpongeResponse response) {
         try {
+            response.setId(exchange.getProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_REQUEST_ID));
+
             if (response.getResult() != null) {
                 if (apiService.getSettings().isIncludeResponseTimes()) {
                     if (response.getResult().getHeader() == null) {
                         response.getResult().setHeader(new ResponseHeader());
                     }
 
-                    response.getResult().getHeader().setRequestTime(
-                            exchange.getIn().getHeader(RemoteApiServerConstants.EXCHANGE_HEADER_REQUEST_TIME, Instant.class));
+                    response.getResult().getHeader()
+                            .setRequestTime(exchange.getProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_REQUEST_TIME, Instant.class));
                     response.getResult().getHeader().setResponseTime(Instant.now());
                 }
 
@@ -233,14 +241,14 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, RemoteApiConstants.CONTENT_TYPE_JSON);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("Remote API {} response: {})", operationName, RemoteApiUtils.obfuscatePassword(responseBody));
+                logger.debug("Remote API {} response: {})", method, RemoteApiUtils.obfuscatePassword(responseBody));
             }
         } catch (JsonProcessingException e) {
             throw SpongeUtils.wrapException(e);
         }
     }
 
-    protected void setupStreamResponse(String operationName, Exchange exchange, OutputStreamValue streamValue) {
+    protected void setupStreamResponse(String method, Exchange exchange, OutputStreamValue streamValue) {
         try {
             HttpServletResponse httpResponse = exchange.getIn(HttpMessage.class).getResponse();
             streamValue.getHeaders().forEach((name, value) -> {
@@ -264,23 +272,30 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         }
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> void createOperation(RestDefinition definition,
-            RemoteApiOperation<I, O> operation) {
+    protected <I extends SpongeRequest<P>, P, O extends SpongeResponse> void createOperation(RestDefinition definition,
+            RemoteApiOperation<I, P, O> operation) {
         createPostOperation(definition, operation);
         createGetOperation(definition, operation);
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> void
-            initializeOperationRouteDefinition(RouteDefinition operationRouteDefinition, RemoteApiOperation<I, O> operation) {
-        operationRouteDefinition.setHeader(RemoteApiServerConstants.EXCHANGE_HEADER_OPERATION_NAME, constant(operation.getName()));
+    protected <I extends SpongeRequest<P>, P, O extends SpongeResponse> void createJsonRpcOperation(RestDefinition definition,
+            RemoteApiOperation<I, P, O> operation) {
+        // TODO Is this ok?
+        createPostOperation(definition, operation);
+        createJsonRpcGetOperation(definition, operation);
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> void createPostOperation(RestDefinition definition,
-            RemoteApiOperation<I, O> operation) {
-        RouteDefinition operationRouteDefinition = definition.post("/" + operation.getName()).description(operation.getDescription())
+    protected <I extends SpongeRequest<P>, P, O extends SpongeResponse> void
+            initializeOperationRouteDefinition(RouteDefinition operationRouteDefinition, RemoteApiOperation<I, P, O> operation) {
+        operationRouteDefinition.setProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_METHOD_NAME, constant(operation.getMethod()));
+    }
+
+    protected <I extends SpongeRequest<P>, P, O extends SpongeResponse> void createPostOperation(RestDefinition definition,
+            RemoteApiOperation<I, P, O> operation) {
+        RouteDefinition operationRouteDefinition = definition.post("/" + operation.getMethod()).description(operation.getDescription())
                 .type(operation.getRequestClass()).outType(operation.getResponseClass()).param().name("body").type(body)
                 .description(operation.getRequestDescription()).endParam().responseMessage().code(200)
-                .message(operation.getResponseDescription()).endResponseMessage().route().routeId("sponge-post-" + operation.getName());
+                .message(operation.getResponseDescription()).endResponseMessage().route().routeId("sponge-post-" + operation.getMethod());
 
         initializeOperationRouteDefinition(operationRouteDefinition, operation);
         setupOperationRouteBeforeExecution(operationRouteDefinition, operation);
@@ -290,17 +305,18 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         operationRouteDefinition.endRest();
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> void createGetOperation(RestDefinition definition,
-            RemoteApiOperation<I, O> operation) {
-        RouteDefinition operationRouteDefinition = definition.get("/" + operation.getName()).description(operation.getDescription())
+    protected <I extends SpongeRequest<P>, P, O extends SpongeResponse> void createGetOperation(RestDefinition definition,
+            RemoteApiOperation<I, P, O> operation) {
+        RouteDefinition operationRouteDefinition = definition.get("/" + operation.getMethod()).description(operation.getDescription())
                 .outType(operation.getResponseClass()).param().name("request").type(query).description(operation.getRequestDescription())
                 .endParam().responseMessage().code(200).message(operation.getResponseDescription()).endResponseMessage().route()
-                .routeId("sponge-get-" + operation.getName());
+                .routeId("sponge-get-" + operation.getMethod());
 
         initializeOperationRouteDefinition(operationRouteDefinition, operation);
         setupOperationRouteBeforeExecution(operationRouteDefinition, operation);
         operationRouteDefinition.process(createOperationExecutionProcessor(message -> {
             try {
+                // TODO Other params
                 String requestParam = message.getHeader("request", String.class);
 
                 // Decode the JSON url-encoded request parameter.
@@ -314,12 +330,44 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         operationRouteDefinition.endRest();
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> void
-            setupOperationRouteBeforeExecution(RouteDefinition operationRouteDefinition, RemoteApiOperation<I, O> operation) {
+    protected <I extends SpongeRequest<P>, P, O extends SpongeResponse> void createJsonRpcGetOperation(RestDefinition definition,
+            RemoteApiOperation<I, P, O> operation) {
+        definition.get("/" + operation.getMethod()).description(operation.getDescription()).outType(operation.getResponseClass());
+
+        definition.param().name(JsonRpcConstants.MEMBER_JSONRPC).type(query).description("The JSON_RPC version").required(true).endParam();
+        definition.param().name(JsonRpcConstants.MEMBER_METHOD).type(query).description("The JSON_RPC method").required(true).endParam();
+        definition.param().name(JsonRpcConstants.MEMBER_PARAMS).type(query).description("The JSON_RPC params").endParam();
+        definition.param().name(JsonRpcConstants.MEMBER_ID).type(query).description("The JSON_RPC id").endParam();
+
+        definition.responseMessage().code(200).message(operation.getResponseDescription()).endResponseMessage();
+
+        RouteDefinition operationRouteDefinition = definition.route().routeId("sponge-get-" + operation.getMethod());
+
+        initializeOperationRouteDefinition(operationRouteDefinition, operation);
+        setupOperationRouteBeforeExecution(operationRouteDefinition, operation);
+        operationRouteDefinition.process(createOperationExecutionProcessor(message -> {
+            try {
+                // TODO jsonrpc, method,params,id -> GenericRequest, convert params String to required Params class according to Operation
+
+                String requestParam = message.getHeader("request", String.class);
+
+                // Decode the JSON url-encoded request parameter.
+                return requestParam != null ? URLDecoder.decode(requestParam, StandardCharsets.UTF_8.name()) : "";
+            } catch (UnsupportedEncodingException e) {
+                throw SpongeUtils.wrapException(e);
+            }
+        }, operation));
+        setupOperationRouteAfterExecution(operationRouteDefinition, operation);
+
+        operationRouteDefinition.endRest();
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> void
-            setupOperationRouteAfterExecution(RouteDefinition operationRouteDefinition, RemoteApiOperation<I, O> operation) {
+    protected <I extends SpongeRequest<P>, P, O extends SpongeResponse> void
+            setupOperationRouteBeforeExecution(RouteDefinition operationRouteDefinition, RemoteApiOperation<I, P, O> operation) {
+    }
+
+    protected <I extends SpongeRequest<P>, P, O extends SpongeResponse> void
+            setupOperationRouteAfterExecution(RouteDefinition operationRouteDefinition, RemoteApiOperation<I, P, O> operation) {
     }
 
     private <O extends SpongeResponse> OutputStreamValue getActionCallOutputStreamResponse(O response) {
@@ -338,47 +386,116 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
     }
 
     @SuppressWarnings({ "unchecked" })
-    protected <I extends SpongeRequest, O extends SpongeResponse> Processor
-            createOperationExecutionProcessor(Function<Message, String> requestBodyProvider, RemoteApiOperation<I, O> operation) {
+    protected Processor createOperationExecutionProcessor(Function<Message, String> requestBodyProvider, RemoteApiOperation operation) {
         return exchange -> {
             String requestBody = requestBodyProvider.apply(exchange.getIn());
 
             if (logger.isDebugEnabled()) {
-                logger.debug("Remote API {} request: {}", operation.getName(), RemoteApiUtils.obfuscatePassword(requestBody));
+                logger.debug("Remote API {} request: {}", operation.getMethod(), RemoteApiUtils.obfuscatePassword(requestBody));
             }
 
+            boolean isJsonRpcOperation = Objects.equals(operation.getMethod(), RemoteApiConstants.ENDPOINT_JSONRPC);
+
             // Allow empty body.
-            if (StringUtils.isBlank(requestBody)) {
+            if (!isJsonRpcOperation && StringUtils.isBlank(requestBody)) {
                 requestBody = "{}";
             }
 
-            exchange.getIn().setHeader(RemoteApiServerConstants.EXCHANGE_HEADER_REQUEST_TIME, Instant.now());
+            exchange.setProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_REQUEST_TIME, Instant.now());
 
             try {
                 // Open a new session. The user will be set later in the service.
                 apiService.openSession(createSession(exchange));
 
-                I request = getObjectMapper().readValue(requestBody, operation.getRequestClass());
+                RemoteApiOperation targetOperation;
 
-                // Set empty params and header if none.
-                if (request != null) {
-                    if (request.getParams() == null) {
-                        request.setParams(request.createParams());
-                    }
-
-                    if (request.getParams().getHeader() == null) {
-                        request.getParams().setHeader(new RequestHeader());
-                    }
+                JsonNode requestNode;
+                try {
+                    requestNode = getObjectMapper().readTree(requestBody);
+                } catch (JsonProcessingException e) {
+                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_PARSE, e.getMessage());
                 }
 
-                O response = operation.getOperationHandler().handle(getRemoteApiService(), request, exchange);
+                if (requestNode.isArray()) {
+                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INTERNAL, "JSON-RPC batch is not supported");
+                } else if (!requestNode.isObject()) {
+                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "The request should be an object");
+                }
+
+                GenericRequest genericRequest;
+
+                try {
+                    genericRequest = getObjectMapper().convertValue(requestNode, GenericRequest.class);
+                } catch (Exception e) {
+                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, e.getMessage());
+                }
+
+                exchange.setProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_REQUEST_ID, genericRequest.getId());
+
+                if (isJsonRpcOperation) {
+                    if (genericRequest.getMethod() == null) {
+                        throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "JSON-RPC method is missing");
+                    }
+
+                    if (!requestNode.has(JsonRpcConstants.MEMBER_JSONRPC)) {
+                        throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "JSON-RPC version is missing");
+                    }
+
+                    if (!Objects.equals(genericRequest.getJsonrpc(), JsonRpcConstants.VERSION)) {
+                        throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST,
+                                String.format("Only JSON-RPC version %s is supported", JsonRpcConstants.VERSION));
+                    }
+
+                    targetOperation = operations.get(genericRequest.getMethod());
+
+                    // Excluding the jsonrpc endpoint as the target.
+                    if (targetOperation == null || targetOperation == operation) {
+                        throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_METHOD_NOT_FOUND,
+                                String.format("JSON-RPC method '%s' not found", genericRequest.getMethod()));
+                    }
+                } else {
+                    if (genericRequest.getMethod() != null) {
+                        if (!genericRequest.getMethod().equals(operation.getMethod())) {
+                            throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST,
+                                    String.format("Invalid JSON-RPC method '%s' for the '%s' endpoint", genericRequest.getMethod(),
+                                            operation.getMethod()));
+                        }
+                    } else {
+                        genericRequest.setMethod(operation.getMethod());
+                    }
+
+                    targetOperation = operation;
+                }
+
+                // Create target request class by reflection constructor and set members.
+                SpongeRequest targetRequest = (SpongeRequest) targetOperation.getRequestClass().newInstance();
+                targetRequest.setMethod(genericRequest.getMethod());
+                targetRequest.setId(genericRequest.getId());
+
+                try {
+                    targetRequest.setParams((RequestParams) getObjectMapper().convertValue(genericRequest.getParams(),
+                            targetOperation.getRequestParamsClass()));
+                } catch (IllegalArgumentException e) {
+                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_PARAMS, e.getMessage());
+                }
+
+                // Set empty params and header if none.
+                if (targetRequest.getParams() == null) {
+                    targetRequest.setParams(targetRequest.createParams());
+                }
+
+                if (targetRequest.getHeader() == null) {
+                    targetRequest.setHeader(new RequestHeader());
+                }
+
+                SpongeResponse response = targetOperation.getHandler().handle(getRemoteApiService(), targetRequest, exchange);
 
                 // Handle an action call that returns a stream.
                 OutputStreamValue streamValue = getActionCallOutputStreamResponse(response);
                 if (streamValue == null) {
-                    setupResponse(operation.getName(), exchange, response);
+                    setupResponse(operation.getMethod(), exchange, response);
                 } else {
-                    setupStreamResponse(operation.getName(), exchange, streamValue);
+                    setupStreamResponse(operation.getMethod(), exchange, streamValue);
                 }
             } finally {
                 // Close the session.
@@ -387,52 +504,55 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         };
     }
 
-    protected <I extends SpongeRequest, O extends SpongeResponse> void addOperation(RemoteApiOperation<I, O> operation) {
-        Validate.isTrue(operations.stream().allMatch(o -> !Objects.equals(o.getName(), operation.getName())),
-                "The operation '%s' has already been defined", operation.getName());
+    protected <I extends SpongeRequest<P>, P, O extends SpongeResponse> void addOperation(RemoteApiOperation<I, P, O> operation) {
+        Validate.isTrue(!operations.containsKey(operation.getMethod()), "The method '%s' has already been defined", operation.getMethod());
 
-        operations.add(operation);
+        operations.put(operation.getMethod(), operation);
     }
 
+    @SuppressWarnings("unchecked")
     protected void createDefaultOperations() {
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_VERSION, "Get the Sponge version", GetVersionRequest.class,
-                "The get Sponge version request", GetVersionResponse.class, "The Sponge version response",
+        // TODO OPERATION_JSONRPC should not be an operation, should be handled separately.
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.ENDPOINT_JSONRPC, "JSON-RPC endpoint", SpongeRequest.class, Map.class,
+                "The JSON-RPC request", SpongeResponse.class, "The JSON-RPC response", (service, request, exchange) -> null));
+
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_VERSION, "Get the Sponge version", GetVersionRequest.class,
+                BaseRequestParams.class, "The get Sponge version request", GetVersionResponse.class, "The Sponge version response",
                 (service, request, exchange) -> service.getVersion(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_FEATURES, "Get the API features", GetFeaturesRequest.class,
-                "The get API features request", GetFeaturesResponse.class, "The API features response",
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_FEATURES, "Get the API features", GetFeaturesRequest.class,
+                BaseRequestParams.class, "The get API features request", GetFeaturesResponse.class, "The API features response",
                 (service, request, exchange) -> service.getFeatures(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_LOGIN, "Login", LoginRequest.class, "The login request",
-                LoginResponse.class, "The login response", (service, request, exchange) -> service.login(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_LOGOUT, "Logout", LogoutRequest.class, "The logout request",
-                LogoutResponse.class, "The logout response", (service, request, exchange) -> service.logout(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_KNOWLEDGE_BASES, "Get knowledge bases",
-                GetKnowledgeBasesRequest.class, "The get knowledge bases request", GetKnowledgeBasesResponse.class,
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_LOGIN, "Login", LoginRequest.class, BaseRequestParams.class,
+                "The login request", LoginResponse.class, "The login response", (service, request, exchange) -> service.login(request)));
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_LOGOUT, "Logout", LogoutRequest.class, BaseRequestParams.class,
+                "The logout request", LogoutResponse.class, "The logout response",
+                (service, request, exchange) -> service.logout(request)));
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_KNOWLEDGE_BASES, "Get knowledge bases",
+                GetKnowledgeBasesRequest.class, BaseRequestParams.class, "The get knowledge bases request", GetKnowledgeBasesResponse.class,
                 "The get knowledge bases response", (service, request, exchange) -> service.getKnowledgeBases(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_ACTIONS, "Get actions", GetActionsRequest.class,
-                "The get actions request", GetActionsResponse.class, "The get actions response",
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_ACTIONS, "Get actions", GetActionsRequest.class,
+                GetActionsParams.class, "The get actions request", GetActionsResponse.class, "The get actions response",
                 (service, request, exchange) -> service.getActions(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_CALL, "Call an action", ActionCallRequest.class,
-                "The call action request", ActionCallResponse.class, "The action call response",
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_CALL, "Call an action", ActionCallRequest.class,
+                ActionCallParams.class, "The call action request", ActionCallResponse.class, "The action call response",
                 (service, request, exchange) -> service.call(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_CALL_NAMED, "Call an action with named arguments",
-                ActionCallNamedRequest.class, "The call action with named arguments request", ActionCallResponse.class,
-                "The action call response", (service, request, exchange) -> service.callNamed(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_SEND, "Send a new event", SendEventRequest.class,
-                "The send event request", SendEventResponse.class, "The send event response",
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_SEND, "Send a new event", SendEventRequest.class,
+                SendEventParams.class, "The send event request", SendEventResponse.class, "The send event response",
                 (service, request, exchange) -> service.send(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_IS_ACTION_ACTIVE, "Is action active",
-                IsActionActiveRequest.class, "The action active request", IsActionActiveResponse.class, "The action active response",
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_IS_ACTION_ACTIVE, "Is action active", IsActionActiveRequest.class,
+                IsActionActiveParams.class, "The action active request", IsActionActiveResponse.class, "The action active response",
                 (service, request, exchange) -> service.isActionActive(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_PROVIDE_ACTION_ARGS, "Provide action arguments",
-                ProvideActionArgsRequest.class, "The provide action arguments request", ProvideActionArgsResponse.class,
-                "The provide action arguments response", (service, request, exchange) -> service.provideActionArgs(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_EVENT_TYPES, "Get event types", GetEventTypesRequest.class,
-                "The get event types request", GetEventTypesResponse.class, "The get event types response",
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_PROVIDE_ACTION_ARGS, "Provide action arguments",
+                ProvideActionArgsRequest.class, ProvideActionArgsParams.class, "The provide action arguments request",
+                ProvideActionArgsResponse.class, "The provide action arguments response",
+                (service, request, exchange) -> service.provideActionArgs(request)));
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_EVENT_TYPES, "Get event types", GetEventTypesRequest.class,
+                GetEventTypesParams.class, "The get event types request", GetEventTypesResponse.class, "The get event types response",
                 (service, request, exchange) -> service.getEventTypes(request)));
 
         if (getSettings().isPublishReload()) {
-            addOperation(new RemoteApiOperation<>(RemoteApiConstants.OPERATION_RELOAD, "Reload knowledge bases", ReloadRequest.class,
-                    "The reload request", ReloadResponse.class, "The reload response",
+            addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_RELOAD, "Reload knowledge bases", ReloadRequest.class,
+                    BaseRequestParams.class, "The reload request", ReloadResponse.class, "The reload response",
                     (service, request, exchange) -> service.reload(request)));
         }
     }
@@ -450,6 +570,12 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         createDefaultOperations();
         createCustomOperations();
 
-        operations.forEach(operation -> createOperation(definition, operation));
+        operations.forEach((name, operation) -> {
+            if (Objects.equals(name, RemoteApiConstants.ENDPOINT_JSONRPC)) {
+                createJsonRpcOperation(definition, operation);
+            } else {
+                createOperation(definition, operation);
+            }
+        });
     }
 }

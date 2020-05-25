@@ -27,9 +27,11 @@ import io.swagger.annotations.ApiModel;
 @ApiModel(value = "BaseResponseResult", description = "A response result")
 public class BaseResponseResult<T> implements ResponseResult<T> {
 
+    /** The response header. */
     @JsonInclude(Include.NON_NULL)
     private ResponseHeader header;
 
+    /** The response value. */
     private T value;
 
     public BaseResponseResult(T value) {

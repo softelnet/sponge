@@ -53,7 +53,6 @@ import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
 import org.openksavi.sponge.remoteapi.model.RemoteCategoryMeta;
 import org.openksavi.sponge.remoteapi.model.RemoteEvent;
 import org.openksavi.sponge.remoteapi.model.RemoteKnowledgeBaseMeta;
-import org.openksavi.sponge.remoteapi.model.request.ActionCallNamedRequest;
 import org.openksavi.sponge.remoteapi.model.request.ActionCallRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest;
 import org.openksavi.sponge.remoteapi.model.request.GetEventTypesRequest;
@@ -214,20 +213,14 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
     @Override
     public GetVersionResponse getVersion(GetVersionRequest request) {
-        // Privileges checked only if the request is provided.
-        if (request != null) {
-            authenticateRequest(request);
-        }
+        authenticateRequest(request);
 
         return setupResponse(new GetVersionResponse(new GetVersionResult(getApiVersion())), request);
     }
 
     @Override
     public GetFeaturesResponse getFeatures(GetFeaturesRequest request) {
-        // Privileges checked only if the request is provided.
-        if (request != null) {
-            authenticateRequest(request);
-        }
+        authenticateRequest(request);
 
         return setupResponse(new GetFeaturesResponse(new GetFeaturesResult(features)), request);
     }
@@ -263,7 +256,7 @@ public class DefaultRemoteApiService implements RemoteApiService {
             }
         }
 
-        return setupResponse(new LogoutResponse(new LogoutResult(RemoteApiServerConstants.STATUS_OK)), request);
+        return setupResponse(new LogoutResponse(new LogoutResult(true)), request);
     }
 
     @Override
@@ -359,6 +352,7 @@ public class DefaultRemoteApiService implements RemoteApiService {
         return actionAdapter;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public ActionCallResponse call(ActionCallRequest request) {
         ActionAdapter actionAdapter = null;
@@ -369,29 +363,17 @@ public class DefaultRemoteApiService implements RemoteApiService {
         String actionName = request.getParams().getName();
         actionAdapter = getActionAdapterForRequest(actionName, request.getParams().getQualifiedVersion(), userContext);
 
-        List<Object> args = unmarshalActionArgs(actionAdapter, request.getParams().getArgs());
+        Object args = request.getParams().getArgs();
+        Object actionResult;
 
-        Object actionResult = getEngine().getOperations().call(actionName, args);
-
-        return setupResponse(new ActionCallResponse(new ActionCallResult(marshalActionResult(actionAdapter, actionResult))), request);
-    }
-
-    @Override
-    public ActionCallResponse callNamed(ActionCallNamedRequest request) {
-        ActionAdapter actionAdapter = null;
-
-        Validate.notNull(request, "The request must not be null");
-        UserContext userContext = authenticateRequest(request);
-
-        String actionName = request.getParams().getName();
-        actionAdapter = getActionAdapterForRequest(actionName, request.getParams().getQualifiedVersion(), userContext);
-
-        List<Object> argsAsList = request.getParams().getArgs() != null
-                ? SpongeUtils.buildActionArgsList(actionAdapter, request.getParams().getArgs()) : null;
-
-        List<Object> args = unmarshalActionArgs(actionAdapter, argsAsList);
-
-        Object actionResult = getEngine().getOperations().call(actionName, args);
+        if (args instanceof List || args == null) {
+            actionResult = getEngine().getOperations().call(actionName, unmarshalActionArgs(actionAdapter, (List) args));
+        } else if (args instanceof Map) {
+            actionResult = getEngine().getOperations().call(actionName, unmarshalActionArgs(actionAdapter,
+                    args != null ? SpongeUtils.buildActionArgsList(actionAdapter, (Map<String, ?>) args) : null));
+        } else {
+            throw new IllegalArgumentException("Action args should be an instance of a List or a Map");
+        }
 
         return setupResponse(new ActionCallResponse(new ActionCallResult(marshalActionResult(actionAdapter, actionResult))), request);
     }
@@ -540,7 +522,7 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
         getEngine().reload();
 
-        return setupResponse(new ReloadResponse(new ReloadResult(RemoteApiServerConstants.STATUS_OK)), request);
+        return setupResponse(new ReloadResponse(new ReloadResult(true)), request);
     }
 
     /**
@@ -554,8 +536,8 @@ public class DefaultRemoteApiService implements RemoteApiService {
         RemoteApiSession session = Validate.notNull(getSession(), "The session is not set");
 
         // Put reguest features to the thread local session.
-        if (request.getParams().getHeader() != null && request.getParams().getHeader().getFeatures() != null) {
-            session.getFeatures().putAll(request.getParams().getHeader().getFeatures());
+        if (request.getHeader() != null && request.getHeader().getFeatures() != null) {
+            session.getFeatures().putAll(request.getHeader().getFeatures());
         }
 
         UserAuthentication userAuthentication = requestAuthenticationService.authenticateRequest(request);
@@ -619,10 +601,6 @@ public class DefaultRemoteApiService implements RemoteApiService {
     }
 
     protected <T extends SpongeResponse, R extends SpongeRequest> T setupResponse(T response, R request) {
-        if (request != null && request.getId() != null) {
-            response.setId(request.getId());
-        }
-
         return response;
     }
 
@@ -649,6 +627,7 @@ public class DefaultRemoteApiService implements RemoteApiService {
     @Override
     public SpongeResponse createErrorResponse(Throwable e) {
         Validate.notNull(e, "Exception should be not null");
+
         ErrorResponse response = new ErrorResponse();
 
         errorResponseProvider.applyException(this, response, e);

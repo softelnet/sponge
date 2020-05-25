@@ -22,7 +22,7 @@ void main() async {
   print('Available action count: ${actionsMeta.length}.');
 
   // Call the action with arguments.
-  String upperCaseText = await client.call('UpperCase', ['Text to upper case']);
+  String upperCaseText = await client.call('UpperCase', args: ['Text to upper case']);
   print('Upper case text: $upperCaseText.');
 
   // Send a new event to the Sponge engine.

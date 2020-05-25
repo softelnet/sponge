@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * A response error.
  */
-@ApiModel(value = "Error", description = "An error object")
+@ApiModel(value = "ResponseError", description = "An error object")
 public class ResponseError {
 
     private Integer code;

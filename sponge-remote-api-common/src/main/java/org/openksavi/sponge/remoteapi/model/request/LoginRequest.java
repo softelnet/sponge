@@ -21,10 +21,10 @@ import io.swagger.annotations.ApiModel;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 
 @ApiModel(value = "LoginRequest", description = "A login request")
-public class LoginRequest extends BaseRequest<BaseRequestParams> {
+public class LoginRequest extends TypedParamsRequest<BaseRequestParams> {
 
-    public LoginRequest(BaseRequestParams body) {
-        super(RemoteApiConstants.OPERATION_LOGIN, body);
+    public LoginRequest(BaseRequestParams params) {
+        super(RemoteApiConstants.METHOD_LOGIN, params);
     }
 
     public LoginRequest() {

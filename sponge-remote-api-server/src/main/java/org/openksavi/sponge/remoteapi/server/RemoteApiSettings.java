@@ -71,7 +71,7 @@ public class RemoteApiSettings {
     /** The SSL configuration. */
     private SslConfiguration sslConfiguration;
 
-    /** If {@code true} then the reload operation will be published. The default value is {@code true}. */
+    /** If {@code true} then the reload method will be published. The default value is {@code true}. */
     private boolean publishReload = RemoteApiServerConstants.DEFAULT_PUBLISH_RELOAD;
 
     private boolean allowAnonymous = RemoteApiServerConstants.DEFAULT_ALLOW_ANONYMOUS;

@@ -53,25 +53,25 @@ public abstract class GrpcApiServerUtils {
     public static <T extends SpongeRequest> T setupRemoteApiRequestHeader(TypeConverter typeConverter, T remoteApiRequest,
             RequestHeader header) {
 
-        if (remoteApiRequest.getParams().getHeader() == null) {
-            remoteApiRequest.getParams().setHeader(new org.openksavi.sponge.remoteapi.model.request.RequestHeader());
+        if (remoteApiRequest.getHeader() == null) {
+            remoteApiRequest.setHeader(new org.openksavi.sponge.remoteapi.model.request.RequestHeader());
         }
 
         if (header != null) {
             if (!StringUtils.isEmpty(header.getUsername())) {
-                remoteApiRequest.getParams().getHeader().setUsername(header.getUsername());
+                remoteApiRequest.getHeader().setUsername(header.getUsername());
             }
             if (!StringUtils.isEmpty(header.getPassword())) {
-                remoteApiRequest.getParams().getHeader().setPassword(header.getPassword());
+                remoteApiRequest.getHeader().setPassword(header.getPassword());
             }
             if (!StringUtils.isEmpty(header.getAuthToken())) {
-                remoteApiRequest.getParams().getHeader().setAuthToken(header.getAuthToken());
+                remoteApiRequest.getHeader().setAuthToken(header.getAuthToken());
             }
             if (header.hasFeatures()) {
                 try {
                     Map<String, Object> jsonFeatures =
                             (Map<String, Object>) typeConverter.getObjectMapper().readValue(header.getFeatures().getValueJson(), Map.class);
-                    remoteApiRequest.getParams().getHeader().setFeatures(jsonFeatures);
+                    remoteApiRequest.getHeader().setFeatures(jsonFeatures);
                 } catch (JsonProcessingException e) {
                     throw SpongeUtils.wrapException(e);
                 }

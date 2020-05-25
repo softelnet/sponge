@@ -21,10 +21,10 @@ import io.swagger.annotations.ApiModel;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 
 @ApiModel(value = "GetVersionRequest", description = "A get version request")
-public class GetVersionRequest extends BaseRequest<BaseRequestParams> {
+public class GetVersionRequest extends TypedParamsRequest<BaseRequestParams> {
 
-    public GetVersionRequest(BaseRequestParams body) {
-        super(RemoteApiConstants.OPERATION_VERSION, body);
+    public GetVersionRequest(BaseRequestParams params) {
+        super(RemoteApiConstants.METHOD_VERSION, params);
     }
 
     public GetVersionRequest() {

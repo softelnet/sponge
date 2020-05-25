@@ -57,7 +57,7 @@ import org.openksavi.sponge.spring.SpringSpongeEngine;
 @DirtiesContext
 public class ActionDelegateRemoteApiOperationTest {
 
-    public static final String OPERATION = "upperCase";
+    public static final String METHOD = "upperCase";
 
     @Inject
     protected SpongeEngine engine;
@@ -105,8 +105,7 @@ public class ActionDelegateRemoteApiOperationTest {
         String text = "TeXt";
 
         try (SpongeClient client = createClient()) {
-            UpperCaseResponse response =
-                    client.execute("upperCase", new UpperCaseRequest(new UpperCaseParams(text)), UpperCaseResponse.class);
+            UpperCaseResponse response = client.execute(new UpperCaseRequest(new UpperCaseParams(text)), UpperCaseResponse.class);
 
             assertEquals(text.toUpperCase(), response.getResult().getValue());
         }
@@ -116,9 +115,10 @@ public class ActionDelegateRemoteApiOperationTest {
 
         @Override
         protected void createCustomOperations() {
-            addOperation(ActionDelegateOperation.<UpperCaseRequest, UpperCaseResponse, String>builder().name(OPERATION)
-                    .requestClass(UpperCaseRequest.class).requestDescription("Text").responseClass(UpperCaseResponse.class)
-                    .responseDescription("Result").argsMapper(request -> Arrays.asList(request.getParams().getText()))
+            addOperation(ActionDelegateOperation.<UpperCaseRequest, UpperCaseParams, UpperCaseResponse, String>builder().method(METHOD)
+                    .requestClass(UpperCaseRequest.class).requestParamsClass(UpperCaseParams.class).requestDescription("Text")
+                    .responseClass(UpperCaseResponse.class).responseDescription("Result")
+                    .argsMapper(request -> Arrays.asList(request.getParams().getText()))
                     .resultMapper((response, result) -> response.setResult(new UpperCaseResult(result))).build());
         }
     }

@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.remoteapi.model.request;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -23,10 +26,10 @@ import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 import org.openksavi.sponge.remoteapi.model.request.GetEventTypesRequest.GetEventTypesParams;
 
 @ApiModel(value = "GetEventTypesRequest", description = "A get event types request")
-public class GetEventTypesRequest extends BaseRequest<GetEventTypesParams> {
+public class GetEventTypesRequest extends TypedParamsRequest<GetEventTypesParams> {
 
-    public GetEventTypesRequest(GetEventTypesParams body) {
-        super(RemoteApiConstants.OPERATION_EVENT_TYPES, body);
+    public GetEventTypesRequest(GetEventTypesParams params) {
+        super(RemoteApiConstants.METHOD_EVENT_TYPES, params);
     }
 
     public GetEventTypesRequest() {
@@ -41,6 +44,7 @@ public class GetEventTypesRequest extends BaseRequest<GetEventTypesParams> {
     @ApiModel(value = "GetEventTypesParams", description = "A get event types request params")
     public static class GetEventTypesParams extends BaseRequestParams {
 
+        @JsonInclude(Include.NON_NULL)
         private String name;
 
         public GetEventTypesParams(String name) {

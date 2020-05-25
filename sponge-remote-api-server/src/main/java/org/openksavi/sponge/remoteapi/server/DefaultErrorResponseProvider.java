@@ -16,11 +16,10 @@
 
 package org.openksavi.sponge.remoteapi.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.openksavi.sponge.action.InactiveActionException;
+import org.openksavi.sponge.remoteapi.JsonRpcConstants;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 import org.openksavi.sponge.remoteapi.model.response.ResponseError;
 import org.openksavi.sponge.remoteapi.model.response.ResponseError.ErrorData;
@@ -47,14 +46,24 @@ public class DefaultErrorResponseProvider implements ErrorResponseProvider {
             response.getError().setData(new ErrorData(RemoteApiUtils.obfuscatePassword(ExceptionUtils.getStackTrace(exception))));
         }
 
-        // Specific error codes.
-        applySpecificErrorCodes(service, response, exception);
+        if (exception instanceof JsonRpcServerException) {
+            int code = ((JsonRpcServerException) exception).getCode();
+
+            response.getError().setCode(code);
+
+            String standardMessage = JsonRpcConstants.ERROR_MESSAGES.get(code);
+
+            if (standardMessage != null) {
+                response.getError().setMessage(String.format("%s. %s", standardMessage, response.getError().getMessage()));
+            }
+        } else {
+            // Specific error codes.
+            applySpecificErrorCodes(service, response, exception);
+        }
     }
 
     protected void applySpecificErrorCodes(RemoteApiService service, SpongeResponse response, Throwable exception) {
-        if (exception instanceof JsonProcessingException) {
-            response.getError().setCode(RemoteApiConstants.ERROR_CODE_STANDARD_PARSE);
-        } else if (exception instanceof InvalidAuthTokenServerException) {
+        if (exception instanceof InvalidAuthTokenServerException) {
             response.getError().setCode(RemoteApiConstants.ERROR_CODE_INVALID_AUTH_TOKEN);
         } else if (exception instanceof InvalidKnowledgeBaseVersionServerException) {
             response.getError().setCode(RemoteApiConstants.ERROR_CODE_INVALID_KB_VERSION);

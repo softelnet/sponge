@@ -16,6 +16,9 @@
 
 package org.openksavi.sponge.remoteapi.model.request;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -23,10 +26,10 @@ import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 import org.openksavi.sponge.remoteapi.model.request.GetActionsRequest.GetActionsParams;
 
 @ApiModel(value = "GetActionsRequest", description = "A get actions request")
-public class GetActionsRequest extends BaseRequest<GetActionsParams> {
+public class GetActionsRequest extends TypedParamsRequest<GetActionsParams> {
 
-    public GetActionsRequest(GetActionsParams body) {
-        super(RemoteApiConstants.OPERATION_ACTIONS, body);
+    public GetActionsRequest(GetActionsParams params) {
+        super(RemoteApiConstants.METHOD_ACTIONS, params);
     }
 
     public GetActionsRequest() {
@@ -41,10 +44,13 @@ public class GetActionsRequest extends BaseRequest<GetActionsParams> {
     @ApiModel(value = "GetActionsParams", description = "A get actions request params")
     public static class GetActionsParams extends BaseRequestParams {
 
+        @JsonInclude(Include.NON_NULL)
         private String name;
 
+        @JsonInclude(Include.NON_NULL)
         private Boolean metadataRequired;
 
+        @JsonInclude(Include.NON_NULL)
         private Boolean registeredTypes;
 
         @ApiModelProperty(

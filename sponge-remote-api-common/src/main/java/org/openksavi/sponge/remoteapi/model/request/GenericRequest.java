@@ -16,23 +16,29 @@
 
 package org.openksavi.sponge.remoteapi.model.request;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import io.swagger.annotations.ApiModel;
 
-import org.openksavi.sponge.remoteapi.RemoteApiConstants;
+@ApiModel(value = "GenericRequest", description = "A generic request")
+public class GenericRequest extends BaseRequest<Map<String, Object>> {
 
-@ApiModel(value = "GetKnowledgeBasesRequest", description = "A get knowledge bases request")
-public class GetKnowledgeBasesRequest extends TypedParamsRequest<BaseRequestParams> {
-
-    public GetKnowledgeBasesRequest(BaseRequestParams params) {
-        super(RemoteApiConstants.METHOD_KNOWLEDGE_BASES, params);
-    }
-
-    public GetKnowledgeBasesRequest() {
-        this(new BaseRequestParams());
+    public GenericRequest() {
     }
 
     @Override
-    public BaseRequestParams createParams() {
-        return new BaseRequestParams();
+    public Map<String, Object> createParams() {
+        return new LinkedHashMap<>();
+    }
+
+    @Override
+    public RequestHeader getHeader() {
+        throw new UnsupportedOperationException("getHeader() is not supported in the generic request");
+    }
+
+    @Override
+    public void setHeader(RequestHeader header) {
+        throw new UnsupportedOperationException("setHeader() is not supported in the generic request");
     }
 }

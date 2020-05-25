@@ -145,8 +145,6 @@ public abstract class BaseRemoteApiTestTemplate {
     @Test
     public void testVersionWithId() {
         try (SpongeClient client = createClient()) {
-            client.getConfiguration().setUseRequestId(true);
-
             GetVersionRequest request = new GetVersionRequest();
             GetVersionResponse response = client.getVersion(request);
 
@@ -244,7 +242,7 @@ public abstract class BaseRemoteApiTestTemplate {
             Map<String, String> args = new LinkedHashMap<>();
             args.put("text", arg1);
 
-            Object result = client.callNamed("UpperCase", args);
+            Object result = client.call("UpperCase", args);
 
             assertTrue(result instanceof String);
             assertEquals(arg1.toUpperCase(), result);

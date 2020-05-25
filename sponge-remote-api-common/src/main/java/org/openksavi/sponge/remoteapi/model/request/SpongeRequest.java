@@ -16,22 +16,37 @@
 
 package org.openksavi.sponge.remoteapi.model.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * A request.
  */
-public interface SpongeRequest<T extends RequestParams> {
+public interface SpongeRequest<T> {
 
+    @ApiModelProperty(value = "The JSON-RPC version", required = true)
+    String getJsonrpc();
+
+    @ApiModelProperty(value = "The JSON-RPC method", required = true)
     String getMethod();
 
     void setMethod(String method);
 
+    @ApiModelProperty(value = "The JSON-RPC params", required = false)
     T getParams();
 
     void setParams(T params);
 
+    @ApiModelProperty(value = "The JSON-RPC id", required = false)
     Object getId();
 
     void setId(Object id);
 
     T createParams();
+
+    @JsonIgnore
+    RequestHeader getHeader();
+
+    void setHeader(RequestHeader header);
 }
