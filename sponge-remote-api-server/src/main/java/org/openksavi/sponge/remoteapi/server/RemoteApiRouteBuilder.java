@@ -151,10 +151,12 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                         Validate.notNull(exchange.getProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_METHOD_NAME, String.class),
                                 "The method name is not set in the Camel route");
 
+                // A notification request should be a valid JSON-RPC request so in case of "Parse error" or "Invalid request"
+                // an error response will be sent.
                 setupResponse(methodName, exchange, apiService.createErrorResponse(processingException),
                         !isNotification(exchange) || shouldNotificationHaveErrorResponse(processingException));
 
-                exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, RemoteApiConstants.HTTP_CODE_ERROR);
+                exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, RemoteApiConstants.HTTP_RESPONSE_CODE_ERROR);
             } catch (Throwable e) {
                 logger.error("Remote API send error response failure", e);
                 throw e;
@@ -308,7 +310,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
             RemoteApiOperation<I, P, O> operation) {
         RouteDefinition operationRouteDefinition = definition.post("/" + operation.getMethod()).description(operation.getDescription())
                 .type(operation.getRequestClass()).outType(operation.getResponseClass()).param().name("body").type(body)
-                .description(operation.getRequestDescription()).endParam().responseMessage().code(200)
+                .description(operation.getRequestDescription()).endParam().responseMessage().code(RemoteApiConstants.HTTP_RESPONSE_CODE_OK)
                 .message(operation.getResponseDescription()).endResponseMessage().route().routeId("sponge-post-" + operation.getMethod());
 
         initializeOperationRouteDefinition(operationRouteDefinition, operation);
@@ -512,6 +514,9 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                 } else {
                     setupStreamResponse(operation.getMethod(), exchange, streamValue);
                 }
+
+                exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, isNotification(exchange)
+                        ? RemoteApiConstants.HTTP_RESPONSE_CODE_NO_RESPONSE : RemoteApiConstants.HTTP_RESPONSE_CODE_OK);
             } finally {
                 // Close the session.
                 apiService.closeSession();
@@ -553,9 +558,6 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_CALL, "Call an action", ActionCallRequest.class,
                 ActionCallParams.class, "The call action request", ActionCallResponse.class, "The action call response",
                 (service, request, exchange) -> service.call(request)));
-        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_SEND, "Send a new event", SendEventRequest.class,
-                SendEventParams.class, "The send event request", SendEventResponse.class, "The send event response",
-                (service, request, exchange) -> service.send(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_IS_ACTION_ACTIVE, "Is action active", IsActionActiveRequest.class,
                 IsActionActiveParams.class, "The action active request", IsActionActiveResponse.class, "The action active response",
                 (service, request, exchange) -> service.isActionActive(request)));
@@ -563,6 +565,9 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                 ProvideActionArgsRequest.class, ProvideActionArgsParams.class, "The provide action arguments request",
                 ProvideActionArgsResponse.class, "The provide action arguments response",
                 (service, request, exchange) -> service.provideActionArgs(request)));
+        addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_SEND, "Send a new event", SendEventRequest.class,
+                SendEventParams.class, "The send event request", SendEventResponse.class, "The send event response",
+                (service, request, exchange) -> service.send(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_EVENT_TYPES, "Get event types", GetEventTypesRequest.class,
                 GetEventTypesParams.class, "The get event types request", GetEventTypesResponse.class, "The get event types response",
                 (service, request, exchange) -> service.getEventTypes(request)));

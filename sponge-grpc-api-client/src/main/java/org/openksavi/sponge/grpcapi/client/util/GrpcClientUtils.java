@@ -173,10 +173,10 @@ public abstract class GrpcClientUtils {
             }
 
             responseError = new org.openksavi.sponge.remoteapi.model.response.ResponseError(status.getCode(), status.getMessage());
+        } else {
+            responseError =
+                    new org.openksavi.sponge.remoteapi.model.response.ResponseError(RemoteApiConstants.ERROR_CODE_GENERIC, e.getMessage());
         }
-
-        responseError =
-                new org.openksavi.sponge.remoteapi.model.response.ResponseError(RemoteApiConstants.ERROR_CODE_GENERIC, e.getMessage());
 
         spongeClient.handleErrorResponse(operation, responseError);
     }

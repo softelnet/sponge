@@ -2,7 +2,7 @@
 The {sponge} Remote API provides users a remote access to key {sponge} functionalities.
 
 == Endpoints
-The {sponge} Remote API supports a JSON-RPC 2.0 endpoint and method endpoints that accept simplified (non strict) JSON-RPC 2.0 messages.
+The {sponge} Remote API provides the https://www.jsonrpc.org/specification[JSON-RPC 2.0] endpoint and method endpoints that accept simplified (non strict) JSON-RPC 2.0 messages.
 
 The reason that the API supports both styles is that the JSON-RPC 2.0 compatibility is intended for applications that connect to {sponge} while the non strict JSON-RPC 2.0 API is rather intended for manual, command-line uses.
 
@@ -12,6 +12,8 @@ The `/jsonrpc` endpoint is intended to be JSON-RPC 2.0 compatible, however:
 * only named JSON-RPC 2.0 params are supported (params as a list are not supported),
 * batch requests are not supported.
 
+The request HTTP content type should be `application/json`.
+
 === Method endpoints
 The other endpoints correspond to the supported Remote API methods and provide an RPC style API based on JSON-RPC 2.0 that adopts some REST concepts:
 
@@ -19,227 +21,1295 @@ The other endpoints correspond to the supported Remote API methods and provide a
 * it uses different endpoints for different methods like REST,
 * requests with no `id` are not regarded as notifications.
 
-The method endpoints metadata is used when the OpenAPI specification for the service is generated.
+The method endpoints metadata are used when the OpenAPI specification for the service is generated.
 
-== Methods summary
-The following table contains a summary of the Remote API methods. For a complete specification see the <<_swagger_overview, specification>> generated using Swagger and https://github.com/Swagger2Markup/swagger2markup[Swagger2Markup].
+== Message
 
-.The Remote API methods summary
-[cols="2,1,4"]
+=== Request
+A Remote API request supports standard JSON-RPC request members.
+
+.Request members
+[cols="1,5"]
 |===
-|Name |Method |Description
+|Name |Description
 
-|Get the Sponge Remote API version
-|`version`
-|Returns the Sponge Remote API version if it is set in the configuration, otherwise returns the {sponge} engine version.
+|`jsonrpc`
+|Required for the JSON-RPC 2.0 endpoint. Optional for method endpoints.
 
-|Get the API features
-|`features`
-|Returns the API features.
+|`method`
+|Required for the JSON-RPC 2.0 endpoint. Optional for method endpoints, but if present for a method endpoint it must have the same value as the corresponsing endpoint.
 
-|Login
-|`login`
-|User login. Used in a token-based authentication scenario.
+|`params`
+|Named JSON-RPC 2.0 method parameters. A parameters object can have a special request `header` field (of the `RequestHeader` type). The `header` is a reserved name that can't be used in any of other method parameters.
 
-|Logout
-|`logout`
-|User logout. Used in a token-based authentication scenario.
-
-|Get knowledge bases
-|`knowledgeBases`
-|Returns the knowledge bases which the user may use (i.e. may call actions registered in these knowledge basses).
-
-|Get actions
-|`actions`
-|Returns the metadata of actions that are available to the user. If you want to get metadata for specified actions, set the request property `name` to an action name or a Java-compatible regular expression. If you want to get only actions that have argument and result metadata specified in their configuration, set the request property `metadataRequired` to `true` (defaults to `false`). Actions will be sorted by a category sequence number, a knowledge base sequence number and an action label or name. The sequence number reflects the order in which categories or knowledge bases have been added to the engine. The optional request property `registeredTypes` is a flag for requesting registered types used in the actions in the result (defaults to `false`).
-
-|Call an action
-|`call`
-|Calls an action.
-
-|Provide action arguments
-|`actionArgs`
-|Returns _provided arguments_, i.e. values along with value sets of action arguments. The request accepts the following properties: `name` - the action name, `argNames` -  the optional list of argument names that are to be provided (if `null`, all provided arguments will be produced), `current` - the optional map of argument names and their current values passed from a client code.
-
-|Send a new event
-|`send`
-|Sends a new event.
-
-|Get event types
-|`eventTypes`
-|Returns the registered event types.
-
-|Reload knowledge bases
-|`reload`
-|Reloads all knowledge bases. Depending on the configuration, this method may not be published. It should be available only to administrators.
-|===
-
-The OpenAPI specification of the Remote API is included in the Appendix A of the {sponge} Reference Documentation.
-
-The {sponge} Remote API service can publish custom Remote API methods as well.
-
-In case of an error, a response HTTP status code will be `500`.
-
-== OpenAPI specification
-An online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be available, depending on the configuration, at URL `http://localhost:1836/doc`.
-
-NOTE: The generated OpenAPI specification is currently limited. For example it doesn't support inheritance e.g. for {sponge} data types. Therefore it is most useful for customized methods.
-
-== Request
-A request may contain base properties.
-
-.Base request properties
-[cols="2,1,4"]
-|===
-|Name |Required |Description
-
-|`header`
-|No
-|A request header.
-
-|`body`
-|No
-|A request body.
+|`id`
+|Required for the JSON-RPC 2.0 endpoint if a request is not a notification. Optional for method endpoints, because they don't support notifications and handle all requests as non notifications.
 |===
 
 .Request header properties
-[cols="2,1,4"]
+[cols="1,1,1,4"]
 |===
-|Name |Required |Description
-
-|`id`
-|No
-|A request identifier. If it is present, the response will contain a header with same `id` property with the same value. This feature provides some compatibility with the JSON-RPC protocol.
+|Name |Type |Required |Description
 
 |`username`
+|`String`
 |No
-|A username that may be used in a user/password authentication mode. In that case, if there is no username present, the _anonumous_ user is assumed.
+|A username that may be used in a user/password authentication mode. In that case, if there is no username present, the _anonymous_ user is assumed.
 
 |`password`
+|`String`
 |No
 |A user password that may be used in a user/password authentication mode.
 
 |`authToken`
+|`String`
 |No
 |An authentication token that may be used in a token-based authentication mode.
 
 |`features`
+|`Map<String, Object>`
 |No
-|Request features that will be saved in a Remote API session.
+|Request features that will be stored in a Remote API session.
 |===
 
-The request features can be used for:
+Request features can be used for:
 
 * Setting a requested language if a knowledge base supports it.
 * Sending an API key to the service. For example, on the server side you could add an `OnSessionOpenListener` implementing the `onSessionOpen(RemoteApiSession session)` method that checks a value of `session.getFeatures().get("apiKey")`. If the API key is incorrect an exception will be thrown.
 
 NOTE: Request and response features are not converted by the feature converter.
 
-The {sponge} Remote API supports both POST and GET methods.
+=== Response
+A Remote API response supports standard JSON-RPC response members.
 
-.Examples of Remote API JSON-RPC 2.0 requests
-[source,bash]
-----
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"version","id":1}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"knowledgeBases","id":1}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"actions","id":1}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"actions","params":{"header":{"username":"john","password":"password"}},"id":1}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"actions","params":{"name":".*Case"},"id":1}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"call","params":{"name":"UpperCase","args":["test1"]},"id":1}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"call","params":{"name":"UpperCase","args":{"text":"test1"}},"id":1}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"send","params":{"header":{"username":"john","password":"password"},"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}},"id":1}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"reload","params":{"header":{"username":"john","password":"password"}},"id":1}'
-
-curl http://localhost:8888/jsonrpc?jsonrpc=2.0&method=version&id=1
-curl http://localhost:8888/jsonrpc?jsonrpc=2.0&method=knowledgeBases&id=1
-curl -G "http://localhost:8888/jsonrpc?jsonrpc=2.0&method=call&id=1" --data-urlencode "params=`echo '{"name":"OutputStreamResultAction"}' | base64`"
-----
-
-.Examples of simplified Remote API method requests
-[source,bash]
-----
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/version
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/knowledgeBases
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/actions
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/actions -d '{"params":{"header":{"username":"john","password":"password"}}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/actions -d '{"params":{"name":".*Case"}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/call -d '{"params":{"name":"UpperCase","args":["test1"]}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/call -d '{"params":{"name":"UpperCase","args":{"text":"test1"}}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/send -d '{"params":{"header":{"username":"john","password":"password"},"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}}'
-curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/reload -d '{"params":{"header":{"username":"john","password":"password"}}}'
-
-curl http://localhost:8888/version
-curl http://localhost:8888/knowledgeBases
-curl -G "http://localhost:8888/call?" --data-urlencode "params=`echo '{"name":"OutputStreamResultAction"}' | base64`"
-----
-
-== Response
-A response may contain base properties.
-
-.Base response properties
-[cols="2,1,4"]
+.Response members
+[cols="1,5"]
 |===
-|Name |Required |Description
+|Name |Description
+
+|`jsonrpc`
+|The version of the JSON-RPC protocol. The value is exactly `"2.0"`.
+
+|`result`
+|A result object that contains a `value` and an optional, special response `header`. The result object is present only on success.
+
+|`error`
+|The error object is present only on error.
+
+|`id`
+|It has the same value as the `id` member in the request or `null`.
+|===
+
+.Response result properties
+[cols="1,2,4"]
+|===
+|Property |Type |Description
 
 |`header`
-|No
-|A response header.
+|`ResponseHeader`
+|The response header.
 
-|`body`
-|No
-|A response body.
+|`value`
+|_depends on the method_
+|The response result value.
 |===
 
 .Response header properties
-[cols="2,1,4"]
+[cols="1,2,1,4"]
 |===
-|Name |Required |Description
-
-|`id`
-|No
-|A corresponding request id.
-
-|`errorCode`
-|No
-|An optional error code in case of server side error.
-
-|`errorMessage`
-|No
-|An optional error message in case of server side error.
-
-|`detailedErrorMessage`
-|No
-|An optional detailed error message in case of server side error.
+|Name |Type |Required |Description
 
 |`requestTime`
+|`Instant`
 |No
-|An optional request time, i.e. a server time (as Java Instant) of starting processing a request.
+|An optional request time, i.e. a server time (as a Java Instant) of starting processing a request.
 
 |`responseTime`
+|`Instant`
 |No
-|An optional response time, i.e. a server time (as Java Instant) of finishing processing a request.
+|An optional response time, i.e. a server time (as a Java Instant) of finishing processing a request.
 
 |`features`
+|`Map<String, Object>`
 |No
 |Response features that will be obtained from a Remote API session.
 |===
 
-.Examples of Remote API responses
+NOTE: Request and response features are not converted by the feature converter.
+
+A Remote API error object supports standard JSON-RPC error object members, i.e. `code`, `message` and optional `data`.
+
+.Error data properties
+[cols="2,1,4"]
+|===
+|Property |Type |Description
+
+|`detailedErrorMessage`
+|`String`
+|The detailed error message, e.g. an exception stack trace.
+|===
+
+== Methods
+The following table contains a summary of the Remote API methods. See the <<_swagger_overview, specification>> generated using Swagger and https://github.com/Swagger2Markup/swagger2markup[Swagger2Markup].
+
+The Remote API methods:
+
+* `version`,
+* `features`,
+* `login`,
+* `logout`,
+* `knowledgeBases`,
+* `actions`,
+* `call`,
+* `isActionActive`,
+* `provideActionArgs`,
+* `send`,
+* `eventTypes`,
+* `reload`.
+
+The OpenAPI specification of the Remote API is included in the Appendix A of the {sponge} Reference Documentation.
+
+The {sponge} Remote API service can publish custom Remote API methods as well.
+
+=== The `version` method
+Returns the Sponge Remote API version if it is set in the configuration, otherwise returns the {sponge} engine version.
+
+.Parameters
+[cols="1,1,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|No
+|A request header.
+|===
+
+.A result
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`String`
+|A version.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.Examples
 [source,bash]
 ----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"version","id":1}'
+# Response
 {
-  "header" : {
-    "id" : null,
-    "errorCode" : null,
-    "errorMessage" : null,
-    "detailedErrorMessage" : null,
-    "requestTime" : "2019-12-14T20:17:26.769Z",
-    "responseTime" : "2019-12-14T20:17:26.770Z"
+  "jsonrpc" : "2.0",
+  "result" : {
+    "header" : {
+      "requestTime" : "2020-05-31T13:59:34.453Z",
+      "responseTime" : "2020-05-31T13:59:34.578Z"
+    },
+    "value" : "1.16.0"
   },
-  "body" : {
-    "result" : "TEST1"
-  }
+  "id" : 1
+}
+
+# Request
+curl http://localhost:8888/jsonrpc?jsonrpc=2.0&method=version&id=1
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : "1.16.0"
+  },
+  "id" : "1"
+}
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/version
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "header" : {
+      "requestTime" : "2020-05-31T14:00:41.246Z",
+      "responseTime" : "2020-05-31T14:00:41.246Z"
+    },
+    "value" : "1.16.0-rc3"
+  },
+  "id" : null
+}
+
+# Request
+curl http://localhost:8888/version
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : "1.16.0"
+  },
+  "id" : null
+}
 ----
+
+=== The `features` method
+Returns the API features.
+
+.Parameters
+[cols="1,1,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|No
+|A request header.
+|===
+
+.A result
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`Map<String, Object>`
+|API features.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"features","id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : {
+      "spongeVersion" : "1.16.0",
+      "apiVersion" : null,
+      "grpcEnabled" : true,
+      "name" : "Sponge Remote API",
+      "description" : "Sponge Remote API description",
+      "license" : "Apache 2.0"
+    }
+  },
+  "id" : 1
+}
+----
+
+=== The `login` method
+User login. Used in a token-based authentication scenario.
+
+.Parameters
+[cols="1,1,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|Yes
+|A request header. It is required because it contains `username` and `password`.
+|===
+
+.A result
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`LoginValue`
+|A login value object.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.A login value object
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`authToken`
+|`String`
+|An authentication token.
+|===
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"login","params":{"header":{"username":"admin","password":"password"}},"id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : {
+      "authToken" : "eyJhbGciOiJIUzUxMiIsInppcCI6IkRFRiJ9.eNqqVkosLckITi0uzszP80xRsjKsBQAAAP__.YaE4Ka_RNk9REnVuzycXkXDTKAfIPHeTJzIRdC22llmK1hCtN3GBIE3cyM-vNJUMWWdgDPNwqFc9J3xwfSx2TA"
+    }
+  },
+  "id" : 1
+}
+----
+
+=== The `logout` method
+User logout. Used in a token-based authentication scenario.
+
+.Parameters
+[cols="1,1,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|Yes
+|A request header. It is required because it contains an `authToken` stored in a client code.
+|===
+
+.A result
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`Boolean`
+|A logout status. It is always `true`.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"logout","params":{"header":{"authToken":"eyJhbGciOiJIUzUxMiIsInppcCI6IkRFRiJ9.eNqqVkosLckITi0uzszP80xRsjKsBQAAAP__.YaE4Ka_RNk9REnVuzycXkXDTKAfIPHeTJzIRdC22llmK1hCtN3GBIE3cyM-vNJUMWWdgDPNwqFc9J3xwfSx2TA"}},"id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : true
+  },
+  "id" : 1
+}
+----
+
+=== The `knowledgeBases` method
+Returns the knowledge bases which the user may use (i.e. may call actions registered in these knowledge bases).
+
+.Parameters
+[cols="1,1,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|No
+|A request header.
+|===
+
+.A result
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`List<RemoteKnowledgeBaseMeta>`
+|A list of available knowledge bases metadata.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.A knowledge bases metadata object
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`name`
+|`String`
+|A knowledge base name.
+
+|`label`
+|`String`
+|A knowledge base label.
+
+|`description`
+|`String`
+|A knowledge base description.
+
+|`version`
+|`Integer`
+|A knowledge base version.
+
+|`sequenceNumber`
+|`Integer`
+|A knowledge base sequence number (e.g. for GUI list order).
+|===
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"knowledgeBases","id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : [ {
+      "name" : "example",
+      "label" : "Example",
+      "description" : null,
+      "version" : 2,
+      "sequenceNumber" : 1
+    } ]
+  },
+  "id" : 1
+}
+
+# Request
+curl http://localhost:8888/jsonrpc?jsonrpc=2.0&method=knowledgeBases&id=1
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/knowledgeBases
+
+# Request
+curl http://localhost:8888/knowledgeBases
+----
+
+=== The `actions` method
+Returns the metadata of actions that are available to the user.
+
+Actions will be sorted by a category sequence number, a knowledge base sequence number and an action label or name. The sequence number reflects the order in which categories or knowledge bases have been added to the engine.
+
+.Parameters
+[cols="1,1,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|No
+|A request header.
+
+|`name`
+|`String`
+|No
+|An action name or a regular expression. If you want to get metadata for specified actions, set this parameter to an action name or a https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html[Java-compatible regular expression].
+
+|`metadataRequired`
+|`Boolean`
+|No
+|A metadata required flag. If you want to get only actions that have argument and result metadata specified in their configuration, set this parameter to `true` (defaults to `false`).
+
+|`registeredTypes`
+|`Boolean`
+|No
+|A flag for requesting registered types used in the actions in the result (defaults to `false`).
+|===
+
+.A result
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`GetActionsValue`
+|A `GetActionsValue` value object.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.A `GetActionsValue` value object
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`actions`
+|`List<RemoteActionMeta>`
+|Available actions metadata. For more information see the {spongeJavaDocUrl}/org/openksavi/sponge/remoteapi/model/RemoteActionMeta.html[`RemoteActionMeta` class].
+
+|`types`
+|`Map<String, DataType>`
+|Registered types used in the actions.
+|===
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"actions","id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : {
+      "actions" : [ {
+        "name" : "LowerCase",
+        "label" : "Convert to lower case",
+        "description" : "Converts a string to lower case.",
+        "knowledgeBase" : {
+          "name" : "example",
+          "label" : "Example",
+          "description" : null,
+          "version" : 2,
+          "sequenceNumber" : 1
+        },
+        "category" : {
+          "name" : "category1",
+          "label" : "Category 1",
+          "description" : "Category 1 description",
+          "features" : { },
+          "sequenceNumber" : 0
+        },
+        "features" : { },
+        "args" : [ {
+          "kind" : "STRING",
+          "registeredType" : null,
+          "name" : "text",
+          "label" : "A text that will be changed to lower case",
+          "description" : null,
+          "annotated" : false,
+          "format" : null,
+          "defaultValue" : null,
+          "nullable" : false,
+          "readOnly" : false,
+          "features" : { },
+          "optional" : false,
+          "provided" : null,
+          "minLength" : null,
+          "maxLength" : null
+        } ],
+        "result" : {
+          "kind" : "STRING",
+          "registeredType" : null,
+          "name" : null,
+          "label" : "Lower case text",
+          "description" : null,
+          "annotated" : false,
+          "format" : null,
+          "defaultValue" : null,
+          "nullable" : false,
+          "readOnly" : false,
+          "features" : { },
+          "optional" : false,
+          "provided" : null,
+          "minLength" : null,
+          "maxLength" : null
+        },
+        "callable" : true,
+        "activatable" : false,
+        "qualifiedVersion" : {
+          "knowledgeBaseVersion" : 2,
+          "processorVersion" : null
+        }
+      }, {
+        "name" : "UpperCase",
+        "label" : "Convert to upper case",
+        "description" : "Converts a string to upper case.",
+        "knowledgeBase" : {
+          "name" : "example",
+          "label" : "Example",
+          "description" : null,
+          "version" : 2,
+          "sequenceNumber" : 1
+        },
+        "category" : {
+          "name" : "category1",
+          "label" : "Category 1",
+          "description" : "Category 1 description",
+          "features" : { },
+          "sequenceNumber" : 0
+        },
+        "features" : { },
+        "args" : [ {
+          "kind" : "STRING",
+          "registeredType" : null,
+          "name" : "text",
+          "label" : "Text to upper case",
+          "description" : "The text that will be converted to upper case.",
+          "annotated" : false,
+          "format" : null,
+          "defaultValue" : null,
+          "nullable" : false,
+          "readOnly" : false,
+          "features" : { },
+          "optional" : false,
+          "provided" : null,
+          "minLength" : null,
+          "maxLength" : 256
+        } ],
+        "result" : {
+          "kind" : "STRING",
+          "registeredType" : null,
+          "name" : null,
+          "label" : "Upper case text",
+          "description" : null,
+          "annotated" : false,
+          "format" : null,
+          "defaultValue" : null,
+          "nullable" : false,
+          "readOnly" : false,
+          "features" : { },
+          "optional" : false,
+          "provided" : null,
+          "minLength" : null,
+          "maxLength" : null
+        },
+        "callable" : true,
+        "activatable" : false,
+        "qualifiedVersion" : {
+          "knowledgeBaseVersion" : 2,
+          "processorVersion" : 2
+        }
+      } ],
+      "types" : null
+    }
+  },
+  "id" : 1
+}
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"actions","params":{"header":{"username":"john","password":"password"}},"id":1}'
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"actions","params":{"name":".*Case"},"id":1}'
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/actions
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/actions -d '{"params":{"header":{"username":"john","password":"password"}}}'
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/actions -d '{"params":{"name":".*Case"}}'
+----
+
+=== The `call` method
+Calls an action.
+
+.Parameters
+[cols="1,2,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|No
+|A request header.
+
+|`name`
+|`String`
+|Yes
+|An action name.
+
+|`args`
+|_list or map_
+|No
+|Action arguments as a list or a map. The map represents named arguments. This parameter is required for actions that have non-nullable or non-optional arguments.
+
+|`qualifiedVersion`
+|`ProcessorQualifiedVersion`
+|No
+|Expected qualified version of the action.
+|===
+
+.A result
+[cols="1,2,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|_depends on the action result_
+|An action result.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+If an action result type is `StreamType` the response won't be compatible with the JSON-RPC 2.0. The HTTP response will contain a raw result of the action.
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"call","params":{"name":"UpperCase","args":["test1"]},"id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : "TEST1"
+  },
+  "id" : 1
+}
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"call","params":{"name":"UpperCase","args":{"text":"test1"}},"id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : "TEST1"
+  },
+  "id" : 1
+}
+
+# Request
+curl -G "http://localhost:8888/jsonrpc?jsonrpc=2.0&method=call&id=1" --data-urlencode "params=`echo '{"name":"OutputStreamResultAction"}' | base64`"
+# Response
+Sample text file
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/call -d '{"params":{"name":"UpperCase","args":["test1"]}}'
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/call -d '{"params":{"name":"UpperCase","args":{"text":"test1"}}}'
+
+# Request
+curl -G "http://localhost:8888/call?" --data-urlencode "params=`echo '{"name":"OutputStreamResultAction"}' | base64`"
+----
+
+=== The `isActionActive` method
+Informs if an action (or actions) in a given context is active.
+
+.Parameters
+[cols="1,2,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|No
+|A request header.
+
+|`entries`
+|`List<IsActionActiveEntry>`
+|Yes
+|Query entries.
+|===
+
+.A query entry
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`name`
+|`String`
+|An action name.
+
+|`contextValue`
+|`Object`
+|A context value.
+
+|`contextType`
+|`DataType`
+|A context context type.
+
+|`args`
+|`List<Object>`
+|Action arguments in the context.
+
+|`features`
+|`Map<String, Object>`
+|Features.
+
+|`qualifiedVersion`
+|`ProcessorQualifiedVersion`
+|An action qualified version.
+|===
+
+.A result
+[cols="1,2,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`List<Boolean>`
+|Actions activity statuses.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"isActionActive","params":{"entries":[{"name":"UpperCase"}]},"id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : [ true ]
+  },
+  "id" : 1
+}
+----
+
+=== The `provideActionArgs` method
+Provides action arguments. Returns _provided arguments_, i.e. values along with value sets of action arguments.
+
+.Parameters
+[cols="1,2,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|No
+|A request header.
+
+|`name`
+|`String`
+|Yes
+|An action name.
+
+|`provide`
+|`List<String>`
+|No
+|Names of action arguments to provide.
+
+|`submit`
+|`List<String>`
+|No
+|Names of action arguments to submit.
+
+|`current`
+|`Map<String, Object>`
+|No
+|Current values of action arguments in a client code.
+
+|`dynamicTypes`
+|`Map<String, DataType>`
+|No
+|Types of dynamic values for provide and current.
+
+|`argFeatures`
+|`Map<String, Map<String, Object>>`
+|No
+|Features for arguments.
+
+|`qualifiedVersion`
+|`ProcessorQualifiedVersion`
+|No
+|An action expected qualified version.
+
+|`initial`
+|`Boolean`
+|No
+|A flag indicating if this is the initial provide action arguments request for a single action.
+|===
+
+.A result
+[cols="1,2,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`Map<String, ProvidedValue>`
+|Provided action arguments.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"provideActionArgs","params":{"name":"ProvideByAction","provide":["value"]},"id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : {
+      "value" : {
+        "value" : null,
+        "valuePresent" : false,
+        "annotatedValueSet" : [ {
+          "value" : "value1",
+          "valueLabel" : null,
+          "valueDescription" : null,
+          "features" : { },
+          "typeLabel" : null,
+          "typeDescription" : null
+        }, {
+          "value" : "value2",
+          "valueLabel" : null,
+          "valueDescription" : null,
+          "features" : { },
+          "typeLabel" : null,
+          "typeDescription" : null
+        }, {
+          "value" : "value3",
+          "valueLabel" : null,
+          "valueDescription" : null,
+          "features" : { },
+          "typeLabel" : null,
+          "typeDescription" : null
+        } ],
+        "annotatedElementValueSet" : null
+      }
+    }
+  },
+  "id" : 1
+}
+----
+
+=== The `send` method
+Sends a new event.
+
+.Parameters
+[cols="1,2,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|No
+|A request header.
+
+|`name`
+|`String`
+|Yes
+|An event name (type).
+
+|`attributes`
+|`Map<String, Object>`
+|No
+|Event attributes.
+
+|`label`
+|`String`
+|No
+|An event label.
+
+|`description`
+|`String`
+|No
+|An event description.
+
+|`features`
+|`Map<String, Object>`
+|No
+|Event features.
+|===
+
+.A result
+[cols="1,2,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`String`
+|A new event id.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"send","params":{"header":{"username":"john","password":"password"},"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}},"id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : "1590944366954-434"
+  },
+  "id" : 1
+}
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/send -d '{"params":{"header":{"username":"john","password":"password"},"name":"alarm","attributes":{"a1":"test1","a2":"test2", "a3":4}}}'
+----
+
+=== The `eventTypes` method
+Returns the registered event types.
+
+.Parameters
+[cols="1,2,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|No
+|A request header.
+
+|`name`
+|`String`
+|No
+|An event name or a https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html[Java-compatible regular expression].
+|===
+
+.A result
+[cols="1,2,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`Map<String, RecordType>`
+|Available event types.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"eventTypes","params":{"name":".*"},"id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : {
+      "notification" : {
+        "kind" : "RECORD",
+        "registeredType" : null,
+        "name" : null,
+        "label" : null,
+        "description" : null,
+        "annotated" : false,
+        "format" : null,
+        "defaultValue" : null,
+        "nullable" : false,
+        "readOnly" : false,
+        "features" : { },
+        "optional" : false,
+        "provided" : null,
+        "fields" : [ {
+          "kind" : "STRING",
+          "registeredType" : null,
+          "name" : "source",
+          "label" : "Source",
+          "description" : null,
+          "annotated" : false,
+          "format" : null,
+          "defaultValue" : null,
+          "nullable" : false,
+          "readOnly" : false,
+          "features" : { },
+          "optional" : false,
+          "provided" : null,
+          "minLength" : null,
+          "maxLength" : null
+        }, {
+          "kind" : "INTEGER",
+          "registeredType" : null,
+          "name" : "severity",
+          "label" : "Severity",
+          "description" : null,
+          "annotated" : false,
+          "format" : null,
+          "defaultValue" : null,
+          "nullable" : true,
+          "readOnly" : false,
+          "features" : { },
+          "optional" : false,
+          "provided" : null,
+          "minValue" : null,
+          "maxValue" : null,
+          "exclusiveMin" : false,
+          "exclusiveMax" : false
+        }, {
+          "kind" : "RECORD",
+          "registeredType" : "Person",
+          "name" : "person",
+          "label" : null,
+          "description" : null,
+          "annotated" : false,
+          "format" : null,
+          "defaultValue" : null,
+          "nullable" : true,
+          "readOnly" : false,
+          "features" : { },
+          "optional" : false,
+          "provided" : null,
+          "fields" : [ {
+            "kind" : "STRING",
+            "registeredType" : null,
+            "name" : "firstName",
+            "label" : "First name",
+            "description" : null,
+            "annotated" : false,
+            "format" : null,
+            "defaultValue" : null,
+            "nullable" : false,
+            "readOnly" : false,
+            "features" : { },
+            "optional" : false,
+            "provided" : null,
+            "minLength" : null,
+            "maxLength" : null
+          }, {
+            "kind" : "STRING",
+            "registeredType" : null,
+            "name" : "surname",
+            "label" : "Surname",
+            "description" : null,
+            "annotated" : false,
+            "format" : null,
+            "defaultValue" : null,
+            "nullable" : false,
+            "readOnly" : false,
+            "features" : { },
+            "optional" : false,
+            "provided" : null,
+            "minLength" : null,
+            "maxLength" : null
+          } ]
+        } ]
+      }
+    }
+  },
+  "id" : 1
+}
+----
+
+=== The `reload` method
+Reloads all knowledge bases. Depending on the configuration, this method may not be published. It should be available only to administrators.
+
+.Parameters
+[cols="1,2,1,5"]
+|===
+|Name |Type |Required |Description
+
+|`header`
+|`RequestHeader`
+|No
+|A request header.
+|===
+
+.A result
+[cols="1,1,5"]
+|===
+|Name |Type |Description
+
+|`value`
+|`Boolean`
+|A reload status. It is always `true`.
+
+|`header`
+|`ResponseHeader`
+|A response header.
+|===
+
+.Examples
+[source,bash]
+----
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"reload","params":{"header":{"username":"john","password":"password"}},"id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "result" : {
+    "value" : true
+  },
+  "id" : 1
+}
+
+# Request
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/jsonrpc -d '{"jsonrpc":"2.0","method":"reload","id":1}'
+# Response
+{
+  "jsonrpc" : "2.0",
+  "error" : {
+    "code" : 1001,
+    "message" : "No privileges to reload Sponge knowledge bases",
+    "data" : null
+  },
+  "id" : 1
+}
+----
+
+== Error codes
+In addition to the https://www.jsonrpc.org/specification[pre-defined JSON-RPC 2.0 error codes], the {sponge} Remote API defines the following error codes.
+
+.Remote API error codes
+[cols="1,2"]
+|===
+|Code |Description
+
+|1001
+|A generic error.
+
+|1002
+|Invalid or expired authentication token.
+
+|1003
+|The action version in the engine differs from the one passed to the Remote API from a client code.
+
+|1004
+|Invalid username or password.
+
+|1005
+|An action to be called is inactive.
+|===
+
+== HTTP POST and GET
+The Remote API supports both HTTP POST and HTTP GET. However HTTP GET is not recommended, because it is not really suited for RPC (see the https://www.simple-is-better.org/json-rpc/transport_http.html[JSON-RPC 2.0 Transport: HTTP proposal/draft]).
+
+.HTTP GET params mapping to a JSON request
+[cols="1,5"]
+|===
+|Param |Description
+
+|`jsonrpc`
+|Maps to a JSON `jsonrpc` request member.
+
+|`method`
+|Maps to a JSON `method` request member.
+
+|`params`
+|A named params JSON object that is: 1) https://en.wikipedia.org/wiki/Base64[Base64 encoded], 2) then https://en.wikipedia.org/wiki/Percent-encoding[URL encoded].
+
+|`id`
+|Maps to a JSON `id` request member.
+|===
+
+== HTTP status codes
+
+.HTTP status codes
+[cols="1,5"]
+|===
+|Code |Description
+
+|`200`
+|In case of a success.
+
+|`500`
+|In case of an error.
+
+|`204`
+|In case of a notification.
+|===
+
+== OpenAPI specification
+An online API specification in the https://swagger.io[OpenAPI 2.0 (Swagger)] JSON format will be available (depending on the configuration) at endpoint `/doc`.
+
+NOTE: The generated OpenAPI specification is currently limited. For example it doesn't support inheritance e.g. for {sponge} data types. Therefore it is most useful for customized methods.
 
 == Security
 
@@ -255,7 +1325,7 @@ The Remote API supports a username/password and an authentication token authenti
 |Every request has to contain a username and a password. Invoking the `login` method switches to the authentication token mode.
 
 |Authentication token
-|Every request has to contain an authentication token, returned by the `login` method that has to be invoked earlier. It may not contain neither username nor password. The authentication token has an expiration time. When a method returns an error message with an error code `INVALID_AUTH_TOKEN` you have to invoke the `login` method once more to obtain a new authentication token.
+|Every request has to contain an authentication token, returned by the `login` method that has to be invoked earlier. It must not contain neither username nor password. The authentication token has an expiration time. When a method returns an `Invalid or expired authentication token` error you have to invoke the `login` method once more to obtain a new authentication token.
 |===
 
 == API features
@@ -290,25 +1360,3 @@ The Remote API supports a username/password and an authentication token authenti
 |Set to `true` if the optional {sponge} gRPC API service is enabled.
 |===
 
-== Error codes
-
-.Remote API error codes
-[cols="1,2"]
-|===
-|Code |Description
-
-|1001
-|A generic error.
-
-|1002
-|Invalid or expired authentication token.
-
-|1003
-|An action version in the engine differs from the one passed to the Remote API from a client code.
-
-|1004
-|Invalid username or password.
-
-|1005
-|An action to be called is inactive.
-|===

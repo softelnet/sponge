@@ -1,5 +1,5 @@
 = {sponge} Remote API client for Dart
-The {sponge} Remote API client for Dart simplifies connecting to a remote {sponge} Remote API service from applications written in Dart. It could be used in a https://flutter.io[Flutter] mobile application or an https://webdev.dartlang.org/angular[AngularDart] web application to connect to a {sponge} based back-end. The Remote API client uses POST methods.
+The {sponge} Remote API client for Dart simplifies connecting to a remote {sponge} Remote API service from applications written in Dart. It could be used in a https://flutter.io[Flutter] mobile application or an https://webdev.dartlang.org/angular[AngularDart] web application to connect to a {sponge} based back-end. The Remote API client uses JSON-RPC 2.0 POST methods.
 
 IMPORTANT: The fully featured {sponge} Remote API client is the client for *Dart*. Clients for other languages may have less features.
 

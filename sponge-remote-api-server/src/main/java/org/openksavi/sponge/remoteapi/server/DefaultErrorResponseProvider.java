@@ -19,7 +19,6 @@ package org.openksavi.sponge.remoteapi.server;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.openksavi.sponge.action.InactiveActionException;
-import org.openksavi.sponge.remoteapi.JsonRpcConstants;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
 import org.openksavi.sponge.remoteapi.model.response.ResponseError;
 import org.openksavi.sponge.remoteapi.model.response.ResponseError.ErrorData;
@@ -51,7 +50,7 @@ public class DefaultErrorResponseProvider implements ErrorResponseProvider {
 
             response.getError().setCode(code);
 
-            String standardMessage = JsonRpcConstants.ERROR_MESSAGES.get(code);
+            String standardMessage = RemoteApiUtils.getErrorMessage(code);
 
             if (standardMessage != null) {
                 response.getError().setMessage(String.format("%s. %s", standardMessage, response.getError().getMessage()));

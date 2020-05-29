@@ -115,7 +115,8 @@ public class OkHttpSpongeClient extends BaseSpongeClient {
             }
 
             Validate.isTrue(
-                    httpResponse.isSuccessful() || httpResponse.code() == RemoteApiConstants.HTTP_CODE_ERROR && isJson(httpResponseBody),
+                    httpResponse.isSuccessful()
+                            || httpResponse.code() == RemoteApiConstants.HTTP_RESPONSE_CODE_ERROR && isJson(httpResponseBody),
                     "HTTP error status code is %s", httpResponse.code());
 
             R response = null;

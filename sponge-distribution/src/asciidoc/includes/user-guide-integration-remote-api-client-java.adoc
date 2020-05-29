@@ -1,5 +1,5 @@
 = {sponge} Remote API client for Java
-The {sponge} Remote API client for Java simplifies connecting to a remote {sponge} Remote API server from applications written in Java. The default implementation uses the http://square.github.io/okhttp/[OkHttp] library. The Remote API client uses POST methods.
+The {sponge} Remote API client for Java simplifies connecting to a remote {sponge} Remote API server from applications written in Java. The default implementation uses the http://square.github.io/okhttp/[OkHttp] library. The Remote API client uses JSON-RPC 2.0 POST methods.
 
 IMPORTANT: The fully featured {sponge} Remote API client is the client for *Dart*. Clients for other languages may have less features. For more information check the client API.
 

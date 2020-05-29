@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.remoteapi.util;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -35,6 +37,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.features.model.geo.GeoLayer;
+import org.openksavi.sponge.remoteapi.JsonRpcConstants;
 import org.openksavi.sponge.remoteapi.feature.converter.FeaturesUtils;
 import org.openksavi.sponge.remoteapi.model.RemoteActionMeta;
 import org.openksavi.sponge.remoteapi.model.RemoteDataType;
@@ -51,6 +54,16 @@ import org.openksavi.sponge.util.DataTypeUtils;
  * A set of common Remote API utility methods.
  */
 public abstract class RemoteApiUtils {
+
+    private static final Map<Integer, String> ERROR_MESSAGES = new LinkedHashMap<>();
+
+    static {
+        ERROR_MESSAGES.put(JsonRpcConstants.ERROR_CODE_PARSE, "Parse error");
+        ERROR_MESSAGES.put(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "Invalid request");
+        ERROR_MESSAGES.put(JsonRpcConstants.ERROR_CODE_METHOD_NOT_FOUND, "Method not found");
+        ERROR_MESSAGES.put(JsonRpcConstants.ERROR_CODE_INVALID_PARAMS, "Invalid params");
+        ERROR_MESSAGES.put(JsonRpcConstants.ERROR_CODE_INTERNAL, "Internal error");
+    }
 
     private RemoteApiUtils() {
         //
@@ -174,5 +187,13 @@ public abstract class RemoteApiUtils {
         }
 
         throw new SpongeException(String.format("Argument %s not found", argName));
+    }
+
+    public static Map<Integer, String> getErrorMessages() {
+        return Collections.unmodifiableMap(ERROR_MESSAGES);
+    }
+
+    public static String getErrorMessage(int code) {
+        return ERROR_MESSAGES.get(code);
     }
 }

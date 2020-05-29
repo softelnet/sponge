@@ -59,7 +59,7 @@ public class IsActionActiveRequest extends TypedParamsRequest<IsActionActivePara
         public IsActionActiveParams() {
         }
 
-        @ApiModelProperty(value = "The entries", required = true)
+        @ApiModelProperty(value = "The query entries", required = true)
         public List<IsActionActiveEntry> getEntries() {
             return entries;
         }
