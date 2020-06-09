@@ -69,7 +69,7 @@ public class HttpTest extends BasicTestTemplate {
         Response okHttpResponse = client.newCall(new Request.Builder().url(String.format("http://localhost:%d/actions", port))
                 .headers(new Headers.Builder().add("Content-Type", RemoteApiConstants.CONTENT_TYPE_JSON).build())
                 .post(RequestBody.create(MediaType.get(RemoteApiConstants.CONTENT_TYPE_JSON), requestBody)).build()).execute();
-        assertEquals(RemoteApiConstants.HTTP_CODE_ERROR, okHttpResponse.code());
+        assertEquals(RemoteApiConstants.HTTP_RESPONSE_CODE_ERROR, okHttpResponse.code());
         ObjectMapper mapper = RemoteApiUtils.createObjectMapper();
         ErrorResponse apiResponse = mapper.readValue(okHttpResponse.body().string(), ErrorResponse.class);
         assertEquals(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, apiResponse.getError().getCode());

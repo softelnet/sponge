@@ -43,7 +43,7 @@ public class SendEventResponse extends BaseResponse<SendEventResult> {
         }
 
         @Override
-        @ApiModelProperty(value = "The event id", required = true)
+        @ApiModelProperty(value = "The new event id", required = true)
         public String getValue() {
             return super.getValue();
         }

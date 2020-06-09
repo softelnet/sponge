@@ -16,9 +16,6 @@
 
 package org.openksavi.sponge.remoteapi;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 /**
  * JSON-RPC 2.0 constants.
  */
@@ -43,16 +40,6 @@ public final class JsonRpcConstants {
     public static final String MEMBER_PARAMS = "params";
 
     public static final String VERSION = "2.0";
-
-    public static final Map<Integer, String> ERROR_MESSAGES = new LinkedHashMap<>();
-
-    static {
-        ERROR_MESSAGES.put(JsonRpcConstants.ERROR_CODE_PARSE, "Parse error");
-        ERROR_MESSAGES.put(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "Invalid request");
-        ERROR_MESSAGES.put(JsonRpcConstants.ERROR_CODE_METHOD_NOT_FOUND, "Method not found");
-        ERROR_MESSAGES.put(JsonRpcConstants.ERROR_CODE_INVALID_PARAMS, "Invalid params");
-        ERROR_MESSAGES.put(JsonRpcConstants.ERROR_CODE_INTERNAL, "Internal error");
-    }
 
     private JsonRpcConstants() {
         //

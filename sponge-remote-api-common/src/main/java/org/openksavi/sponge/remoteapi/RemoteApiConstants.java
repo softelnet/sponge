@@ -80,7 +80,11 @@ public final class RemoteApiConstants {
 
     public static final String REMOTE_EVENT_OBJECT_TYPE_CLASS_NAME = RemoteEvent.class.getName();
 
-    public static final int HTTP_CODE_ERROR = 500;
+    public static final int HTTP_RESPONSE_CODE_OK = 200;
+
+    public static final int HTTP_RESPONSE_CODE_ERROR = 500;
+
+    public static final int HTTP_RESPONSE_CODE_NO_RESPONSE = 204;
 
     public static final String SERVICE_DISCOVERY_TYPE = "_sponge._tcp";
 
