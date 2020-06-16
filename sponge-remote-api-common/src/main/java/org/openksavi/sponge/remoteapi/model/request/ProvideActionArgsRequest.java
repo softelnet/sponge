@@ -47,7 +47,7 @@ public class ProvideActionArgsRequest extends TypedParamsRequest<ProvideActionAr
         return new ProvideActionArgsParams();
     }
 
-    @ApiModel(value = "ProvideActionArgsParams", description = "A provide action arguments request params")
+    @ApiModel(value = "ProvideActionArgsParams", description = "Provide action arguments request params")
     public static class ProvideActionArgsParams extends BaseRequestParams implements ActionExecutionInfo {
 
         private String name;

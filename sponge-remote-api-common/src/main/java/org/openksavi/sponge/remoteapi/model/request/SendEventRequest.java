@@ -43,7 +43,7 @@ public class SendEventRequest extends TypedParamsRequest<SendEventParams> {
         return new SendEventParams();
     }
 
-    @ApiModel(value = "SendEventParams", description = "A send event request params")
+    @ApiModel(value = "SendEventParams", description = "Send event request params")
     public static class SendEventParams extends BaseRequestParams {
 
         private String name;

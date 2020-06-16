@@ -41,7 +41,7 @@ public class GetEventTypesRequest extends TypedParamsRequest<GetEventTypesParams
         return new GetEventTypesParams();
     }
 
-    @ApiModel(value = "GetEventTypesParams", description = "A get event types request params")
+    @ApiModel(value = "GetEventTypesParams", description = "Get event types request params")
     public static class GetEventTypesParams extends BaseRequestParams {
 
         @JsonInclude(Include.NON_NULL)

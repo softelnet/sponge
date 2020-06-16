@@ -41,7 +41,7 @@ public class GetActionsRequest extends TypedParamsRequest<GetActionsParams> {
         return new GetActionsParams();
     }
 
-    @ApiModel(value = "GetActionsParams", description = "A get actions request params")
+    @ApiModel(value = "GetActionsParams", description = "Get actions request params")
     public static class GetActionsParams extends BaseRequestParams {
 
         @JsonInclude(Include.NON_NULL)

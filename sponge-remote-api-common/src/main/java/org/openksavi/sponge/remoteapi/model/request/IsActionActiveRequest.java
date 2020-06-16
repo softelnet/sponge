@@ -47,7 +47,7 @@ public class IsActionActiveRequest extends TypedParamsRequest<IsActionActivePara
         return new IsActionActiveParams();
     }
 
-    @ApiModel(value = "IsActionActiveParams", description = "An action active request params")
+    @ApiModel(value = "IsActionActiveParams", description = "Action active request params")
     public static class IsActionActiveParams extends BaseRequestParams {
 
         private List<IsActionActiveEntry> entries;
