@@ -46,7 +46,7 @@ The main features of {sponge}:
 * The standalone command-line application allows, for example, *management of Camel routes without the need of writing Java code* (you may use any of the supported scripting languages or XML).
 * Supports *reloading of knowledge bases on the fly* (i.e. while the system is running).
 * Supports processing of streams of {sponge} events by using *http://reactivex.io[Reactive Extensions (ReactiveX)]*.
-* Allows *publishing a custom Remote API of your application as a set of actions (e.g. written in a scripting language) that may be changed and reloaded on the fly*.
+* Allows *publishing a custom Remote API of your application or your microservice as a set of actions (e.g. written in a scripting language) that may be changed and reloaded on the fly*.
 * Provides *Remote API client libraries* for *Java* and *Dart* to simplify writing a client code.
 * Provides integration with *https://www.tensorflow.org[TensorFlow]*, an open source *machine learning* framework. You may use the TensorFlow or Keras Python API indirectly from your Java application.
 * Provides *Sponge Remote* (_currently under development_), a *generic, minimalistic, opinionated mobile application* backed by a server-side business logic. The business logic is placed in {sponge} actions. Sponge Remote provides a generic GUI to call those actions. Sponge Remote could be useful in cases when a mobile GUI doesn't have to be customized.
