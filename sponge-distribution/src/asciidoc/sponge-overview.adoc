@@ -1,4 +1,4 @@
-= Overview
+= Sponge Overview
 :page-permalink: index.html
 
 == {sponge}
