@@ -100,7 +100,7 @@
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
         <rxjava2.version>2.2.19</rxjava2.version>
-        <okhttp.version>4.7.2</okhttp.version>
+        <okhttp.version>4.8.0</okhttp.version>
         <reflections.version>0.9.12</reflections.version>
         <jackson.version>2.10.4</jackson.version>
         <swagger.version>1.6.2</swagger.version>
@@ -124,7 +124,7 @@
         <logback.version>1.2.3</logback.version>
         <junit-jupiter.version>5.6.2</junit-jupiter.version>
         <junit-platform.version>5.6.2</junit-platform.version>
-        <mockito.version>3.3.3</mockito.version>
+        <mockito.version>3.4.0</mockito.version>
         <jcip.version>1.0-1</jcip.version>
 
         <log4j2.version>2.13.3</log4j2.version>
