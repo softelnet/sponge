@@ -6,7 +6,7 @@
 // image:https://travis-ci.org/softelnet/sponge.svg?branch=master[link="https://travis-ci.org/softelnet/sponge"]
 image:https://img.shields.io/maven-central/v/org.openksavi.sponge/sponge-core.svg[link="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.openksavi.sponge%22%20AND%20a%3A%22sponge-core%22"]
 
-This is the source code repository for the open source, Java-based Action and Event Processing System.
+This is the source code repository for Sponge - the open-source, Java-based action and event processing service with a mobile client app.
 
 {sponge} is released under the https://www.apache.org/licenses/LICENSE-2.0[Apache 2.0 license].
 

@@ -158,8 +158,8 @@
                                 <icons>font</icons>
                                 <prewrap>false</prewrap>
                                 <linkattrs>true</linkattrs>
-                                <description>Sponge is an open-source, Java-based Action and Event Processing System</description>
-                                <keywords>Sponge,Event Processing System,CEP,Complex Event Processing,Java,Open Source,Ruby,Groovy,JavaScript,IoT,Internet of things,Apache license,Apache Camel</keywords>
+                                <description>Sponge is an open-source, Java-based action and event processing service with a mobile client app</description>
+                                <keywords>Sponge,Mobile app,CEP,Complex Event Processing,Java,Open Source,Ruby,Groovy,JavaScript,IoT,Internet of things,Apache license,Apache Camel,Flutter</keywords>
                                 <linkcss>true</linkcss>
 
                                 <sponge>Sponge</sponge>

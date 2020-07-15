@@ -13,7 +13,7 @@
 # in the templates via {{ site.myvariable }}.
 title: Sponge
 description: > # this means to ignore newlines until "baseurl:"
-  Sponge is an open-source, Java-based Action and Event Processing System.
+  Sponge is an open-source, Java-based action and event processing service with a mobile client app.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 show_downloads: true
@@ -44,8 +44,8 @@ asciidoctor:
     - icons=font
     - prewrap=false
     - linkattrs=true
-    - description="Sponge - open source, Java-based Action and Event Processing System"
-    - keywords="Sponge,Event Processing System,CEP,Complex Event Processing,Java,Open Source,Ruby,Groovy,JavaScript,IoT,Internet of things,Apache license,Apache Camel"
+    - description="Sponge - open-source, Java-based action and event processing service with a mobile client app"
+    - keywords="Sponge,Mobile app,CEP,Complex Event Processing,Java,Open Source,Ruby,Groovy,JavaScript,IoT,Internet of things,Apache license,Apache Camel,Flutter"
 #    - linkcss=true
     - source-highlighter=coderay
 #    - source-highlighter=pygments
