@@ -24,7 +24,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JRuleBuilder;
 
 /**
- * Sponge Knowledge base. Rule builders.
+ * Sponge Knowledge Base. Rule builders.
  */
 public class RulesBuilder extends JKnowledgeBase {
 

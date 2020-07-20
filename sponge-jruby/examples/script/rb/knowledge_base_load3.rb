@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Loading knowledge bases
 
 class Trigger1 < Trigger

@@ -23,7 +23,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTriggerBuilder;
 
 /**
- * Sponge Knowledge base. Trigger builders.
+ * Sponge Knowledge Base. Trigger builders.
  */
 public class TriggersBuilder extends JKnowledgeBase {
 

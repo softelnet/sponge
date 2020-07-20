@@ -1,5 +1,5 @@
 /*
- * Sponge Knowledge base
+ * Sponge Knowledge Base
  * Triggers - Generating events and using triggers
  */
 

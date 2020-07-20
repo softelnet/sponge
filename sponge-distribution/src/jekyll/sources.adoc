@@ -1,0 +1,10 @@
+= Source Codes
+:page-permalink: /sources/
+
+The {sponge} source codes are hosted on GitHub:
+
+* https://github.com/softelnet/sponge[{sponge}],
+* https://github.com/softelnet/sponge_client_dart[{sponge} client for Dart],
+* https://github.com/softelnet/sponge_grpc_client_dart[{sponge} gRPC client for Dart],
+* https://github.com/softelnet/sponge_flutter_api[{sponge} Flutter API],
+* https://github.com/softelnet/sponge_remote[{sponge} Remote].

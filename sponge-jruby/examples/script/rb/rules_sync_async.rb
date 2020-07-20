@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Using rules - synchronous and asynchronous
 
 java_import org.openksavi.sponge.examples.util.CorrelationEventsLog

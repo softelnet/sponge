@@ -274,15 +274,16 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
         String leftPadding = StringUtils.repeat(' ', formatter.getLeftPadding());
         //@formatter:off
         String footer = new StringBuilder()
-                .append("\nExamples (change directory to " + VersionInfo.PRODUCT + " bin/ first):\n")
-                .append(leftPadding + "./" + EXECUTABLE_NAME + " -c ../examples/script/py/triggers_hello_world.xml\n")
-                .append(leftPadding + "./" + EXECUTABLE_NAME + " -k helloWorldKb=../examples/script/py/triggers_hello_world.py\n")
-                .append(leftPadding + "./" + EXECUTABLE_NAME + " -k ../examples/script/py/triggers_hello_world.py\n")
-                .append(leftPadding + "./" + EXECUTABLE_NAME
-                        + " -k filtersKb=../examples/script/py/filters.py -k heartbeatKb=../examples/script/js/rules_heartbeat.js\n")
-                .append(leftPadding + "./" + EXECUTABLE_NAME
-                        + " -k ../examples/standalone/multiple_kb_files/event_processors.py"
-                        + ",../examples/standalone/multiple_kb_files/example2.py\n")
+                .append("\nExamples:\n")
+                .append(leftPadding + EXECUTABLE_NAME + " -c examples/script/py/triggers_hello_world.xml\n")
+                .append(leftPadding + EXECUTABLE_NAME + " -k helloWorldKb=examples/script/py/triggers_hello_world.py\n")
+                .append(leftPadding + EXECUTABLE_NAME + " -k examples/script/py/triggers_hello_world.py\n")
+                .append(leftPadding + EXECUTABLE_NAME
+                        + " -k filtersKb=examples/script/py/filters.py -k heartbeatKb=examples/script/js/rules_heartbeat.js\n")
+                .append(leftPadding + EXECUTABLE_NAME
+                        + " -k examples/standalone/multiple_kb_files/event_processors.py"
+                        + ",examples/standalone/multiple_kb_files/example2.py\n")
+                .append(leftPadding + EXECUTABLE_NAME + " -c services/remote/remote.xml -Dsponge.serviceDir=examples/standalone/remote_service\n")
                 .append("\nPress CTRL+C to exit the " + VersionInfo.PRODUCT + " standalone command-line application.\n")
                 .append("\nSee https://sponge.openksavi.org for more details.").toString();
         //@formatter:on

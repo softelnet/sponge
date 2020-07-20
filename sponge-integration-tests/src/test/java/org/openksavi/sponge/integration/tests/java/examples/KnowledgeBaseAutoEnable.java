@@ -27,7 +27,7 @@ import org.openksavi.sponge.java.JRule;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Auto-enable.
+ * Sponge Knowledge Base. Auto-enable.
  */
 public class KnowledgeBaseAutoEnable extends JKnowledgeBase {
 

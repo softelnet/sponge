@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Heartbeat
 
 java_import java.util.concurrent.atomic.AtomicBoolean

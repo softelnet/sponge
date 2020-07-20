@@ -1,5 +1,5 @@
 /**
- * Sponge Knowledge base
+ * Sponge Knowledge Base
  * Loading knowledge bases
  * Note that auto-enable is turned off in the configuration.
  */

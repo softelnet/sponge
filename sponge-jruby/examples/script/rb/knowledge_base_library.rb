@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Library use
 
 java_import java.util.Collections

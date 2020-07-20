@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Standalone with Camel example
 
 java_import org.apache.camel.builder.RouteBuilder

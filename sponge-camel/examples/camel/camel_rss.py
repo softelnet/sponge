@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 Camel integration - RSS
 """
 

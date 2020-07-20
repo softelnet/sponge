@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Triggers - Incorrect event pattern
 
 class TriggerAPattern < Trigger

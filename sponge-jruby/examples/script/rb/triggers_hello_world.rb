@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Hello world
 
 class HelloWorldTrigger < Trigger

@@ -29,7 +29,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Using filters for deduplication of events.
+ * Sponge Knowledge Base. Using filters for deduplication of events.
  */
 public class FiltersDeduplication extends JKnowledgeBase {
 

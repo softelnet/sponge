@@ -23,7 +23,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Generating events by Cron.
+ * Sponge Knowledge Base. Generating events by Cron.
  */
 public class EventsCron extends JKnowledgeBase {
 

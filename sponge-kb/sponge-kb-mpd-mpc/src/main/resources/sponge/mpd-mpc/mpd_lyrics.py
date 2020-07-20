@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 Uses Musixmatch to get lyrics (requires an API key).
 """
 

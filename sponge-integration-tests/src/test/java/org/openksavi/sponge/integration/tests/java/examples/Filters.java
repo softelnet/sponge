@@ -27,7 +27,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Using filters.
+ * Sponge Knowledge Base. Using filters.
  */
 public class Filters extends JKnowledgeBase {
 

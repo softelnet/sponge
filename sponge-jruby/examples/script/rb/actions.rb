@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Defining, calling and disabling Actions
 
 java_import org.openksavi.sponge.examples.PowerEchoAction

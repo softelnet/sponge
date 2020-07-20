@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 Blinking LED
 GrovePi board: Connect LED to D4
 """

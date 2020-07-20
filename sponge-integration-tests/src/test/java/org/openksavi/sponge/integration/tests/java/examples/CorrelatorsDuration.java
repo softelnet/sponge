@@ -27,7 +27,7 @@ import org.openksavi.sponge.java.JCorrelator;
 import org.openksavi.sponge.java.JKnowledgeBase;
 
 /**
- * Sponge Knowledge base. Using correlator duration
+ * Sponge Knowledge Base. Using correlator duration
  */
 public class CorrelatorsDuration extends JKnowledgeBase {
 

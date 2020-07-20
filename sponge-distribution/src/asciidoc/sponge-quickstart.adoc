@@ -58,6 +58,172 @@ Correlator:: If there is a correlator that listens to that event, the event will
 
 == Distributions
 
+=== Docker
+The standalone command-line program or a {sponge} service can be run as a https://www.docker.com[Docker] container.
+
+The Docker container is based on OpenJDK 11.
+
+.Invoke {sponge} in an interactive mode with a Python interpreter in a Docker container
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it --rm openksavi/sponge -i -l python
+----
+
+.Invoke {sponge} in a Docker container in an interactive mode in a Docker container
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it --rm openksavi/sponge -c examples/script/py/triggers_hello_world.xml -i
+----
+
+.Enter bash in a Docker container and print {sponge} help
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it --rm --entrypoint "/bin/bash" openksavi/sponge
+./sponge -h
+----
+
+If you want to mount a host directory containing for example {sponge} knowledge bases or configuration files you may use Docker volumes or mount features.
+
+.Example of mounting a host directory
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it -v ~/examples:/opt/examples openksavi/sponge -c /opt/examples/script/py/triggers_hello_world.xml
+----
+
+Press `CTRL+C` after seeing the message `"Hello World!"` to exit the {sponge} loop.
+
+==== Remote {sponge} service template
+The Remote {sponge} service template allows you to run your own {sponge} service and use it remotely in the Sponge Remote mobile app for Android.
+
+* First run an example of a remote {sponge} service with a `HelloWorld` action.
+
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it --rm -p 1836:1836 -p 1837:1837 openksavi/sponge -c services/remote/remote.xml -Dsponge.serviceDir=examples/standalone/remote_service
+----
+
+.Verify the service.
+[source,bash,subs="verbatim,attributes"]
+----
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/call -d '{"params":{"name":"HelloWorld","args":["User"]}}'
+----
+
+.The JSON response.
+[source,json,subs="verbatim,attributes"]
+----
+{"jsonrpc":"2.0","result":{"value":"Hello World! Hello User!"},"id":null}
+----
+
+Press `CTRL+C` to stop the {sponge} service.
+
+* Then run your own remote {sponge} service with your `HelloWorld` action.
+
+.Create a new directory for your knowledge base files.
+[source,bash,subs="verbatim,attributes"]
+----
+mkdir remote_service
+cd remote_service
+----
+
+.Create a new Python-based knowledge base file.
+[source,bash,subs="verbatim,attributes"]
+----
+vi service.py
+----
+
+.Define your action in the knowledge base file.
+[source,python,subs="verbatim,attributes"]
+----
+class MyHelloWorld(Action):
+    def onConfigure(self):
+        self.withLabel("My hello world").withDescription("Returns a greeting text.")
+        self.withArg(StringType("name").withLabel("Your name").withDescription("Type your name."))
+        self.withResult(StringType().withLabel("Greeting").withDescription("The greeting text."))
+    def onCall(self, name):
+        return "My Hello World! Hello {}!".format(name)
+----
+
+.Run your own remote {sponge} service.
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it --rm -p 1836:1836 -p 1837:1837 -v `pwd`:/opt/service openksavi/sponge -c services/remote/remote.xml -Dsponge.serviceDir=/opt/service
+----
+
+.Verify the service.
+[source,bash,subs="verbatim,attributes"]
+----
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/call -d '{"params":{"name":"MyHelloWorld","args":["User"]}}'
+----
+
+.The JSON response.
+[source,json,subs="verbatim,attributes"]
+----
+{"jsonrpc":"2.0","result":{"value":"My Hello World! Hello User!"},"id":null}
+----
+
+* Finally run your own remote {sponge} service with a more useful action that displays free disk space in your Docker container.
+
+.Edit your Python-based knowledge base file.
+[source,bash,subs="verbatim,attributes"]
+----
+vi service.py
+----
+
+.Add the following action in the knowledge base file.
+[source,python,subs="verbatim,attributes"]
+----
+class GetDiskSpaceInfo(Action):
+    def onConfigure(self):
+        self.withLabel("Get disk space info").withDescription("Returns the disk space info.")
+        self.withNoArgs().withResult(StringType().withFormat("console").withLabel("Disk space info"))
+        self.withFeature("icon", "console")
+    def onCall(self):
+        return sponge.process("df", "-h").outputAsString().run().outputString
+----
+
+.Reload the service.
+[source,bash,subs="verbatim,attributes"]
+----
+curl -i -k -X POST -H "Content-type:application/json" http://localhost:1836/call -d '{"params":{"name":"EngineReload"}}'
+----
+
+.The reload JSON response.
+[source,json,subs="verbatim,attributes"]
+----
+{"jsonrpc":"2.0","result":{"value":null},"id":null}
+----
+
+Install the `jq` command-line JSON processor if there is none.
+
+.Verify the service.
+[source,bash,subs="verbatim,attributes"]
+----
+curl -s -X POST -H "Content-type:application/json" http://localhost:1836/call -d '{"params":{"name":"GetDiskSpaceInfo"}}' | jq -r '.result.value'
+----
+
+.The response will be something like this.
+[source,bash,subs="verbatim,attributes"]
+----
+Filesystem      Size  Used Avail Use% Mounted on
+overlay          63G   47G   14G  78% /
+tmpfs            64M     0   64M   0% /dev
+osxfs           932G  867G   51G  95% /opt/service
+/dev/vda1        63G   47G   14G  78% /etc/hosts
+----
+
+* Use the Sponge Remote mobile app for Android (_currently under development_) to connect to the service.
+
+Install the Sponge Remote mobile app for Android from Google Play.
+
+After the app starts go to the `Connections` page to manually add a new connection by tapping the `+` button. Enter a connection name `My Service` and a Sponge address, e.g. `http://192.168.0.2:1836`. Tap the `VERIFY` button to test the connection and then save it by tapping the `OK` button. Then tap the `My Service` connection.
+
+Depending on your Docker environment you may be able to automatically discover the service in your local network by selecting the `Find new nearby services` in the `Connections` page.
+
+Now you can remotely call your actions from your Android device.
+
+* Remote API Security.
+The Remote {sponge} service template is set up only for anonymous users. If you would like to configure other users or change user privileges to knowledge bases, you can provide your own settings and pass the `-Dsponge.securityDir` and `-Dpassword.file` parameters to the `docker` commadline.
+
 === Embedded in a Java application
 {sponge} could be embedded in a Java application by adding a Maven dependency.
 
@@ -73,7 +239,7 @@ If you want to use {sponge} with, for example, Python scripting knowledge bases,
 </dependency>
 ----
 
-==== Creating and starting the {sponge} engine
+==== Creating and starting a {sponge} engine
 The following example shows how to make {sponge} a part of a custom Java application.
 
 .Example of starting the embedded {sponge} with the configuration file
@@ -87,7 +253,7 @@ engine.startup(); // <2>
 
 The engine runs until it is shut down explicitly. So, for example, if you place this code in the `main` method and execute it, the program will run infinitely.
 
-.Example of starting the embedded {sponge} with the knowledge base file
+.Example of starting an embedded {sponge} with a knowledge base file
 [source,java]
 ----
 SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase("knowledgeBaseName", "examples/script/py/triggers_hello_world.py").build(); // <1>
@@ -239,41 +405,6 @@ Multi-line statements should be entered by adding a backslash (`\`) to the end o
 ----
 
 You may exit the program by entering `exit`, `quit` or pressing `CTRL-D`.
-
-=== Docker
-
-The standalone command-line program may also be run as a https://www.docker.com[Docker] container.
-
-.Invoke {sponge} in an interactive mode with the Python interpreter in a Docker container
-[source,bash,subs="verbatim,attributes"]
-----
-docker run -it --rm openksavi/sponge -i -l python
-----
-
-.Invoke {sponge} in a Docker container in an interactive mode in a Docker container
-[source,bash,subs="verbatim,attributes"]
-----
-docker run -it --rm openksavi/sponge -c ../examples/script/py/triggers_hello_world.xml -i
-----
-
-.Enter bash in a Docker container and print {sponge} help
-[source,bash,subs="verbatim,attributes"]
-----
-docker run -it --rm --entrypoint "/bin/bash" openksavi/sponge
-./sponge -h
-----
-
-The Docker container is based on OpenJDK 11.
-
-If you want to mount a host directory containing for example {sponge} knowledge bases or configuration files you may use Docker volumes or mount features.
-
-.Example of mounting a host directory
-[source,bash,subs="verbatim,attributes"]
-----
-docker run -it -v ~/examples:/opt/examples openksavi/sponge -c /opt/examples/script/py/triggers_hello_world.xml
-----
-
-Press `CTRL+C` after seeing the message `"Hello World!"` to exit the {sponge} loop.
 
 == Examples
 This chapter provides introductory examples of {sponge}. For detailed information see User Guide.

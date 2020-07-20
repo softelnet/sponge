@@ -25,7 +25,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Using knowledge base callbacks.
+ * Sponge Knowledge Base. Using knowledge base callbacks.
  */
 public class KnowledgeBaseCallbacks extends JKnowledgeBase {
 

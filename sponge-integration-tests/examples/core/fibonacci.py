@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 Fibonacci numbers
 
 Note that this example is intended ONLY to show how to send a chain of events (each carrying a Fibonacci number as an attribute).

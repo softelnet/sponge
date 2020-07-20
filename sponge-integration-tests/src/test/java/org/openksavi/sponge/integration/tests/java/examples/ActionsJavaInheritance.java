@@ -23,7 +23,7 @@ import org.openksavi.sponge.examples.PowerEchoAction;
 import org.openksavi.sponge.java.JKnowledgeBase;
 
 /**
- * Sponge Knowledge base. Actions - Java inheritance.
+ * Sponge Knowledge Base. Actions - Java inheritance.
  */
 public class ActionsJavaInheritance extends JKnowledgeBase {
 

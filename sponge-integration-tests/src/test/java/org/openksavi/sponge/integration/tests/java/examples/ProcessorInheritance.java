@@ -20,7 +20,7 @@ import org.openksavi.sponge.java.JAction;
 import org.openksavi.sponge.java.JKnowledgeBase;
 
 /**
- * Sponge Knowledge base. Processor inheritance.
+ * Sponge Knowledge Base. Processor inheritance.
  */
 public class ProcessorInheritance extends JKnowledgeBase {
 

@@ -13,14 +13,16 @@ RUN apt-get -qq update \
 
 COPY sponge-${SPONGE_VERSION}-standalone.zip /opt/
 
+ENV PATH="/opt/sponge/bin:${PATH}"
+
 RUN cd /opt \
     && unzip -q sponge-${SPONGE_VERSION}-standalone.zip \
     && rm -f sponge-${SPONGE_VERSION}-standalone.zip \
     && ln -s -f sponge-${SPONGE_VERSION} sponge \
     && chmod ug+x sponge/bin/sponge
 
-WORKDIR /opt/sponge-${SPONGE_VERSION}/bin
+WORKDIR /opt/sponge-${SPONGE_VERSION}
 
-ENTRYPOINT ["./sponge"]
+ENTRYPOINT ["sponge"]
 
 CMD ["--help"]

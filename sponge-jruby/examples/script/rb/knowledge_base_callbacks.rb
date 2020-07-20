@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Using knowledge base callbacks.
 
 java_import java.util.concurrent.atomic.AtomicBoolean

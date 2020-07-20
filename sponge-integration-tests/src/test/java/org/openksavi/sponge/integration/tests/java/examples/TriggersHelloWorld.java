@@ -21,7 +21,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Hello world.
+ * Sponge Knowledge Base. Hello world.
  */
 public class TriggersHelloWorld extends JKnowledgeBase {
 

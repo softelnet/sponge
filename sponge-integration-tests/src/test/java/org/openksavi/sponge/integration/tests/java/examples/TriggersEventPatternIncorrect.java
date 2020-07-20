@@ -21,7 +21,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Triggers - Incorrect event pattern.
+ * Sponge Knowledge Base. Triggers - Incorrect event pattern.
  */
 public class TriggersEventPatternIncorrect extends JKnowledgeBase {
 

@@ -23,7 +23,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JRule;
 
 /**
- * Sponge Knowledge base. Rules - instances.
+ * Sponge Knowledge Base. Rules - instances.
  */
 public class RulesInstances extends JKnowledgeBase {
 

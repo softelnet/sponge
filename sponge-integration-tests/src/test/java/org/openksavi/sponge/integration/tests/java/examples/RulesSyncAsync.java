@@ -24,7 +24,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JRule;
 
 /**
- * Sponge Knowledge base. Using rules - synchronous and asynchronous.
+ * Sponge Knowledge Base. Using rules - synchronous and asynchronous.
  */
 public class RulesSyncAsync extends JKnowledgeBase {
 

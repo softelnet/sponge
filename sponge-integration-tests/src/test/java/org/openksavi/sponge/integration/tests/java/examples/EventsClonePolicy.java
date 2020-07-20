@@ -30,7 +30,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Deep and shallow event clone policy.
+ * Sponge Knowledge Base. Deep and shallow event clone policy.
  */
 public class EventsClonePolicy extends JKnowledgeBase {
 

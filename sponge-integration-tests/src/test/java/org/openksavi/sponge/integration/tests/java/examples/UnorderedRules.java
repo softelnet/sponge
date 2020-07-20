@@ -31,7 +31,7 @@ import org.openksavi.sponge.java.JTrigger;
 import org.openksavi.sponge.rule.Rule;
 
 /**
- * Sponge Knowledge base. Using unordered rules.
+ * Sponge Knowledge Base. Using unordered rules.
  */
 public class UnorderedRules extends JKnowledgeBase {
 

@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Using rules - events
 
 java_import org.openksavi.sponge.examples.util.CorrelationEventsLog

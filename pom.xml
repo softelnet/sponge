@@ -95,7 +95,7 @@
         <spring-security.version>5.3.3.RELEASE</spring-security.version>
         <camel.version>3.4.1</camel.version>
         <awaitility.version>4.0.3</awaitility.version>
-        <jline.version>3.15.0</jline.version>
+        <jline.version>3.16.0</jline.version>
         <py4j.version>0.10.9</py4j.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
@@ -118,13 +118,13 @@
         <bitronix.version>2.1.4</bitronix.version>
         <atomikos.version>4.0.4</atomikos.version>
 
-        <jetty.version>9.4.27.v20200227</jetty.version>
+        <jetty.version>9.4.29.v20200521</jetty.version>
 
         <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit-jupiter.version>5.6.2</junit-jupiter.version>
         <junit-platform.version>5.6.2</junit-platform.version>
-        <mockito.version>3.4.2</mockito.version>
+        <mockito.version>3.4.4</mockito.version>
         <jcip.version>1.0-1</jcip.version>
 
         <log4j2.version>2.13.3</log4j2.version>

@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Using correlators
 
 java_import org.openksavi.sponge.examples.SampleJavaCorrelator

@@ -23,7 +23,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Removing scheduled events.
+ * Sponge Knowledge Base. Removing scheduled events.
  */
 public class EventsRemoving extends JKnowledgeBase {
 

@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 gRPC demo - Memo.
 """
 from org.openksavi.sponge.remoteapi.model import RemoteEvent

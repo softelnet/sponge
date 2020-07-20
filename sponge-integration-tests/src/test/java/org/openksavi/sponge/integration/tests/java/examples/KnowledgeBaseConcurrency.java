@@ -25,7 +25,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Concurrency.
+ * Sponge Knowledge Base. Concurrency.
  */
 @SuppressWarnings("unchecked")
 public class KnowledgeBaseConcurrency extends JKnowledgeBase {

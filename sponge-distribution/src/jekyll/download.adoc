@@ -16,4 +16,10 @@ In order to use {sponge} you may choose to:
 ++++
 * Run the {sponge} standalone command-line program in a Docker container.
 
-For more information on these distributions see the link:/quickstart/[Quickstart] page and the link:/release-notes/[Release notes] page.
+For more information on distributions see the link:/quickstart/[Quickstart] page. For more information on history of changes see the link:/release-notes/[Release notes] page.
+
+The hosted {sponge} programming libraries:
+
+* https://mvnrepository.com/artifact/org.openksavi.sponge[{sponge} artifacts in the Maven Central Repository],
+* https://pub.dev/packages/sponge_client_dart[{sponge} client for Dart],
+* https://pub.dev/packages/sponge_grpc_client_dart[{sponge} gRPC client for Dart].

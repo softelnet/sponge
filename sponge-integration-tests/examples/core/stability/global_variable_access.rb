@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Global variable access
 
 java_import java.util.concurrent.atomic.AtomicInteger

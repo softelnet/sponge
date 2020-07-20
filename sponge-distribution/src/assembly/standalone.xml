@@ -153,6 +153,7 @@
             <outputDirectory></outputDirectory>
             <includes>
                 <include>examples/**</include>
+                <include>services/**</include>
             </includes>
         </fileSet>
         <fileSet>

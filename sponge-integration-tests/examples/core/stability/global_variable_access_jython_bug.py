@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 Global variable access Jython 2.7.1 bug: http://bugs.jython.org/issue2487
 """
 

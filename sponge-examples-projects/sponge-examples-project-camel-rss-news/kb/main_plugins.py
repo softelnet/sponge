@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 """
 
 # Plugin written in Python. Stores any value.

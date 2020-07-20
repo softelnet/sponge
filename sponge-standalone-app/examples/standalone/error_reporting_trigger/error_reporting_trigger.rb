@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Error reporting
 
 class HelloWorldTrigger < Trigger

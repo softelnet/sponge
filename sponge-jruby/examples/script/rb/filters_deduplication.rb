@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Using filters for deduplication of events.
 
 java_import java.util.Collections

@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 Using rules - immediate, no duration
 Note that auto-enable is turned off in the configuration.
 """

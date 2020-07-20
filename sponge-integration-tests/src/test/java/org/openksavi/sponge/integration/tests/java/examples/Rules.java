@@ -26,7 +26,7 @@ import org.openksavi.sponge.java.JRule;
 import org.openksavi.sponge.rule.Rule;
 
 /**
- * Sponge Knowledge base. Using rules.
+ * Sponge Knowledge Base. Using rules.
  */
 public class Rules extends JKnowledgeBase {
 

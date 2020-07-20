@@ -1,5 +1,5 @@
 /*
- * Sponge Knowledge base
+ * Sponge Knowledge Base
  * Using knowledge base callbacks.
  */
 

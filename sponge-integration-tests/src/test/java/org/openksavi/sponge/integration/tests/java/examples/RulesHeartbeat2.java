@@ -24,7 +24,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JRule;
 
 /**
- * Sponge Knowledge base. Heartbeat 2.
+ * Sponge Knowledge Base. Heartbeat 2.
  */
 public class RulesHeartbeat2 extends JKnowledgeBase {
 

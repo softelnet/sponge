@@ -1,5 +1,5 @@
 /*
- * Sponge Knowledge base
+ * Sponge Knowledge Base
  * Defining plugins in a Kotlin knowledge base.
  */
 

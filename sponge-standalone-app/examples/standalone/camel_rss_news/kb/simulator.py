@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 """
 
 # Trigger that executes a function passed as an event attribute.

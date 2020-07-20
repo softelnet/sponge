@@ -23,7 +23,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.type.StringType;
 
 /**
- * Sponge Knowledge base. Hello World action.
+ * Sponge Knowledge Base. Hello World action.
  */
 public class ActionsHelloWorld extends JKnowledgeBase {
 

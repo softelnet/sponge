@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
+    <properties>
+        <property name="sponge.serviceDir">${sponge.configDir}/service</property>
+        <property name="sponge.securityDir">${sponge.configDir}/security</property>
+
+        <property name="password.file">${sponge.configDir}/password.txt</property>
+    </properties>
+
+    <engine name="remote" label="Remote"/>
+
+    <knowledgeBases>
+        <knowledgeBase name="service" label="Service">
+            <file>file:${sponge.serviceDir}/**/*.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="administration" label="Administration">
+            <file>classpath*:sponge/engine/**/*.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="security" label="Security">
+            <file>file:${sponge.securityDir}/**/*.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+
+    <plugins>
+        <plugin name="standalone" class="org.openksavi.sponge.standalone.StandalonePlugin">
+            <configuration>
+                <spring camel="true" />
+            </configuration>
+        </plugin>
+        <plugin name="remoteApiServer" class="org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin">
+            <configuration>
+                <allowAnonymous>true</allowAnonymous>
+                <securityProviderClass>org.openksavi.sponge.remoteapi.server.security.SimpleInMemorySecurityProvider</securityProviderClass>
+                <registerServiceDiscovery>true</registerServiceDiscovery>
+            </configuration>
+        </plugin>
+        <plugin name="grpcApiServer" class="org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin"/>
+    </plugins>
+</sponge>
+

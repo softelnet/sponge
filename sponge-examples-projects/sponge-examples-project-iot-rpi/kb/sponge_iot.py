@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 IoT on Raspberry Pi with a GrovePi board
 """
 

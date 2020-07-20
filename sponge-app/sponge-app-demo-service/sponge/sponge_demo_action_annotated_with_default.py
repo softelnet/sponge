@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 Demo - Action - a annotated arg with a default value
 """
 

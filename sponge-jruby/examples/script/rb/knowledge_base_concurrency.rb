@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Concurrency
 
 java_import java.util.concurrent.atomic.AtomicReference

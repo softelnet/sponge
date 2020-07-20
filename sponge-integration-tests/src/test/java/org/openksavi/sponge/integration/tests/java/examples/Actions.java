@@ -23,7 +23,7 @@ import org.openksavi.sponge.java.JAction;
 import org.openksavi.sponge.java.JKnowledgeBase;
 
 /**
- * Sponge Knowledge base. Defining, calling and disabling Actions
+ * Sponge Knowledge Base. Defining, calling and disabling Actions
  */
 public class Actions extends JKnowledgeBase {
 

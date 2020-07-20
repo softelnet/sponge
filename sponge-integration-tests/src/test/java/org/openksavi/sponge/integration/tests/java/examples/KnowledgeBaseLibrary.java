@@ -30,7 +30,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Library use.
+ * Sponge Knowledge Base. Library use.
  */
 public class KnowledgeBaseLibrary extends JKnowledgeBase {
 

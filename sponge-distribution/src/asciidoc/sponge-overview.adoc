@@ -14,7 +14,7 @@ There are several ways to use {sponge}:
 * Download the {sponge} *standalone command-line program* and use it in your environment.
 * Run the {sponge} *standalone command-line program in a Docker* container.
 * Connect to a {sponge} service via the *Remote API*.
-* Connect to a {sponge} service via the *Sponge Remote mobile application* (currently under development) or a custom mobile app build with the *Sponge Flutter API* (currently under development).
+* Connect to a {sponge} service via the *Sponge Remote mobile application* (_currently under development_) or a custom mobile app build with the *Sponge Flutter API* (_currently under development_).
 
 Actions and event processors are grouped in knowledge bases. A knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. *Python*, *Ruby*, *Groovy*, *JavaScript* as well as in *Java* or *Kotlin*.
 

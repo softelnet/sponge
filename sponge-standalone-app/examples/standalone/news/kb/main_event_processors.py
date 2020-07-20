@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 """
 
 from java.util.concurrent.atomic import AtomicBoolean

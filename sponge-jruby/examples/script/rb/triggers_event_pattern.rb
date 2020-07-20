@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Triggers - Event pattern
 
 java_import java.util.concurrent.atomic.AtomicInteger

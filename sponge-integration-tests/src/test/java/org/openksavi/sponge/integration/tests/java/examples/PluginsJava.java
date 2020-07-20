@@ -23,7 +23,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Using plugins.
+ * Sponge Knowledge Base. Using plugins.
  */
 public class PluginsJava extends JKnowledgeBase {
 

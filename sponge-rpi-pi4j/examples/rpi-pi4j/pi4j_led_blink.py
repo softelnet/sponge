@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 Blinking LED
 Raspberry Pi: Make sure that your Raspberry Pi is not powered! Then connect Grove LED to GPIO via a 4-pin connector:
 - BLACK wire goes on PIN#14 (Ground),

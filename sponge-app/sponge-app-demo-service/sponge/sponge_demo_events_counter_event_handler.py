@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 gRPC demo - Counter - event handler.
 """
 

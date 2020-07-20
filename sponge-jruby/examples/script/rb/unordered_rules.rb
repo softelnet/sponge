@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Using unordered rules
 
 java_import java.util.concurrent.atomic.AtomicInteger

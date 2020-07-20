@@ -1,5 +1,5 @@
 """
-Sponge Knowledge base
+Sponge Knowledge Base
 """
 
 # Sends alarm messages to Camel endpoints in two ways.

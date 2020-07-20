@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Generating events by Cron
 
 java_import java.util.concurrent.atomic.AtomicInteger

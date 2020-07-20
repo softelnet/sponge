@@ -23,7 +23,7 @@ import org.openksavi.sponge.type.provided.ProvidedMeta;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 
 /**
- * Sponge Knowledge base.
+ * Sponge Knowledge Base.
  */
 public class ActionsBuilder extends JKnowledgeBase {
 

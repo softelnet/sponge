@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Actions - Java inheritance
 
 java_import org.openksavi.sponge.examples.PowerEchoAction

@@ -27,7 +27,7 @@ import org.openksavi.sponge.java.JTrigger;
 import org.openksavi.sponge.rule.Rule;
 
 /**
- * Sponge Knowledge base. Heartbeat.
+ * Sponge Knowledge Base. Heartbeat.
  */
 public class RulesHeartbeat extends JKnowledgeBase {
 

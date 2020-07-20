@@ -23,7 +23,7 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Using knowledge base manager: enabling/disabling processors. Note that auto-enable is turned off in the
+ * Sponge Knowledge Base. Using knowledge base manager: enabling/disabling processors. Note that auto-enable is turned off in the
  * configuration.
  */
 public class KnowledgeBaseManager extends JKnowledgeBase {

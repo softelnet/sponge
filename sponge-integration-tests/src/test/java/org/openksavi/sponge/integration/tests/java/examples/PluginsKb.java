@@ -23,7 +23,7 @@ import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.java.JTrigger;
 
 /**
- * Sponge Knowledge base. Defining plugins in a Kotlin knowledge base.
+ * Sponge Knowledge Base. Defining plugins in a Kotlin knowledge base.
  */
 public class PluginsKb extends JKnowledgeBase {
 

@@ -1,5 +1,5 @@
 /**
- * Sponge Knowledge base Using knowledge base callbacks.
+ * Sponge Knowledge Base Using knowledge base callbacks.
  */
 
 var AtomicBoolean = java.util.concurrent.atomic.AtomicBoolean;

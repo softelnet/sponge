@@ -1,4 +1,4 @@
-# Sponge Knowledge base
+# Sponge Knowledge Base
 # Triggers - Generating events and using triggers
 
 java_import java.util.concurrent.atomic.AtomicInteger
