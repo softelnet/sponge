@@ -92,6 +92,7 @@ docker run -it -v ~/examples:/opt/examples openksavi/sponge -c /opt/examples/scr
 
 Press `CTRL+C` after seeing the message `"Hello World!"` to exit the {sponge} loop.
 
+[[quickstart-docker-template]]
 ==== Remote {sponge} service template
 The Remote {sponge} service template allows you to run your own {sponge} service and use it remotely in the Sponge Remote mobile app for Android.
 

@@ -1,5 +1,5 @@
 = Applications
-The {sponge} project contains a few predefined {sponge}-based applications that can be used ad hoc. Their source codes are placed under the `sponge-kb` multi-module project.
+The {sponge} project contains a few predefined {sponge}-based application services that can be used ad hoc. Their source codes are placed under the `sponge-app` multi-module project.
 
 [[remote-api-demo-service]]
 == Remote API Demo Service

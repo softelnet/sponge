@@ -26,6 +26,14 @@ The {appName} layout is optimized for smartphones.
 
 NOTE: The {sponge} Flutter API library is in alpha phase and supports only a limited set of {sponge} features.
 
+[[mobile-app-getting-started]]
+== Getting started
+To try some of {sponge} features you can connect to the Demo Service. However, to use the full potential of {sponge} and {appName} you should run a {sponge} application service in your local network.
+
+For information on how to run a predefined {sponge} service (e.g. on Raspberry Pi) in Docker see link:/user-guide/#applications[Applications].
+
+For information on how to run your own {sponge} service in Docker see link:/quickstart/#quickstart-docker-template[Remote Sponge service template].
+
 == Functionalities
 The following chapters show the key functionalities of the mobile application.
 
@@ -466,35 +474,35 @@ The application may be switched to the dark or the light theme in the settings.
 
 === Data types
 
-=== `AnyType`
+==== `AnyType`
 Not supported.
 
-=== `BinaryType`
+==== `BinaryType`
 Partially supported.
 
 Editing (as an action attribute) is supported only for a `image/png` mime type with the `drawing` characteristic feature. Viewing is supported for image formats supported by Flutter and other binary content supported by the https://pub.dartlang.org/packages/open_file[`open_file` Flutter plugin] that is used by the application.
 
 Support for nullable values is limited.
 
-=== `BooleanType`
+==== `BooleanType`
 Supported.
 
-=== `DateTimeType`
+==== `DateTimeType`
 Partially supported.
 
 `DATE_TIME_ZONE` and `INSTANT` editing is not supported.
 
 The default format for `DATE` is `"yyyy-dd-MM"`. A format for `TIME` is required for the {sponge} Remote API Dart client.
 
-=== `DynamicType`
+==== `DynamicType`
 Partially supported. This functionality is considered experimental.
 
 A new dynamic value can be created only on the server side, i.e. in an `onProvideArgs` action callback method. A provided `DynamicValue.type` name will be ignored because a name of a parent dynamic type is used in the application.
 
-=== `IntegerType`
+==== `IntegerType`
 Supported.
 
-=== `ListType`
+==== `ListType`
 Partially supported. This functionality is considered experimental.
 
 A unique list with a provided element value set is represented as a multichoice widget. In most cases a complex list element should be annotated with a value label in order to be nicely displayed in the mobile GUI.
@@ -503,34 +511,34 @@ See the <<mobile-advanced-use-cases,Advanced use cases>> chapter.
 
 Support for nullable values is limited.
 
-=== `MapType`
+==== `MapType`
 Partially supported. This functionality is considered experimental.
 
 Editing is not supported.
 
-=== `NumberType`
+==== `NumberType`
 Supported.
 
-=== `ObjectType`
+==== `ObjectType`
 Partially supported. This functionality is considered experimental.
 
 Supported only if an object type defines a companion type that is supported.
 
-=== `RecordType`
+==== `RecordType`
 Supported. This functionality is considered experimental.
 
-=== `StreamType`
+==== `StreamType`
 Not supported.
 
-=== `StringType`
+==== `StringType`
 Supported.
 
 A `StringType` value in a text field is always trimmed when the field is submitted and converted to `null` if it is empty. So for example you can't enter only white spaces in such text field if the type is not nullable.
 
-=== `TypeType`
+==== `TypeType`
 Not supported.
 
-=== `VoidType`
+==== `VoidType`
 Supported.
 
 A https://material.io/components/chips/[`chip`] widget is presented as an editor. A user can tap the chip widget to submit an argument if it is configured as submittable.
@@ -1115,6 +1123,10 @@ The {appName} and the {sponge} Flutter API library use third party software rele
 
 * `AsyncPopupMenuButton` - a modified Flutter `PopupMenuButton` widget that adds support for an asynchronous item builder.
 * `Painter` - a modified https://pub.dartlang.org/packages/painter2 library. It is used for drawings.
+
+[[mobile-app-privacy-policy]]
+== Sponge Remote privacy policy
+The Sponge Remote privacy policy can be found link:/sponge-mobile-privacy-policy[here].
 
 == Application development
 
