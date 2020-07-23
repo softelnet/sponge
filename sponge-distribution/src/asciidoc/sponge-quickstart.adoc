@@ -211,7 +211,7 @@ osxfs           932G  867G   51G  95% /opt/service
 /dev/vda1        63G   47G   14G  78% /etc/hosts
 ----
 
-* Use the Sponge Remote mobile app for Android (_currently under development_) to connect to the service.
+* Use the Sponge Remote mobile app for Android (_currently in alpha phase_) to connect to the service.
 
 Install the Sponge Remote mobile app for Android from Google Play.
 

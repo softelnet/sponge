@@ -2,7 +2,7 @@
 :page-permalink: index.html
 
 == {sponge}
-*{sponge} is an open-source, Java-based action and event processing service with a mobile client app.*
+*{sponge} is an open-source, Java-based action and event processing service with a mobile client application.*
 
 This documentation applies to version {projectVersion} (release date: {projectDate}).
 
@@ -14,7 +14,7 @@ There are several ways to use {sponge}:
 * Download the {sponge} *standalone command-line program* and use it in your environment.
 * Run the {sponge} *standalone command-line program in a Docker* container.
 * Connect to a {sponge} service via the *Remote API*.
-* Connect to a {sponge} service via the *Sponge Remote mobile application* (_currently under development_) or a custom mobile app build with the *Sponge Flutter API* (_currently under development_).
+* Connect to a {sponge} service via the *Sponge Remote mobile application* (_currently in alpha phase_) or a custom mobile app build with the *Sponge Flutter API* (_currently in alpha phase_).
 
 Actions and event processors are grouped in knowledge bases. A knowledge base is defined in files which may be written in one of several supported scripting languages, i.e. *Python*, *Ruby*, *Groovy*, *JavaScript* as well as in *Java* or *Kotlin*.
 
@@ -47,8 +47,8 @@ The main features of {sponge}:
 * Allows *publishing a custom Remote API of your application or your microservice as a set of actions (e.g. written in a scripting language) that may be changed and reloaded on the fly*.
 * Provides *Remote API client libraries* for *Java* and *Dart* to simplify writing a client code.
 * Provides integration with *https://www.tensorflow.org[TensorFlow]*, an open source *machine learning* framework. You may use the TensorFlow or Keras Python API indirectly from your Java application.
-* Provides *Sponge Remote* (_currently under development_), a *generic, minimalistic, opinionated mobile application* backed by a server-side business logic. The business logic is placed in {sponge} actions. Sponge Remote provides a generic GUI to call those actions. Sponge Remote could be useful in cases when a mobile GUI doesn't have to be customized.
-* Allows *development of mobile applications* using the *Sponge Flutter API* library (_currently under development_) for cases when the GUI that connects to {sponge} has to be customized.
+* Provides *Sponge Remote* (_currently in alpha phase_), a *generic, minimalistic, opinionated mobile application* backed by a server-side business logic. The business logic is placed in {sponge} actions. Sponge Remote provides a generic GUI to call those actions. Sponge Remote could be useful in cases when a mobile GUI doesn't have to be customized.
+* Allows *development of mobile applications* using the *Sponge Flutter API* library (_currently in alpha phase_) for cases when the GUI that connects to {sponge} has to be customized.
 * Provides a comprehensive documentation and many examples.
 
 == Applications

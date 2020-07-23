@@ -4,9 +4,11 @@
 :appName: Sponge Remote
 
 == Introduction
-The {appName} is a https://flutter.io[Flutter] mobile application that provides a generic GUI to call remote {sponge} actions. It can be run on both Android and iOS. It could be used as _the one app to rule them all_ for {sponge} services that publish actions via the {sponge} Remote API. All business logic has to be placed in {sponge} actions, so the only requirement to have the application working is to create your own {sponge} service by writing a knowledge base that define actions that will be visible and ready to run in the application or to connect to an existing {sponge} service.
+{appName} is an open-source mobile application that provides a generic user interface to call remote {sponge} actions. It could be used as _the one app to rule them all_ for {sponge} services that publish actions via the {sponge} Remote API. All business logic has to be placed in {sponge} actions, so the only requirement to have the application working is to create your own {sponge} service by writing a knowledge base that define actions that will be visible and ready to run in the application or to connect to an existing {sponge} service.
 
-NOTE: The application is currently under development and is not officially published. It will be released as an open source.
+The app is made with https://flutter.io[Flutter]. It can be run on both Android and iOS.
+
+NOTE: {appName} is in alpha phase and supports only a limited set of {sponge} features.
 
 The {appName} is especially useful when data and functionality are more important than visual aspects of a GUI, e.g. for prototyping, rapid application development, low cost solutions, etc. The reason is that the application provides only a generic and opinionated GUI whose customization is limited.
 
@@ -20,7 +22,9 @@ You could build a customized GUI using your own Flutter code that will call the 
 
 Unless noted otherwise in the release notes, the {appName} and the {sponge} Flutter API library versions `0.minor.*` are compatible only with the {sponge}  versions `1.minor.*`, e.g. the `0.16.5` version of the {appName} will be compatible with the `1.16.1` version of the {sponge} engine.
 
-NOTE: The {sponge} Flutter API library is currently under development.
+The {appName} layout is optimized for smartphones.
+
+NOTE: The {sponge} Flutter API library is in alpha phase and supports only a limited set of {sponge} features.
 
 == Functionalities
 The following chapters show the key functionalities of the mobile application.
