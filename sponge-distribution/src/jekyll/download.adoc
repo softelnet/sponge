@@ -16,6 +16,8 @@ In order to use {sponge} you may choose to:
 ++++
 * Run the {sponge} standalone command-line program in a Docker container.
 
+The alpha version of the Sponge Remote mobile app can be downloaded from the http://play.google.com/store/apps/details?id=org.openksavi.sponge.remote.mobile[Google Play Store].
+
 For more information on distributions see the link:/quickstart/[Quickstart] page. For more information on history of changes see the link:/release-notes/[Release notes] page.
 
 The hosted {sponge} programming libraries:

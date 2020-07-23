@@ -8,8 +8,10 @@ If you choose to use our app to connect to a Sponge service, then you agree to t
 
 Note that the predefined Sponge application services are open-source as well, so you can evaluate their functionality by yourself.
 
+This policy is effective as of 2020-07-24.
+
 == Information collection and use
-The app can use third party services that may collect information used to identify you.
+The app can use third party services that may collect information used to identify you, for example map providers.
 
 == Log data
 We want to inform you that whenever you use our app, in a case of an error in the app we collect data and information on your phone called Log data. This Log data may include information such as your device Internet Protocol (IP) address, device name, operating system version, the configuration of the app when utilizing our app, the time and date of your use of the app and other statistics.
@@ -18,12 +20,10 @@ We want to inform you that whenever you use our app, in a case of an error in th
 We value your trust in providing us your Personal Information. But remember that no method of transmission over the internet, or method of electronic storage is 100% secure and reliable, and we cannot guarantee its absolute security.
 
 == Children’s privacy
-Some Sponge actions published in Sponge services may appeal to children under the age of 13, for example actions allowing a user to draw doodles on a mobile device. If you are a parent or guardian we advise you to supervise your child in such cases.
+Some Sponge actions published in Sponge services may appeal to children under the age of 13, for example actions allowing a user to draw sketches on a mobile device. If you are a parent or guardian we advise you to supervise your child in such cases.
 
-== Changes to this privacy policy
+== Changes to this Privacy Policy
 We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes.
-
-This policy is effective as of 2020-07-23.
 
 == Contact us
 If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at softelnetmobile@gmail.com.
