@@ -123,7 +123,7 @@ class DateTimeTypeResultAction(Action):
         elif type == "dateReadOnlyNullable":
             return DynamicValue(None, DateTimeType().withDate().withLabel("Date read only nullable").withReadOnly().withNullable())
         elif type == "dateReadOnlyNonNullable":
-            return DynamicValue(LocalDate.of(2020, 1, 1), DateTimeType().withLabel("Date-time read only non nullable").withReadOnly())
+            return DynamicValue(LocalDate.of(2020, 1, 1), DateTimeType().withDate().withLabel("Date-time read only non nullable").withReadOnly())
         if type == "timeNonNullable":
             return DynamicValue(LocalTime.of(12, 0), DateTimeType().withTime().withFormat("HH:mm").withLabel("Time non nullable"))
         elif type == "timeNullable":
