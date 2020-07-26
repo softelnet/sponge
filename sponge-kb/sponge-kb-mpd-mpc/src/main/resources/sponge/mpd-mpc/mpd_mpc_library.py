@@ -17,7 +17,8 @@ class MpdLibrary(Action):
                     RecordType("file").withAnnotated().withFields([
                         StringType("file"),
                         BooleanType("isDir")
-                    ]).withProvided(ProvidedMeta().withSubmittable(SubmittableMeta().withInfluences(["files", "parentDir"])).withDependency("parentDir")))
+                    ]).withProvided(ProvidedMeta().withSubmittable(SubmittableMeta().withInfluences(["files", "parentDir"])).withDependency("parentDir")).
+                        withFeature("submittableBlocking", True))
         ]).withNonCallable().withActivatable()
         self.withFeatures({"icon":"folder-music", "contextActions":[SubAction("MpdRefreshDatabase")], "visible":True})
 

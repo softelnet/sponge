@@ -168,6 +168,8 @@ public final class Features {
 
     public static final String PROVIDE_VALUE_INDICATED_INDEX = "indicatedIndex";
 
+    public static final String SUBMITTABLE_BLOCKING = "submittableBlocking";
+
     public static final String GEO_MAP = "geoMap";
 
     public static final String GEO_POSITION = "geoPosition";

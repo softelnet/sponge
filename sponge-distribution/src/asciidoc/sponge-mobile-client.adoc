@@ -811,6 +811,11 @@ A non-limited value set is supported only for `StringType`.
 |`ListType`
 |A flag indicating that a list will have its own scroll. This feature turns off the main scroll in an action screen. It is useful for long lists. This feature is only supported for main action arguments (i.e. not nested). Defaults to `false`.
 
+|`submittableBlocking`
+|`boolean`
+|Type
+|A flag that causes GUI to block until a value is submitted (a value of a submittable provided value that is sent from a client to a server). Defaults to `false`.
+
 |`geoMap`
 |`GeoMap`
 |`ListType`
