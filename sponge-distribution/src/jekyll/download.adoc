@@ -3,7 +3,7 @@
 
 The current {sponge} version is {projectVersion} (release date: {projectDate}).
 
-In order to use {sponge} you may choose to:
+In order to use *{sponge}* you may choose to:
 
 * Embed {sponge} in your Java application using Maven dependency.
 * Download the {sponge} standalone command-line program and use it in your environment:
@@ -16,11 +16,18 @@ In order to use {sponge} you may choose to:
 ++++
 * Run the {sponge} standalone command-line program in a Docker container.
 
-The alpha version of the Sponge Remote mobile app can be downloaded from the http://play.google.com/store/apps/details?id=org.openksavi.sponge.remote.mobile[Google Play Store].
+The *Sponge Remote* mobile app is now available on Google Play. Google Play and the Google Play logo are trademarks of Google LLC.
+
+[subs="attributes"]
+++++
+<p>
+<a href='http://play.google.com/store/apps/details?id=org.openksavi.sponge.remote.mobile&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="25%"/></a>
+</p>
+++++
 
 For more information on distributions see the link:/quickstart/[Quickstart] page. For more information on history of changes see the link:/release-notes/[Release notes] page.
 
-The hosted {sponge} programming libraries:
+The hosted *{sponge} programming libraries*:
 
 * https://mvnrepository.com/artifact/org.openksavi.sponge[{sponge} artifacts in the Maven Central Repository],
 * https://pub.dev/packages/sponge_client_dart[{sponge} client for Dart],

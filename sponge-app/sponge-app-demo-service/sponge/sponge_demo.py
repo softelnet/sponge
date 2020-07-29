@@ -14,6 +14,7 @@ def onInit():
         sponge.logger.info("RUNNING IN THE READ ONLY MODE")
 
     sponge.addCategories(
+        CategoryMeta("start").withLabel("Start"),
         CategoryMeta("basic").withLabel("Basic"),
         CategoryMeta("forms").withLabel("Forms"),
         CategoryMeta("types").withLabel("Types"),
@@ -24,6 +25,7 @@ def onInit():
     )
 
 def onLoad():
+    sponge.selectCategory("start", lambda processor: processor.kb.name in ("start"))
     sponge.selectCategory("basic", lambda processor: processor.kb.name in ("demo", "engine"))
     sponge.selectCategory("forms", lambda processor: processor.kb.name in ("demoForms", "demoFormsLibraryArgs", "demoFormsLibraryRecord"))
     sponge.selectCategory("types", lambda processor: processor.kb.name in ("types"))
@@ -31,14 +33,6 @@ def onLoad():
     sponge.selectCategory("admin", lambda processor: processor.kb.name in ("admin"))
     sponge.selectCategory("plus", lambda processor: processor.kb.name in ("demoPlus", "digitsLearn"))
     sponge.selectCategory("events", lambda processor: processor.kb.name in ("events", "eventsNotification", "eventsMemo", "eventsCounter"))
-
-class HelloWorldAction(Action):
-    def onConfigure(self):
-        self.withLabel("Hello world").withDescription("Returns a greeting text.")
-        self.withArg(StringType("name").withLabel("Your name").withDescription("Type your name."))
-        self.withResult(StringType().withLabel("Greeting").withDescription("The greeting text."))
-    def onCall(self, name):
-        return u"Hello World! Hello {}!".format(name)
 
 class UpperCase(Action):
     def onConfigure(self):
@@ -262,12 +256,3 @@ class LowerCaseHello(Action):
         self.withArg(StringType("text").withLabel("Text to lower case")).withResult(StringType().withLabel("Lower case text"))
     def onCall(self, text):
         return "Hello " + remoteApiServer.session.userAuthentication.userContext.name + ": " + text.lower()
-
-class DrawDoodle(Action):
-    def onConfigure(self):
-        self.withLabel("Draw a doodle").withDescription("Shows a canvas to draw a doodle")
-        self.withArg(BinaryType("image").withLabel("Doodle").withMimeType("image/png")
-                     .withFeatures({"characteristic":"drawing", "width":300, "height":250, "background":"FFFFFF", "color":"000000", "strokeWidth":2}))
-        self.withNoResult().withFeatures({"icon":"brush", "callLabel":"OK", "showClear":True, "showCancel":True})
-    def onCall(self, image):
-        pass

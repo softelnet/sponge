@@ -5,7 +5,7 @@ Demo - A geo map
 
 class ActionWithGeoMap(Action):
     def onConfigure(self):
-        self.withLabel("Action with a geo map")
+        self.withLabel("Geo map")
         self.withArgs([
             ListType("locations").withLabel("Locations").withAnnotated().withFeatures({
                     "geoMap":GeoMap().withCenter(GeoPosition(50.06143, 19.93658)).withZoom(15).withLayers([

@@ -16,10 +16,14 @@
     <engine name="demoLite" label="Sponge Demo Service Lite"/>
 
     <knowledgeBases>
+        <knowledgeBase name="start" label="Start">
+            <file>sponge_demo_start.py</file>
+            <file>sponge_demo_depending.py</file>
+            <file>sponge_demo_geo_map.py</file>
+        </knowledgeBase>
         <knowledgeBase name="demo" label="Demo">
             <file>sponge_demo.py</file>
             <file>sponge_demo_choose_color.py</file>
-            <file>sponge_demo_depending.py</file>
             <file>sponge_demo_binary_result.py</file>
             <file>sponge_demo_context_actions_action.py</file>
             <file>sponge_demo_context_actions_record.py</file>
@@ -32,7 +36,6 @@
             <file>sponge_demo_setter_context_actions_list.py</file>
             <file>sponge_demo_list_pageable.py</file>
             <file>sponge_demo_object_type_with_companion.py</file>
-            <file>sponge_demo_geo_map.py</file>
             <file>sponge_demo_geo_map_simple.py</file>
             <file>sponge_demo_geo_map_indirect.py</file>
             <file>sponge_demo_geo_map_wms.py</file>

@@ -55,7 +55,7 @@
     </issueManagement>
 
     <properties>
-        <release.version>1.16.0</release.version>
+        <release.version>1.16.1-rc1</release.version>
         <release.date>2020-06-09</release.date>
 
         <maven.compiler.source>1.8</maven.compiler.source>

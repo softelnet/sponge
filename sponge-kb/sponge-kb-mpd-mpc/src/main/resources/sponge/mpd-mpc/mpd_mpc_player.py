@@ -29,7 +29,7 @@ class MpdPlayer(Action):
             VoidType("next").withLabel("Next").withAnnotated().withFeatures({"icon":"skip-next", "group":"navigation"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable())
         ]).withNonCallable().withActivatable()
-        self.withFeatures({"cancelLabel":"Close", "refreshEvents":["statusPolling", "mpdNotification_.*"], "icon":"music", "contextActions":[
+        self.withFeatures({"refreshEvents":["statusPolling", "mpdNotification_.*"], "icon":"music", "contextActions":[
             SubAction("MpdPlaylist"),
             SubAction("MpdFindAndAddToPlaylist"),
             SubAction("ViewSongInfo"),

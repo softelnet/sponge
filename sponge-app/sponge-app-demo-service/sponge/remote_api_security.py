@@ -4,7 +4,7 @@ Remote API security
 """
 
 # Simple access configuration: role -> knowledge base names regexps.
-ROLES_TO_KB = { "admin":[".*"], "anonymous":["demo", "digits", "demoForms.*"]}
+ROLES_TO_KB = { "admin":[".*"], "anonymous":["start", "demo", "digits", "demoForms.*"]}
 # Simple access configuration: role -> event names regexps.
 ROLES_TO_SEND_EVENT = { "admin":[".*"], "anonymous":[]}
 ROLES_TO_SUBSCRIBE_EVENT = { "admin":[".*"], "anonymous":["notification.*"]}

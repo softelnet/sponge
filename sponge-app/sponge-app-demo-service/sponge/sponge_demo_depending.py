@@ -5,7 +5,7 @@ Demo
 
 class DependingArgumentsAction(Action):
     def onConfigure(self):
-        self.withLabel("Action with depending arguments")
+        self.withLabel("Depending arguments")
         self.withArgs([
             StringType("continent").withLabel("Continent").withProvided(ProvidedMeta().withValueSet()),
             StringType("country").withLabel("Country").withProvided(ProvidedMeta().withValueSet().withDependency("continent")),
