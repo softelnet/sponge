@@ -16,7 +16,7 @@ In order to use *{sponge}* you may choose to:
 ++++
 * Run the {sponge} standalone command-line program in a Docker container.
 
-The *Sponge Remote* mobile app *will be available on Google Play soon*. Google Play and the Google Play logo are trademarks of Google LLC.
+The *Sponge Remote* mobile app *is now available on Google Play*. Google Play and the Google Play logo are trademarks of Google LLC.
 
 [subs="attributes"]
 ++++
