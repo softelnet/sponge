@@ -6,9 +6,10 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
-== 1.16.1 (not released yet)
-* Documentation updates.
+== 1.16.1 (2020-07-31)
+* Support for the `submittableBlocking` feature.
 * Minor fixes in the Demo Service and examples.
+* Documentation updates.
 * Dependencies upgrade.
 
 [discrete]
