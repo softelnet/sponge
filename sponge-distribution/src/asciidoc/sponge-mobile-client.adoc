@@ -567,7 +567,15 @@ A https://material.io/components/chips/[`chip`] widget is presented as an editor
 |===
 
 === Provided action arguments
+
+==== Non-limited value sets
 A non-limited value set is supported only for `StringType`.
+
+==== Submittable arguments with dependant arguments
+If a provided argument is `submittable` with the `responsive` feature set to `true` and has other arguments that depend on it, not only those dependant arguments have to point to that argument but also:
+
+* the submittable argument should have the `influences` property set to point to the dependant arguments,
+* the dependant arguments should be provided with the `OPTIONAL` mode (`withOptionalMode()`).
 
 === Features
 

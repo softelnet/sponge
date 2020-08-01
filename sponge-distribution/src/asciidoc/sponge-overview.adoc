@@ -54,14 +54,14 @@ The main features of {sponge}:
 == Applications
 {sponge} could be used as a component in various types of applications. Here are some examples.
 
-https://en.wikipedia.org/wiki/Minimum_viable_product[Minimum viable product (MVP)]::
-The Sponge Remote mobile app (or a custom mobile app build with the Sponge Flutter API) along with {sponge} services can be used as an early version of a product with just enough features to satisfy early customers and provide feedback for future product development.
-
 Task automation::
 Tasks could be programmed in any of the supported scripting languages as {sponge} actions, published via the Remote API and called or managed *remotely in the Sponge Remote mobile client application*.
 
 https://en.wikipedia.org/wiki/Internet_of_things[Internet of Things (IoT)]::
 {sponge} as a part of https://en.wikipedia.org/wiki/Gateway_(telecommunications)#IoT_Modular_Gateway[an IoT gateway] can locally process data provided by the devices in the field, thus only important data is sent to the central node where data is collected, stored and manipulated by enterprise applications.
+
+https://en.wikipedia.org/wiki/Minimum_viable_product[Minimum viable product (MVP)]::
+The Sponge Remote mobile app (or a custom mobile app build with the Sponge Flutter API) along with {sponge} services can be used as an early version of a product with just enough features to satisfy early customers and provide feedback for future product development.
 
 https://en.wikipedia.org/wiki/Edge_computing[Edge computing]::
 {sponge} may be used on edge devices (also known as smart devices), providing a computation platform that would be largely or completely performed on distributed device nodes. The requirement is that such device must have Java (JRE) installed. The example is Raspberry Pi with connected sensors.
