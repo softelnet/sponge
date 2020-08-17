@@ -1,0 +1,7 @@
+= Blog
+:page-permalink: /blog/
+:page-liquid:
+
+++++
+{% include blog-index.html %}
+++++

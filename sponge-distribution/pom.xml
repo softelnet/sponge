@@ -62,33 +62,38 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <!-- Copy documentation file sources to the target. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>documentation-copy</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>documentation-copy</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/assembly/documentation-copy.xml</descriptor>
+                            </descriptors>
+                            <tarLongFileMode>gnu</tarLongFileMode>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <profiles>
         <profile>
             <id>documentation</id>
             <build>
                 <plugins>
-                    <!-- Copy documentation file sources to the target. -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>documentation-copy</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                                <configuration>
-                                    <finalName>documentation-copy</finalName>
-                                    <appendAssemblyId>false</appendAssemblyId>
-                                    <descriptors>
-                                        <descriptor>src/assembly/documentation-copy.xml</descriptor>
-                                    </descriptors>
-                                    <tarLongFileMode>gnu</tarLongFileMode>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <!-- Generate an RPC API OpenAPI specification JSON. -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>

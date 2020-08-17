@@ -1,0 +1,137 @@
+= Getting started with Sponge and the Sponge Remote mobile app
+:page-layout: post
+:page-author: Marcin Paś
+
+After reading this article *you will learn*:
+
+* What are *Sponge* and *Sponge Remote*?
+* What are the *problems* that Sponge and Sponge Remote *solve*?
+* What are the main *advantages* of Sponge and Sponge Remote?
+* How to *connect* to a remote Sponge service using the Sponge Remote mobile app and how to *run a simple action*?
+* Are Sponge and Sponge Remote the best choices for you?
+
+== What you need
+
+* About 5 minutes.
+* An Android phone or tablet with an Internet connection.
+* Basic programming knowledge.
+
+== What are Sponge and Sponge Remote?
+*Sponge* is an *open-source*, Java-based *action and event processing service*.
+
+*Sponge Remote* is an *open-source* *mobile application* that provides an *opinionated, minimalistic, generic user interface to call remote actions*.
+
+_Currently Sponge Remote is in alpha phase and supports only a limited set of Sponge features._
+
+== What are the problems that Sponge and Sponge Remote solve?
+Suppose you have an idea of a service that everyone (or just you) needs. :-) 
+
+The service that can be *used* (managed, monitored or whatever) *remotely via a mobile app*. The service that will be available in the Internet or only in a local network.
+
+There are many possibilities to do that.
+
+But suppose that:
+
+* You *don't want to concentrate on programming a new mobile app or on tedious tasks of creating your backend service*.
+* You *want to do it fast with less coding*.
+* You just *want to write only the necessary code for your idea and use it*.
+* You *don't even care if the mobile app would be minimalistic*. Besides, you will find out soon that you are be able to create your own mobile app based on *Flutter* and the *Sponge Flutter API* that Sponge Remote is built upon.
+
+*Well, it would be a lot easier to just install the mobile app, open it and connect to the service.*
+
+This is where Sponge and Sponge Remote come into play.
+
+== What are the main advantages of Sponge and Sponge Remote?
+
+* You *don't have to program your mobile app* if you are comfortable with the Sponge Remote app user interface. *Just install it as it is.*
+* To provide the *core functionalities of your idea* you would *only write your own actions in the service*. *The actions will be rendered by the mobile app.* You can even change your action source code in the service and run a *hot reload* in your Android device to instantly see the changes.
+* Sponge and Sponge Remote can be useful in such diverse areas as task automation, IoT, edge computing, etc. They can aid in learning scripting languages (e.g. Python, Ruby, Groovy) and possibly even make it more fun :-) by allowing you to edit the input and to see the output data structures in a mobile app.
+
+== Install the Sponge Remote mobile app on your Android device
+In your Android phone or tablet go to the Play Store, search for and install the *Sponge Remote* app. Google Play and the Google Play logo are trademarks of Google LLC.
+
+++++
+<p>
+<a href='http://play.google.com/store/apps/details?id=org.openksavi.sponge.remote.mobile&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="25%"/></a>
+</p>
+++++
+
+== Open and setup the app
+When you open the app you will be shown the _actions screen_ with a prompt. First you have to *activate a connection to a remote Sponge service*. To do so, tap the prompt text.
+
+image::blog/01_100_actions_not_connected.jpg[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+Now you have a choice to add a new connection or *select the predefined Demo Service*.
+
+image::blog/01_110_connections_not_connected.jpg[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+To do so, *tap the Demo Service*.
+
+image::blog/01_120_connections_connected.jpg[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+You will be navigated back to the Actions page.
+
+== What are all these actions?
+The _actions page_ is now titled `Demo service`. This is the *name of the selected connection*.
+
+image::blog/01_130_actions_connected.jpg[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+What you can see now, are the *actions published in the remote Demo Service*, arranged into tabs. Each tab corresponds to an action category that is configured in the service.
+
+== Running a remote action
+For the purpose of this article, let's *open* the `Hello World` *action by tapping it*. You will be shown the _action call screen_.
+
+image::blog/01_140_action_hello_world_with_no_data.jpg[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+Fill in the text field. This text field corresponds to the *action argument*.
+
+image::blog/01_150_action_hello_world_with_data.jpg[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+Then tap the `RUN` button to *call the action* remotely.
+
+The *action result* will be shown beneath the action name in the _actions page_. This an elementary case because here the action result is simply displayed.
+
+image::blog/01_160_actions_hello_world_result.jpg[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+Some of the most useful actions are not callable (there would be no button to run the action) but they initiate a two-way communication with the service by using so called *provided* and *submittable arguments*. For more information see the other articles about Sponge Remote.
+
+== Where is the actual action code?
+The action code is stored in the remote service.
+
+An action can be written in one of the several supported scripting languages, i.e. *Python*, *Ruby*, *Groovy*, *JavaScript* as well as in *Java* or *Kotlin*.
+
+The Python code of the `Hello world` *action is just a class definition*.
+
+----
+class HelloWorldAction(Action):
+    def onConfigure(self):
+        self.withLabel("Hello world").withDescription("Returns a greeting text.")
+        self.withArg(StringType("name").withLabel("Your name").withDescription("Type your name."))
+        self.withResult(StringType().withLabel("Greeting").withDescription("The greeting text."))
+    def onCall(self, name):
+        return u"Hello World! Hello {}!".format(name)
+----
+
+In order to be visible in the Sponge Remote app an action class must:
+
+* extend the base `Action` class,
+* override the `onConfigure` method, define its arguments (`withArg` or `withArgs`) and the result (`withResult`),
+* override the `onCall` method (if the action is callable).
+
+== How does it work?
+When you *press the `RUN` button*, the *`onCall` method will be invoked remotely with the arguments you entered and the result will be sent back to the app*.
+
+== Are Sponge and Sponge Remote the best choices for you?
+Of course Sponge and Sponge Remote are not the best choices for everyone.
+
+In their basic use case they would rather be suitable for *lightweight* or *low-cost* solutions. In more advanced cases you will need to build your own mobile app using the Sponge Flutter API.
+
+It's up to you to evaluate the pros and cons given your goals.
+
+== Summary
+Congratulations! Now you are familiar with the basics of Sponge and the Sponge Remote mobile app.
+
+However the real journey begins with *creating your own Sponge service*, *writing your own actions* and using them *in the same mobile app* you've already installed. So, I encourage you to read the next articles.
+
+Link to the https://medium.com/@marcin.pas/getting-started-with-sponge-and-the-sponge-remote-mobile-app-cd09b9ccc2cc[Medium article].
+

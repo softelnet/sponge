@@ -72,5 +72,14 @@
             <directory>${project.basedir}/src/favicons</directory>
             <outputDirectory>/</outputDirectory>
         </fileSet>
+
+        <!-- Blog. -->
+        <fileSet>
+            <directory>${project.basedir}/src/blog/</directory>
+            <outputDirectory>_posts</outputDirectory>
+            <includes>
+                <include>*.adoc</include>
+            </includes>
+        </fileSet>
     </fileSets>
 </assembly>
