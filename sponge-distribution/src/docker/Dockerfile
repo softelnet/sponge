@@ -5,7 +5,7 @@ FROM adoptopenjdk:11-jdk-hotspot
 ARG SPONGE_VERSION
 
 RUN apt-get -qq update \
-    && apt-get -y -qq --no-install-recommends install unzip python3 python3-pip \
+    && apt-get -y -qq --no-install-recommends install unzip python3 python3-pip git \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/* \
     && pip3 install py4j \

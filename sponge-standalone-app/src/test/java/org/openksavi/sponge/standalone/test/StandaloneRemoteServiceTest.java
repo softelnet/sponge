@@ -55,6 +55,12 @@ public class StandaloneRemoteServiceTest {
                 Object result = client.call("HelloWorld", Arrays.asList(arg1));
 
                 assertEquals(String.format("Hello World! Hello %s!", arg1), result);
+
+                client.call("SetupGitKnowledgeBase", Arrays.asList("https://github.com/mnpas/sponge_example_git_kb.git"));
+
+                client.call("EngineReload");
+
+                assertEquals(client.call("HelloWorldActionPython", Arrays.asList("User")), "Hello World! Hello User!");
             }
 
             assertFalse(engine.isError());

@@ -13,3 +13,4 @@ __pycache__/
 _*_/
 .vscode/settings.json
 sponge-kotlin-script/.factorypath
+sponge-standalone-app/_work

@@ -197,8 +197,8 @@ public class ScriptKotlinKnowledgeBaseInterpreter extends EngineScriptKnowledgeB
 
     @Override
     protected void doReload(List<KnowledgeBaseScript> scripts) {
-        if (scripts != null) {
-            scripts.clear();
+        if (this.scripts != null) {
+            this.scripts.clear();
         }
 
         super.doReload(scripts);
