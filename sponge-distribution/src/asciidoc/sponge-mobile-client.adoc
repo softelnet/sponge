@@ -14,6 +14,8 @@ The {appName} is especially useful when data and functionality are more importan
 
 image::mobile_architecture.svg[title="The mobile application architecture",width=800]
 
+Sponge Remote supports heterogeneous {sponge} services in a sense that each of the services can provide actions from a different scope (for example one for the MPD, the second for managing IoT device sensors, the third for image recognition etc.). All of the services have the same high level interface, but each of them can provide different low level interface.
+
 One of many use cases of the application is to connect to IoT devices that have {sponge} installed and execute available actions. Different types of such devices provide different sets of actions that are specific to a device features. For example one device could have a camera and provide an action to take a picture. Another device could have a temperature sensor and provide its readings or have a machine learning model and provide predictions.
 
 The {appName} uses several {sponge} concepts such as actions and action arguments metadata, data types metadata, action and data type features, annotated values, provided action arguments, categories and events. It supports a convention over configuration paradigm.
