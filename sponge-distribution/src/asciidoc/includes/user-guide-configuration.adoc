@@ -145,6 +145,10 @@ Each `<knowledgeBase>` tag contains:
 |Attribute
 |The class of the non script knowledge base. In that case you don't have to specify a type and you must not specify files. A knowledge base class should define a non-parameterized constructor.
 
+|`clearOnReload`
+|Attribute
+|The flag indicating if the knowledge base should be cleared on reload. Defaults to `false`.
+
 |`description`
 |Element
 |The description of the knowledge base.

@@ -7,7 +7,9 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 [discrete]
 == 1.16.2 (not released yet)
+* Added a new `clearOnReload` flag to a knowledge base. This flag indicates if the knowledge base should be cleared on reload. Defaults to `false`.
 * Fixed the bug that prevented reloading of Groovy and Kotlin script knowledge bases.
+* Documentation updates.
 * Dependencies upgrade.
 
 [discrete]

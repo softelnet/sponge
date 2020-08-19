@@ -306,6 +306,11 @@ WARNING: There is a limitation in reloading a knowledge base that defines event 
 
 Depending on the specific interactions and taking into account differences in the third-party implementations of scripting languages, reloading sometimes may lead to problems or side effects and it should be used carefully. For example if `onLoad` callback function definition is removed in the Python script file before reloading, the instance of this function that had been loaded before will still be present in the interpreter and will be invoked. That is because the scripts being reloaded run in the same interpreter instance.
 
+=== The `clearOnReload` flag
+A scripting knowledge base can have the `clearOnReload` flag set. This flag indicates if the knowledge base should be cleared on reload. Defaults to `false`. If the knowledge base is to be cleared on reload, then all existing processors registered in this knowledge base will be disabled and a new interpreter will be created and attached to the knowledge base.
+
+WARNING: Setting the `clearOnReload` to `true` can be potentially dangerous for the consistency of the knowledge base, especially if there are event processors. So make sure that your knowledge base will not be affected by this flag.
+
 == Use of many knowledge base files
 As mentioned before, {sponge} provides the possibility to read a knowledge base from many files. Dividing a knowledge base into a few files allows in an easy way to separate some functionalities.
 

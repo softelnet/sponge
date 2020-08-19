@@ -33,6 +33,9 @@ import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
  */
 public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements ScriptKnowledgeBase {
 
+    /** The flag indicating if the knowledge base should be cleared on reload. */
+    private boolean clearOnReload = false;
+
     /** Knowledge base scripts. */
     private List<KnowledgeBaseScript> scripts = Collections.synchronizedList(new ArrayList<>());
 
@@ -43,6 +46,16 @@ public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements Scr
 
     public DefaultScriptKnowledgeBase(String name) {
         setName(name);
+    }
+
+    @Override
+    public boolean isClearOnReload() {
+        return clearOnReload;
+    }
+
+    @Override
+    public void setClearOnReload(boolean clearOnReload) {
+        this.clearOnReload = clearOnReload;
     }
 
     @Override

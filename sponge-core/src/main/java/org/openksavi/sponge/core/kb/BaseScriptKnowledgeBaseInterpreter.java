@@ -88,7 +88,7 @@ public abstract class BaseScriptKnowledgeBaseInterpreter extends BaseKnowledgeBa
 
     private Map<Class<?>, Class<?>> processorBuilderClasses = new LinkedHashMap<>(EngineConstants.BASE_PROCESSOR_BUILDER_CLASSES);
 
-    /** Synchronization processor. */
+    /** Synchronization object. */
     protected Object interpteterSynchro = new Object();
 
     @SuppressWarnings("rawtypes")

@@ -71,6 +71,7 @@
         <xs:attribute name="label" type="xs:string" use="optional" />
         <xs:attribute name="type" type="xs:string" use="optional" />
         <xs:attribute name="class" type="xs:string" use="optional" />
+        <xs:attribute name="clearOnReload" type="xs:boolean" use="optional" default="false" />
     </xs:complexType>
 
     <xs:complexType name="KnowledgeBaseFile" mixed="true">

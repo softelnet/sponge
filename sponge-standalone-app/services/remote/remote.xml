@@ -11,19 +11,19 @@
     <engine name="remote" label="Remote"/>
 
     <knowledgeBases>
-        <knowledgeBase name="servicePython" label="Service Python">
+        <knowledgeBase name="servicePython" label="Service Python" clearOnReload="true">
             <file required="false">file:${sponge.serviceDir}/**/*.py</file>
             <file required="false">file:${sponge.workDir}/_local_git_cached/kb/**/*.py</file>
         </knowledgeBase>
-        <knowledgeBase name="serviceGroovy" label="Service Groovy">
+        <knowledgeBase name="serviceGroovy" label="Service Groovy" clearOnReload="true">
             <file required="false">file:${sponge.serviceDir}/**/*.groovy</file>
             <file required="false">file:${sponge.workDir}/_local_git_cached/kb/**/*.groovy</file>
         </knowledgeBase>
-        <knowledgeBase name="serviceRuby" label="Service Ruby">
+        <knowledgeBase name="serviceRuby" label="Service Ruby" clearOnReload="true">
             <file required="false">file:${sponge.serviceDir}/**/*.rb</file>
             <file required="false">file:${sponge.workDir}/_local_git_cached/kb/**/*.rb</file>
         </knowledgeBase>
-        <knowledgeBase name="serviceJavaScript" label="Service JavaScript">
+        <knowledgeBase name="serviceJavaScript" label="Service JavaScript" clearOnReload="true">
             <file required="false">file:${sponge.serviceDir}/**/*.js</file>
             <file required="false">file:${sponge.workDir}/_local_git_cached/kb/**/*.js</file>
         </knowledgeBase>

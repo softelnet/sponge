@@ -67,8 +67,11 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
     /** Configuration knowledge base type attribute name. */
     private static final String CFG_KNOWLEDGE_BASE_ATTR_TYPE = "type";
 
-    /** Configuration knowledge base class attribute name. */
+    /** Configuration knowledge base class attribute class. */
     private static final String CFG_KNOWLEDGE_BASE_ATTR_CLASS = "class";
+
+    /** Configuration knowledge base class attribute clearOnReload. */
+    private static final String CFG_KNOWLEDGE_BASE_ATTR_CLEAR_ON_RELOAD = "clearOnReload";
 
     /** Configuration knowledge base description. */
     private static final String CFG_KNOWLEDGE_BASE_DESCRIPTION = "description";
@@ -146,6 +149,16 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
             knowledgeBase.setDescription(description);
         }
 
+        Boolean clearOnReload = configuration.getBooleanAttribute(CFG_KNOWLEDGE_BASE_ATTR_CLEAR_ON_RELOAD, null);
+        if (clearOnReload != null) {
+            if (knowledgeBase instanceof ScriptKnowledgeBase) {
+                ((ScriptKnowledgeBase) knowledgeBase).setClearOnReload(clearOnReload);
+            } else {
+                logger.warn("The knowledge base {} clearOnReload property is ignored because the knowledge base is not script-based",
+                        knowledgeBase.getName());
+            }
+        }
+
         return knowledgeBase;
     }
 
@@ -217,7 +230,13 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         // Reload script knowledge bases.
         knowledgeBases.values().forEach(knowledgeBase -> {
             if (knowledgeBase instanceof ScriptKnowledgeBase) {
-                SpongeUtils.doInWrappedException(knowledgeBase, () -> ((ScriptKnowledgeBase) knowledgeBase).reload(), "reload");
+                ScriptKnowledgeBase scriptKnowledgeBase = (ScriptKnowledgeBase) knowledgeBase;
+                SpongeUtils.doInWrappedException(knowledgeBase, () -> {
+                    if (scriptKnowledgeBase.isClearOnReload()) {
+                        clearKnowledgeBaseOnReload(scriptKnowledgeBase);
+                    }
+                    scriptKnowledgeBase.reload();
+                }, "reload");
             }
         });
 
@@ -226,6 +245,24 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         onAfterLoad();
 
         onAfterReload();
+    }
+
+    public void clearKnowledgeBaseOnReload(ScriptKnowledgeBase knowledgeBase) {
+        disableProcessors(knowledgeBase);
+
+        // Renew the interpreter.
+        if (knowledgeBase.getInterpreter() != null) {
+            knowledgeBase.getInterpreter().onClear();
+        }
+
+        knowledgeBase.setInterpreter(createKnowledgeBaseInterpreter(knowledgeBase.getType().getTypeCode(), knowledgeBase));
+    }
+
+    public void disableProcessors(ScriptKnowledgeBase knowledgeBase) {
+        getEngine().getProcessorManager().getAllProcessorAdapters().stream()
+                .filter(adapter -> adapter.getKnowledgeBase().equals(knowledgeBase)).forEach(adapter -> {
+                    knowledgeBase.getEngineOperations().disable(adapter.getMeta().getName());
+                });
     }
 
     /**

@@ -25,6 +25,20 @@ import java.util.List;
 public interface ScriptKnowledgeBase extends KnowledgeBase {
 
     /**
+     * Returns the flag indicating if this knowledge base should be cleared on reload. Defaults to {@code false}.
+     *
+     * @return the clearOnRealod flag.
+     */
+    boolean isClearOnReload();
+
+    /**
+     * Sets the flag indicating if this knowledge base should be cleared on reload.
+     *
+     * @param clearOnReload the clearOnRealod flag.
+     */
+    void setClearOnReload(boolean clearOnReload);
+
+    /**
      * Returns knowledge base scripts.
      *
      * @return knowledge base scripts.

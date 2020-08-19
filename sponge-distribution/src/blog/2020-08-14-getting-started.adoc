@@ -1,4 +1,4 @@
-= Getting started with Sponge and the Sponge Remote mobile app
+= Getting Started with Sponge and the Sponge Remote Mobile App
 :page-layout: post
 :page-author: Marcin Paś
 
