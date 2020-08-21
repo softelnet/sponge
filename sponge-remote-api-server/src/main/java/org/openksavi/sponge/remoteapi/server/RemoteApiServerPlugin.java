@@ -182,6 +182,11 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
                 settings.setRegisterServiceDiscovery(true);
             }
         }
+
+        Boolean ignoreUnknownArgs = configuration.getBoolean(RemoteApiServerConstants.TAG_IGNORE_UNKNOWN_ARGS, null);
+        if (ignoreUnknownArgs != null) {
+            settings.setIgnoreUnknownArgs(ignoreUnknownArgs);
+        }
     }
 
     protected void refreshSettings() {

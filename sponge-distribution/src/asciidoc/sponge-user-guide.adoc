@@ -1262,7 +1262,7 @@ TIP: You may see ignored events (i.e. events that go to the Output Event Queue) 
 
 |`engine`
 |`sponge-kb-engine`
-|The Engine Knowledge Base artifact provides `engine_admin_library.py` and `engine_public_library.py` script files that define actions related to {sponge} engine, e.g. `EngineReload`, `EngineGetVersion`.
+|The Engine Knowledge Base artifact provides `engine_admin_library.py`, `engine_public_library.py` and `engine_reload_git.py` script files that define actions related to {sponge} engine, e.g. `EngineReload`, `EngineGetVersion`, `SetupGitKnowledgeBase`. The `engine_reload_git.py` script provides support for using a git repository as a set of knowledge base files to load. It also overrides the `EngineReload` in order to invoke git clone before a reload.
 
 |`user-management`
 |`sponge-kb-user-management`

@@ -102,6 +102,7 @@ An action can be written in one of the several supported scripting languages, i.
 
 The Python code of the `Hello world` *action is just a class definition*.
 
+[source,python]
 ----
 class HelloWorldAction(Action):
     def onConfigure(self):

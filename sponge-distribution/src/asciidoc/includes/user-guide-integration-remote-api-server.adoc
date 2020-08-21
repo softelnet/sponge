@@ -86,15 +86,15 @@ The default name of the Remote API plugin (which can be used in knowledge bases)
 
 |`registerServiceDiscovery`
 |`boolean`
-|The flag specifying if the service should be registered in a service discovery. It allows client applications to automatically find nearby (i.e. on the local network) {sponge} services. Defaults to `true`.
-
-|`registerServiceDiscovery`
-|`boolean`
-|The flag specifying if the service should be registered in a service discovery. Defaults to `false`. It can be overwritten by a Java system property `sponge.remoteApiServer.registerServiceDiscovery`.
+|The flag specifying if the service should be registered in a service discovery. It allows client applications to automatically find nearby (i.e. on the local network) {sponge} services. Defaults to `false`. It can be overwritten by a Java system property `sponge.remoteApiServer.registerServiceDiscovery`.
 
 |`serviceDiscoveryUrl`
 |`String`
 |The service URL used in a service discovery. It can be overwritten by a Java system property `sponge.remoteApiServer.serviceDiscoveryUrl`. This property automatically sets the `registerServiceDiscovery` flag to `true` as well.
+
+|`ignoreUnknownArgs`
+|`boolean`
+|The flag specifying if the service should ignore unknown action arguments passed by the client. Defaults to `false`.
 |===
 
 .The Remote API server plugin XML configuration example

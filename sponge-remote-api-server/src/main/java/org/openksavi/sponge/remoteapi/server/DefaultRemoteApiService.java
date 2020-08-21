@@ -369,8 +369,8 @@ public class DefaultRemoteApiService implements RemoteApiService {
         if (args instanceof List || args == null) {
             actionResult = getEngine().getOperations().call(actionName, unmarshalActionArgs(actionAdapter, (List) args));
         } else if (args instanceof Map) {
-            actionResult = getEngine().getOperations().call(actionName,
-                    unmarshalActionArgs(actionAdapter, SpongeUtils.buildActionArgsList(actionAdapter, (Map<String, ?>) args)));
+            actionResult = getEngine().getOperations().call(actionName, unmarshalActionArgs(actionAdapter,
+                    SpongeUtils.buildActionArgsList(actionAdapter, (Map<String, ?>) args, settings.isIgnoreUnknownArgs())));
         } else {
             throw new IllegalArgumentException("Action args should be an instance of a List or a Map");
         }

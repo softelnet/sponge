@@ -1124,10 +1124,8 @@ A geographical position is represented by `GeoPosition`.
 == Customized applications
 Access to actions in the {appName} is generic. However you could build a customized GUI using your own Flutter code using the upcoming {sponge} Flutter API library.
 
-=== {sponge} Digit Recognition
-The {sponge} Digit Recognition mobile application is an example of using a customized Flutter UI.
-
-NOTE: The {sponge} Digit Recognition application is currently under development and is not officially published. It will be released as an open source.
+=== {sponge} Digits
+The {sponge} Digits mobile app is an example of using a customized Flutter UI with the {sponge} service to recognize handwritten digits.
 
 image::screens/mobile/digits_drawing.png[title="The digit recognition - drawing a digit",width=300,pdfwidth=35%,scaledwidth=35%]
 

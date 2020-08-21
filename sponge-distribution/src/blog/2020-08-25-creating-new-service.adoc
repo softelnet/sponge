@@ -1,0 +1,190 @@
+= Creating a New Service with Sponge and the Sponge Remote Mobile App
+:page-layout: post
+:page-author: Marcin Paś
+
+If you are not familiar with Sponge and the Sponge Remote mobile app, please read the {homepage}/2020/08/14/getting-started.html[Getting Started with Sponge and the Sponge Remote Mobile App] first.
+
+After reading this article *you will learn*:
+
+* How to *run* a *new Sponge service* in Docker using the Sponge service *template*?
+* How to *create and modify Sponge actions* using an external *git repository*?
+* How to *reload* Sponge actions using the Sponge Remote mobile app?
+
+== What you need
+
+* About 15 minutes.
+* https://docs.docker.com/engine/install/[*Docker*] installed on your computer and familiarity with Docker.
+* An easy way to create a new *git public repository* (e.g. on GitHub). _Only a public git repository is allowed because currently git credentials are not supported in the Sponge service template._
+* An *Android* phone or tablet with an Internet connection.
+* Basic programming knowledge (Python, Groovy, Ruby or JavaScript).
+
+== Introduction
+It is important to know that this article *showcases only one way of creating a Sponge service* and knowledge base files, that is convenient for *knowledge base developers*. In most cases you shouldn't load knowledge base files from a git repository (particularly in production).
+
+A *knowledge base* is used here merely to *define actions*. A knowledge base can be written in one of the supported scripting languages.
+
+== Run a new Sponge service in Docker using the Sponge service template
+To *run a new Sponge service in Docker* just type the following command, but place *your computer IP address* instead of `YOUR_COMPUTER_IP`. The address will be published by the *service discovery* in order to enable finding nearby Sponge services in your local network by the Sponge Remote mobile app. How to get your computer IP depends on the operating system.
+
+[source,bash,subs="verbatim,attributes"]
+----
+docker run -it --rm -p 1836:1836 -p 1837:1837 openksavi/sponge -c services/remote/remote.xml \
+-Dsponge.remoteApiServer.serviceDiscoveryUrl="YOUR_COMPUTER_IP:1836"\
+-Dsponge.serviceDir=examples/standalone/remote_service
+----
+
+* The `remote.xml` configuration file defines Sponge knowledge bases with support for knowledge base files stored in a git repository (e.g. on GitHub).
+* The optional `sponge.serviceDir` property points to the directory containing local knowledge base files. The knowledge base files in the `examples/standalone/remote_service` directory define only one action - `Hello world`.
+
+== Open the Sponge Remote mobile app and connect to your Sponge service
+Open the *Sponge Remote mobile app* on your Android device and navigate to the *Connections* page.
+
+image::blog/02_050_connections.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+There are two ways to add new connections:
+
+* By *service discovery* - select the `Find new nearby services` menu item. If your service is found, tap it to connect. _Keep in mind that in some environments the service discovery may not work or would require additional configuration._
+* By *creating a connection manually* - tap the plus icon, fill in a connection name, Sponge address and tap the `OK` button.
++
+image::blog/02_060_connection_add.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+In the the Connections page tap the new connection to *activate* it. You will be navigated back to the Actions page.
+
+You will see only one action (`Hello world`) in the `My Service` tab. That action has been read from the local knowledge base files provided by the `sponge.serviceDir` property.
+
+image::blog/02_100_action_no_git.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+== Create the git repository
+For the purpose of this article you need to *create a new public git repository*, e.g. on GitHub.
+
+The repository should contain a `kb` directory that will be loaded by Sponge. You should place all your knowledge base files in this directory. The name `kb` is only a matter of convention assumed in the `remote.xml` configuration file.
+
+As a starting point you can *https://docs.github.com/en/github/getting-started-with-github/fork-a-repo[fork] the example git repository https://github.com/mnpas/sponge_example_git_kb*.
+
+== Set up the git repository in Sponge
+In the Sponge Remote mobile app navigate to the `ADMINISTRATION` tab and *tap the `Setup git knowledge base` action*.
+
+image::blog/02_110_actions_administration.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+The `Setup git knowledge base` action clones the git repository and reloads the knowledge bases.
+
+WARNING: Prior to setting a git repository as a Sponge knowledge base *you SHOULD verify its source codes*. When Sponge reads knowledge base files it simply executes them using the respective interpreter. Although in this case the execution will take place in a Docker container, generally it could be dangerous.
+
+*Fill in the git repository URL and optionally the branch name.*
+
+image::blog/02_120_action_git.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+*To run the action tap the `RUN` button.*
+
+== Actions in the git repository
+Now in the `My Service` tab *you can also see the Sponge actions defined in the knowledge base files located in the git repository* (names starting with `Hello world git`).
+
+image::blog/02_130_action_my_services_git.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+== Modify an action
+To modify an action (in this configuration) you have to, on your computer:
+
+* *Clone* the git repository containing the knowledge base files.
+* *Edit* one of the script files. For example, in the `kb/services.py` file:
+** change the action label from `"Hello world git - Python"` to `"My Hello world git - Python"`,
+** change the `onCall` method result from `"Hello World! Hello {}!"` to `"Hello {}!"`.
++
+[source,python]
+----
+class HelloWorldActionPython(Action):
+    def onConfigure(self):
+        self.withLabel(
+            "My Hello world git - Python").withDescription("Returns a greeting text.")
+        self.withArg(StringType("name").withLabel(
+            "Your name").withDescription("Type your name."))
+        self.withResult(StringType().withLabel(
+            "Greeting").withDescription("The greeting text."))
+        self.withFeature("icon", "git")
+
+    def onCall(self, name):
+        return "Hello {}!".format(name)
+----
+* *Commit and push* the changes.
+* *Run the `Reload Sponge knowledge bases` action* by tapping it in the Sponge Remote mobile app.
+
+After going through these steps, you would notice that *the action label has changed in the mobile app instantly*.
+
+image::blog/02_140_action_my_services_git_changed_action.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+== Create a new action
+Now let's create a new action:
+
+* *Create a new file* `my_service.py` in the `kb` directory.
++
+[source,python]
+----
+class OsGetDiskSpaceInfo(Action):
+    def onConfigure(self):
+        self.withLabel("Get disk space info").withDescription("Returns the disk space info.")
+        self.withNoArgs().withResult(StringType().withFormat("console").withLabel("Disk space info"))
+        self.withFeature("icon", "console")
+    def onCall(self):
+        return sponge.process("df", "-h").outputAsString().run().outputString
+----
+* *Add the file to the a git repository, commit and push* your changes.
+* *Run the `Reload Sponge knowledge bases` action* by tapping it in the Sponge Remote mobile app.
+
+Now you would notice *a new action with the label `Get disk space info`* in the actions page in the mobile app.
+
+image::blog/02_150_actions_new_action.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+*Tap the `Get disk space info` action in order to run it.*
+
+image::blog/02_160_actions_new_action_called.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+Then *tap the shortened result text* to see the whole output. In this case it is *the output of the `df -h` command* that has been run in the Docker container.
+
+image::blog/02_170_actions_new_action_result.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+== How does it work?
+To understand how it works let's take a look at the Sponge configuration file `remote.xml`. For the brevity of this article, only the key settings are shown here.
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
+
+    <!-- ... -->
+
+    <knowledgeBases>
+        <knowledgeBase name="servicePython" label="Service Python" clearOnReload="true">
+            <file required="false">file:${sponge.serviceDir}/**/*.py</file>
+            <file required="false">file:${sponge.workDir}/_local_git_cached/kb/**/*.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="serviceGroovy" label="Service Groovy" clearOnReload="true">
+            <file required="false">file:${sponge.serviceDir}/**/*.groovy</file>
+            <file required="false">file:${sponge.workDir}/_local_git_cached/kb/**/*.groovy</file>
+        </knowledgeBase>
+        <knowledgeBase name="serviceRuby" label="Service Ruby" clearOnReload="true">
+            <file required="false">file:${sponge.serviceDir}/**/*.rb</file>
+            <file required="false">file:${sponge.workDir}/_local_git_cached/kb/**/*.rb</file>
+        </knowledgeBase>
+        <knowledgeBase name="serviceJavaScript" label="Service JavaScript" clearOnReload="true">
+            <file required="false">file:${sponge.serviceDir}/**/*.js</file>
+            <file required="false">file:${sponge.workDir}/_local_git_cached/kb/**/*.js</file>
+        </knowledgeBase>
+
+        <!-- ... -->
+    </knowledgeBases>
+
+    <!-- ... -->
+</sponge>
+----
+
+So, there are four knowledge bases for your service (`servicePython`, `serviceGroovy`, `serviceRuby` and `serviceJavaScript`), each for one of the supported scripting languages. The reason for that is to allow you to experiment with any of the supported languages. Sponge allows only *one language for one knowledge base*. For each knowledge base a new instance of a corresponding interpreter is created and held in the memory.
+
+The `clearOnReload` flag indicates that during reloading of knowledge bases, all previously registered processors (including actions) will be removed from the Sponge engine. Setting this flag to `true` is useful when experimenting with and reloading the knowledge bases.
+
+The `_local_git_cached` directory *points to a local clone of the git repository that you have already set up*. *That's why you can see the actions defined in your git repository in your Sponge Remote mobile app.*
+
+To see the full configuration file, go to https://github.com/softelnet/sponge/blob/master/sponge-standalone-app/services/remote/remote.xml[the Sponge repository on GitHub].
+
+== Summary
+Congratulations! Now you are familiar with *running your own Sponge service* and know how to *write your own Sponge actions*.
+
+However the even more interesting journey begins with *using Sponge services to help you with some of your daily activities*. For example the predefined {sponge} *Music Player Demon (MPD) Client Service* provides a basic set of actions that enable you to *use the Sponge Remote mobile app as a remote music player*. So, I encourage you to read the next articles.

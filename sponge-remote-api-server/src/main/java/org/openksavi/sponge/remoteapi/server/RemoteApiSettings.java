@@ -96,6 +96,9 @@ public class RemoteApiSettings {
     /** The service discovery info. */
     private ServiceDiscoveryInfo serviceDiscoveryInfo;
 
+    /** The flag specifying if the service should ignore unknown action arguments passed by the client. Defaults to {@code false}. */
+    private boolean ignoreUnknownArgs = false;
+
     public String getComponentId() {
         return componentId;
     }
@@ -292,6 +295,14 @@ public class RemoteApiSettings {
         this.serviceDiscoveryInfo = serviceDiscoveryInfo;
     }
 
+    public boolean isIgnoreUnknownArgs() {
+        return ignoreUnknownArgs;
+    }
+
+    public void setIgnoreUnknownArgs(boolean ignoreUnknownArgs) {
+        this.ignoreUnknownArgs = ignoreUnknownArgs;
+    }
+
     @Override
     public String toString() {
         return "RemoteApiSettings [componentId=" + componentId + ", host=" + host + ", port=" + port + ", path=" + path + ", version="
@@ -302,6 +313,6 @@ public class RemoteApiSettings {
                 + ", includeDetailedErrorMessage=" + includeDetailedErrorMessage + ", authTokenExpirationDuration="
                 + authTokenExpirationDuration + ", openApiProperties=" + openApiProperties + ", includeResponseTimes="
                 + includeResponseTimes + ", registerServiceDiscovery=" + registerServiceDiscovery + ", serviceDiscoveryInfo="
-                + serviceDiscoveryInfo + "]";
+                + serviceDiscoveryInfo + ", ignoreUnknownArgs=" + ignoreUnknownArgs + "]";
     }
 }

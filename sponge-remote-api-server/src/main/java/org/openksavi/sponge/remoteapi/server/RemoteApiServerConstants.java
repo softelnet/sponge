@@ -97,6 +97,8 @@ public final class RemoteApiServerConstants {
 
     public static final String TAG_SERVICE_DISCOVERY_URL = "serviceDiscoveryUrl";
 
+    public static final String TAG_IGNORE_UNKNOWN_ARGS = "ignoreUnknownArgs";
+
     public static final String DEFAULT_NAME = "Sponge";
 
     public static final String DEFAULT_ANONYMOUS_USERNAME = "anonymous";

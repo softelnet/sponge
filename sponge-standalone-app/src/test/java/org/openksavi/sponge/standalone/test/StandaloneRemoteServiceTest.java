@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.remoteapi.client.DefaultSpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClient;
@@ -56,7 +57,8 @@ public class StandaloneRemoteServiceTest {
 
                 assertEquals(String.format("Hello World! Hello %s!", arg1), result);
 
-                client.call("SetupGitKnowledgeBase", Arrays.asList("https://github.com/mnpas/sponge_example_git_kb.git"));
+                client.call("SetupGitKnowledgeBase",
+                        SpongeUtils.immutableMapOf("url", "https://github.com/mnpas/sponge_example_git_kb.git"));
 
                 client.call("EngineReload");
 

@@ -986,8 +986,12 @@ public abstract class SpongeUtils {
                 .filter((type) -> Objects.equals(type.getLanguage(), language) && type.isScript()).findFirst().orElse(null);
     }
 
-    @SuppressWarnings("rawtypes")
     public static List<Object> buildActionArgsList(ActionAdapter actionAdapter, Map<String, ?> argsMap) {
+        return buildActionArgsList(actionAdapter, argsMap, false);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static List<Object> buildActionArgsList(ActionAdapter actionAdapter, Map<String, ?> argsMap, boolean ignoreUnknownArgs) {
         if (argsMap == null) {
             return null;
         }
@@ -995,18 +999,25 @@ public abstract class SpongeUtils {
         List<DataType> argsMeta = actionAdapter.getMeta().getArgs();
         Validate.notNull(argsMeta, "Action %s doesn't have argument metadata", actionAdapter.getMeta().getName());
 
-        Map<String, Integer> indexes = getActionArgIndexes(actionAdapter, argsMap.keySet());
+        Map<String, Integer> indexes = getActionArgIndexes(actionAdapter, argsMap.keySet(), ignoreUnknownArgs);
 
         List<Object> args = new ArrayList<>(argsMeta.size());
         argsMeta.forEach(argMeta -> args.add(null));
 
-        argsMap.forEach((name, value) -> args.set(indexes.get(name), argsMap.get(name)));
+        argsMap.forEach((name, value) -> {
+            Integer index = indexes.get(name);
+
+            // A null index will happen if the argument name is unknown and ignoreUnknownArgs is true.
+            if (index != null) {
+                args.set(index, argsMap.get(name));
+            }
+        });
 
         return args;
     }
 
     @SuppressWarnings("rawtypes")
-    public static Map<String, Integer> getActionArgIndexes(ActionAdapter actionAdapter, Set<String> argNames) {
+    public static Map<String, Integer> getActionArgIndexes(ActionAdapter actionAdapter, Set<String> argNames, boolean ignoreUnknownArgs) {
         List<DataType> argsMeta = actionAdapter.getMeta().getArgs();
         Validate.notNull(argsMeta, "Action %s doesn't have argument metadata", actionAdapter.getMeta().getName());
 
@@ -1019,10 +1030,12 @@ public abstract class SpongeUtils {
             }
         }
 
-        // Validate if all of the argNames exist.
-        if (indexes.size() < argNames.size()) {
-            String notFoundArg = argNames.stream().filter(name -> !indexes.containsKey(name)).findFirst().orElseGet(() -> null);
-            Validate.isTrue(notFoundArg == null, "Argument %s not found in action %s", notFoundArg, actionAdapter.getMeta().getName());
+        if (!ignoreUnknownArgs) {
+            // Validate if all of the argNames exist.
+            if (indexes.size() < argNames.size()) {
+                String notFoundArg = argNames.stream().filter(name -> !indexes.containsKey(name)).findFirst().orElseGet(() -> null);
+                Validate.isTrue(notFoundArg == null, "Argument %s not found in action %s", notFoundArg, actionAdapter.getMeta().getName());
+            }
         }
 
         return indexes;
