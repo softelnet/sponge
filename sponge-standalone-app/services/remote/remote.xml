@@ -32,9 +32,8 @@
             <file required="false">${sponge.configDir}/configuration.py</file>
         </knowledgeBase>
         <knowledgeBase name="administration" label="Administration">
-            <file>classpath:sponge/engine/engine_admin_library.py</file>
-            <file>classpath:sponge/engine/engine_public_library.py</file>
-            <file>classpath:sponge/engine/engine_reload_git.py</file>
+            <file>classpath*:sponge/engine/*.py</file>
+            <file>classpath:sponge/engine/git/engine_reload_git.py</file>
         </knowledgeBase>
         <knowledgeBase name="security" label="Security">
             <file>file:${sponge.securityDir}/**/*.py</file>

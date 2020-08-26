@@ -614,7 +614,7 @@ If a provided argument is `submittable` with the `responsive` feature set to `tr
 |`icon`
 |`IconInfo` or `String`
 |Action
-|An action icon. The icon feature converter supports an instance of `IconInfo` or `String` (an icon name) as a value. The supported set of icon names is limited to the https://cdn.materialdesignicons.com/5.1.45/[material design icons (currently v5.1.45)].
+|An action icon. The icon feature converter supports an instance of `IconInfo` or `String` (an icon name) as a value. The supported set of icon names is limited to the https://cdn.materialdesignicons.com/5.3.45/[material design icons (currently v5.3.45)].
 
 |`icon`
 |`IconInfo` or `String`
@@ -835,6 +835,11 @@ If a provided argument is `submittable` with the `responsive` feature set to `tr
 |`boolean`
 |`GeoTileLayer`
 |A flag that informs if a tile layer service is https://en.wikipedia.org/wiki/Tile_Map_Service[TMS]. Defaults to `false`.
+
+|`align`
+|`String`
+|Type
+|A GUI alignment for a widget. Supported values: `"left"`, `"right"`, `"center"`. Defaults to `"left"`. If some of action arguments belong to the same group, the whole group will have the alignment like the first argument of this group.
 |===
 
 Colors are represented by a hexadecimal value specified with `RRGGBB` (Red, Green, Blue), e.g. `"FF0000"`.
@@ -924,7 +929,10 @@ A _number_ can be an integer or a floating point value.
 |Supported for an `IntegerType` but only if it has min and max values defined. The default behaviour of a slider is lazy, i.e. a value is set on an end of drag. If an integer type has a `responsive` feature set to `true`, the value will be set while dragging.
 
 |`switch`
-|Supported for a `BooleanType`. The default widget for `BooleanType` is a checkbox.
+|Supported for the `BooleanType`. The default widget for `BooleanType` is a checkbox.
+
+|`toggleButton`
+|Supported for the `BooleanType`.
 |===
 
 A data type property can be dynamically overwritten by a corresponding feature in an `AnnotatedValue`. The feature name has to be exactly the same as the data type property name. The overwrite is handled by the {appName}.

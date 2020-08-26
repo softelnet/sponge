@@ -156,6 +156,16 @@ public final class Features {
 
     public static final String WIDGET_SWITCH = "switch";
 
+    public static final String WIDGET_TOGGLE_BUTTON = "toggleButton";
+
+    public static final String ALIGN = "align";
+
+    public static final String ALIGN_LEFT = "left";
+
+    public static final String ALIGN_CENTER = "center";
+
+    public static final String ALIGN_RIGHT = "right";
+
     public static final String SCROLL = "scroll";
 
     public static final String PROVIDE_VALUE_PAGEABLE = "pageable";

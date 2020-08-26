@@ -10,6 +10,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a new `clearOnReload` flag to a knowledge base. This flag indicates if the knowledge base should be cleared on reload. Defaults to `false`.
 * Added a new `ignoreUnknownArgs` property to the Remote API settings. The flag indicates if the service should ignore unknown action arguments passed by the client. Defaults to `false`.
 * Added support for using a git repository as a set of knowledge base files (in the `sponge-kb-engine` artifact).
+* Added a new type feature `align` (with values `left`, `center`, `right`) and a feature value `toggleButton` for the `widget` feature for the `BooleanType`.
 * Fixed the bug that prevented reloading of Groovy and Kotlin script knowledge bases.
 * Documentation updates.
 * Dependencies upgrade.

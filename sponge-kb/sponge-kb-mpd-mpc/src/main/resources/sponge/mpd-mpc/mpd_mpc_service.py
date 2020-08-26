@@ -295,6 +295,31 @@ class Mpc:
     def setVolume(self, volume):
         return self.__execute("volume", str(volume))
 
+    def getMode(self, mode):
+        return self.getMode(self.getStatus())
+
+    def getModes(self, status):
+        lines = status.splitlines()
+        if len(lines) > 0:
+            matched = re.match(r"volume:\s*(.+)% .*repeat:\s*(on|off) .*random:\s*(on|off) .*single:\s*(on|off) .*consume:\s*(on|off).*", lines[-1])
+            if matched is not None and len(matched.groups()) == 5:
+                return {"repeat":matched.groups()[1] == "on",
+                        "random":matched.groups()[2] == "on",
+                        "single":matched.groups()[3] == "on",
+                        "consume":matched.groups()[4] == "on"}
+        return {}
+
+    def getMode(self, status, mode):
+        lines = status.splitlines()
+        if len(lines) > 0:
+            matched = re.match(r".*{}:\s*(on|off).*".format(mode), lines[-1])
+            if matched is not None and len(matched.groups()) == 1:
+                return matched.groups()[0] == "on"
+        return None
+
+    def setMode(self, mode, value):
+        return self.__execute(mode, "on" if value else "off")
+
     # Events.
 
     def __onMpdEvent(self, event):

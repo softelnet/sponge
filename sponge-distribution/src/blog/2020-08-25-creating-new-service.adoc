@@ -6,9 +6,9 @@ If you are not familiar with Sponge and the Sponge Remote mobile app, please rea
 
 After reading this article *you will learn*:
 
-* How to *run* a *new Sponge service* in Docker using the Sponge service *template*?
-* How to *create and modify Sponge actions* using an external *git repository*?
-* How to *reload* Sponge actions using the Sponge Remote mobile app?
+* How to *run* a *new Sponge service* in Docker using the Sponge service *template*.
+* How to *create and modify Sponge actions* using an external *git repository*.
+* How to *reload* Sponge actions using the Sponge Remote mobile app.
 
 == What you need
 
@@ -44,7 +44,7 @@ image::blog/02_050_connections.png[width=300,pdfwidth=35%,scaledwidth=35%,align=
 There are two ways to add new connections:
 
 * By *service discovery* - select the `Find new nearby services` menu item. If your service is found, tap it to connect. _Keep in mind that in some environments the service discovery may not work or would require additional configuration._
-* By *creating a connection manually* - tap the plus icon, fill in a connection name, Sponge address and tap the `OK` button.
+* By *creating a connection manually* - tap the plus icon, fill in the connection name, Sponge address and tap the `OK` button.
 +
 image::blog/02_060_connection_add.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
 
@@ -82,7 +82,7 @@ Now in the `My Service` tab *you can also see the Sponge actions defined in the 
 image::blog/02_130_action_my_services_git.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
 
 == Modify an action
-To modify an action (in this configuration) you have to, on your computer:
+Launch your favourite IDE on your computer.
 
 * *Clone* the git repository containing the knowledge base files.
 * *Edit* one of the script files. For example, in the `kb/services.py` file:
@@ -107,14 +107,14 @@ class HelloWorldActionPython(Action):
 * *Commit and push* the changes.
 * *Run the `Reload Sponge knowledge bases` action* by tapping it in the Sponge Remote mobile app.
 
-After going through these steps, you would notice that *the action label has changed in the mobile app instantly*.
+After going through these steps, you will notice that *the action label has changed in the mobile app instantly*.
 
 image::blog/02_140_action_my_services_git_changed_action.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
 
 == Create a new action
-Now let's create a new action:
+Now *let's create a new action*:
 
-* *Create a new file* `my_service.py` in the `kb` directory.
+* *Create a new Python file* `my_service.py` in the `kb` directory.
 +
 [source,python]
 ----
@@ -126,10 +126,10 @@ class OsGetDiskSpaceInfo(Action):
     def onCall(self):
         return sponge.process("df", "-h").outputAsString().run().outputString
 ----
-* *Add the file to the a git repository, commit and push* your changes.
+* *Add the file to your git repository, commit and push* your changes.
 * *Run the `Reload Sponge knowledge bases` action* by tapping it in the Sponge Remote mobile app.
 
-Now you would notice *a new action with the label `Get disk space info`* in the actions page in the mobile app.
+Now you will notice *a new action with the label `Get disk space info`* in the actions page in the mobile app.
 
 image::blog/02_150_actions_new_action.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
 
@@ -142,7 +142,7 @@ Then *tap the shortened result text* to see the whole output. In this case it is
 image::blog/02_170_actions_new_action_result.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
 
 == How does it work?
-To understand how it works let's take a look at the Sponge configuration file `remote.xml`. For the brevity of this article, only the key settings are shown here.
+To understand how it works let's take a look at the *Sponge configuration file* `remote.xml`. For the brevity of this article, only the key settings are shown here.
 
 [source,xml]
 ----
@@ -176,9 +176,11 @@ To understand how it works let's take a look at the Sponge configuration file `r
 </sponge>
 ----
 
-So, there are four knowledge bases for your service (`servicePython`, `serviceGroovy`, `serviceRuby` and `serviceJavaScript`), each for one of the supported scripting languages. The reason for that is to allow you to experiment with any of the supported languages. Sponge allows only *one language for one knowledge base*. For each knowledge base a new instance of a corresponding interpreter is created and held in the memory.
+There are four knowledge bases for your service (`servicePython`, `serviceGroovy`, `serviceRuby` and `serviceJavaScript`), each for one of the supported scripting languages. The reason for that is to allow you to experiment with any of the supported languages.
 
-The `clearOnReload` flag indicates that during reloading of knowledge bases, all previously registered processors (including actions) will be removed from the Sponge engine. Setting this flag to `true` is useful when experimenting with and reloading the knowledge bases.
+Sponge allows only *one language for one knowledge base*. For each knowledge base a new instance of a corresponding interpreter is created and held in the memory.
+
+The `clearOnReload` flag indicates that during reloading of knowledge bases, all previously registered processors (including actions) will be removed from the Sponge engine. Setting this flag to `true` is useful when experimenting with the knowledge bases.
 
 The `_local_git_cached` directory *points to a local clone of the git repository that you have already set up*. *That's why you can see the actions defined in your git repository in your Sponge Remote mobile app.*
 
@@ -187,4 +189,4 @@ To see the full configuration file, go to https://github.com/softelnet/sponge/bl
 == Summary
 Congratulations! Now you are familiar with *running your own Sponge service* and know how to *write your own Sponge actions*.
 
-However the even more interesting journey begins with *using Sponge services to help you with some of your daily activities*. For example the predefined {sponge} *Music Player Demon (MPD) Client Service* provides a basic set of actions that enable you to *use the Sponge Remote mobile app as a remote music player*. So, I encourage you to read the next articles.
+However the even more interesting journey begins with *using Sponge services to help you with some of your daily activities*. For example the predefined {sponge} *Music Player Demon (MPD) Service* provides a basic set of actions that enable you to *use the Sponge Remote mobile app as a remote music player*. So, I encourage you to read the next articles.

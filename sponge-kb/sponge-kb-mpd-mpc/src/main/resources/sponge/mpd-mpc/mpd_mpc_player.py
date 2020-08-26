@@ -20,14 +20,27 @@ class MpdPlayer(Action):
                 ProvidedMeta().withValue().withOverwrite().withSubmittable()),
             StringType("time").withLabel("Time").withNullable().withReadOnly().withFeatures({"group":"position"}).withProvided(
                 ProvidedMeta().withValue()),
-            IntegerType("volume").withLabel("Volume").withAnnotated().withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
-                ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
-            VoidType("prev").withLabel("Previous").withAnnotated().withFeatures({"icon":"skip-previous", "group":"navigation"}).withProvided(
+
+
+            VoidType("prev").withLabel("Previous").withAnnotated().withFeatures({
+                "icon":IconInfo().withName("skip-previous").withSize(30), "group":"navigation", "align":"center"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable()),
             BooleanType("play").withLabel("Play").withAnnotated().withFeatures({"group":"navigation"}).withProvided(
                 ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
-            VoidType("next").withLabel("Next").withAnnotated().withFeatures({"icon":"skip-next", "group":"navigation"}).withProvided(
-                ProvidedMeta().withValue().withOverwrite().withSubmittable())
+            VoidType("next").withLabel("Next").withAnnotated().withFeatures({"icon":IconInfo().withName("skip-next").withSize(30), "group":"navigation"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable()),
+
+            IntegerType("volume").withLabel("Volume").withAnnotated().withMinValue(0).withMaxValue(100).withFeatures({"widget":"slider"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
+
+            BooleanType("repeat").withLabel("Repeat").withAnnotated().withFeatures({"group":"mode", "widget":"toggleButton", "icon":"repeat", "align":"right"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
+            BooleanType("single").withLabel("Single").withAnnotated().withFeatures({"group":"mode", "widget":"toggleButton", "icon":"numeric-1"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
+            BooleanType("random").withLabel("Random").withAnnotated().withFeatures({"group":"mode", "widget":"toggleButton", "icon":"mixer"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate()),
+            BooleanType("consume").withLabel("Consume").withAnnotated().withFeatures({"group":"mode", "widget":"toggleButton", "icon":"pac-man"}).withProvided(
+                ProvidedMeta().withValue().withOverwrite().withSubmittable().withLazyUpdate())
         ]).withNonCallable().withActivatable()
         self.withFeatures({"refreshEvents":["statusPolling", "mpdNotification_.*"], "icon":"music", "contextActions":[
             SubAction("MpdPlaylist"),
@@ -63,6 +76,15 @@ class MpdPlayer(Action):
                     status = mpc.prev()
                 if "next" in context.submit:
                     status = mpc.next()
+
+                if "repeat" in context.submit:
+                    status = mpc.setMode("repeat", context.current["repeat"].value)
+                if "single" in context.submit:
+                    status = mpc.setMode("single", context.current["single"].value)
+                if "random" in context.submit:
+                    status = mpc.setMode("random", context.current["random"].value)
+                if "consume" in context.submit:
+                    status = mpc.setMode("consume", context.current["consume"].value)
             except:
                 sponge.logger.warn("Submit error: {}", sys.exc_info()[1])
 
@@ -91,7 +113,8 @@ class MpdPlayer(Action):
             if "play" in context.provide:
                 status = self.__ensureStatus(mpc, status)
                 playing = mpc.getPlay(status)
-                context.provided["play"] = ProvidedValue().withValue(AnnotatedValue(playing).withFeature("icon", "pause" if playing else "play"))
+                context.provided["play"] = ProvidedValue().withValue(AnnotatedValue(playing).withFeature("icon",
+                        IconInfo().withName("pause" if playing else "play").withSize(60)))
 
             if "prev" in context.provide or "next" in context.provide:
                 status = self.__ensureStatus(mpc, status)
@@ -101,5 +124,18 @@ class MpdPlayer(Action):
             if "next" in context.provide:
                 context.provided["next"] = ProvidedValue().withValue(AnnotatedValue(None).withFeature("enabled",
                         position is not None and size is not None))
+
+            if "repeat" in context.provide or "single" in context.provide or "random" in context.provide or "consume" in context.provide:
+                status = self.__ensureStatus(mpc, status)
+                modes = mpc.getModes(status)
+
+                if "repeat" in context.provide:
+                    context.provided["repeat"] = ProvidedValue().withValue(AnnotatedValue(modes.get("repeat", False)))
+                if "single" in context.provide:
+                    context.provided["single"] = ProvidedValue().withValue(AnnotatedValue(modes.get("single", False)))
+                if "random" in context.provide:
+                    context.provided["random"] = ProvidedValue().withValue(AnnotatedValue(modes.get("random", False)))
+                if "consume" in context.provide:
+                    context.provided["consume"] = ProvidedValue().withValue(AnnotatedValue(modes.get("consume", False)))
         finally:
             mpc.lock.unlock()

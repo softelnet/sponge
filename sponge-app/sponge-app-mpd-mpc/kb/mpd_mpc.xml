@@ -11,7 +11,7 @@
             <file>classpath*:sponge/mpd-mpc/**/*.py</file>
         </knowledgeBase>
         <knowledgeBase name="administration" label="Administration">
-            <file>classpath*:sponge/engine/**/*.py</file>
+            <file>classpath*:sponge/engine/*.py</file>
         </knowledgeBase>
         <knowledgeBase name="security" label="Security">
             <file>remote_api_security.py</file>
