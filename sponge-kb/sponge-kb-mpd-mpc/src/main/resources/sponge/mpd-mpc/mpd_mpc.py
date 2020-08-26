@@ -96,7 +96,7 @@ class ViewMpdStatus(Action):
 
 class MpdSetServer(Action):
     def onConfigure(self):
-        self.withLabel("Choose an MPD server").withDescription("Sets an MPD server")
+        self.withLabel("Change the MPD server").withDescription("Changes the MPD server")
         self.withArg(StringType("host").withNullable().withLabel("Host").withDescription("The MPD host").withProvided(
             ProvidedMeta().withValue().withOverwrite()))
         self.withNoResult().withFeatures({"icon":"record-player", "intent":"reset", "callLabel":"Save"})
