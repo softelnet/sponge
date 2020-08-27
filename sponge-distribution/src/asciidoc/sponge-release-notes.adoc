@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
-== 1.16.2 (not released yet)
+== 1.16.2 (2020-08-27)
 * Added a new `clearOnReload` flag to a knowledge base. This flag indicates if the knowledge base should be cleared on reload. Defaults to `false`.
 * Added a new `ignoreUnknownArgs` property to the Remote API settings. The flag indicates if the service should ignore unknown action arguments passed by the client. Defaults to `false`.
 * Added support for using a git repository as a set of knowledge base files (in the `sponge-kb-engine` artifact).
