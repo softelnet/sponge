@@ -174,24 +174,24 @@ You may use other online XYZ tile map servers as well.
 
 [[mpd-mpc-raspberry]]
 == MPD Client Service
-The {sponge} MPD Client Service provides a basic set of Music Player Demon (MPD) client related actions. It can be used in combination with the generic {sponge} mobile client application as a simple music player. It includes the `sponge-kb-mpd-mpc` knowledge base artifact.
+The {sponge} MPD Client Service provides a basic set of Music Player Daemon (MPD) client related actions. It can be used in combination with the generic {sponge} mobile client application as a simple music player. It includes the `sponge-kb-mpd-mpc` knowledge base artifact.
 
-The {sponge} MPD service uses the `mpc` client commandline to communicate with the MPD server. For performance reasons the {sponge} MPD service should be installed on the same machine that runs an MPD server.
+The {sponge} MPD service uses the `mpc` client commandline to communicate with the MPD server. For performance reasons the {sponge} MPD service should be installed on the same machine that runs the MPD server.
 
 NOTE: One of the aims of the {sponge} MPD Client Service application is to showcase the ability of {sponge} to publish a set of commandline tool invocations as a Remote API and use it in a mobile application. It is not a replacement for existing MPD clients available for mobile devices because they connect to an MPD server directly. The architecture shown in this example introduces an additional layer between the MPD server and the GUI MPD client (in that case the generic {sponge} mobile client application) that can have a noticable impact on the performance.
 
 [discrete]
 === Running in Docker
-The Docker image `openksavi/sponge-mpd` contains a predefined {sponge} MPD service.
+The Docker image `openksavi/sponge-mpd` contains the predefined {sponge} MPD service.
 
-The main use case is that the service runs in Docker on a Raspberry PI with an already configured MPD. There is a number of Linux distributions for a Raspberry PI that provide well configured music player features. For this example the https://moodeaudio.org[moOde audio player] has been chosen.
+The service runs in Docker on Raspberry Pi with an already configured MPD. There is a number of Linux distributions for Raspberry PI that provide well configured music player features. For this example the https://moodeaudio.org[moOde audio player] has been chosen.
 
-The architecture of this solution is: Raspberry PI with the MPD server (running in the moOde audio distribution) and Docker containing the {sponge} MPD service.
+The architecture of this solution is: Raspberry Pi with the MPD server (running in the moOde audio distribution) and Docker containing the {sponge} MPD service.
 
 Installing the {sponge} MPD service:
 
-* https://moodeaudio.org[Download], install and https://github.com/moode-player/moode/blob/master/www/setup.txt[setup] the moOde audio player for Raspberry PI.
-* Connect to the Raspberry PI via SSH as the `pi` user.
+* https://moodeaudio.org[Download], install and https://github.com/moode-player/moode/blob/master/www/setup.txt[setup] the moOde audio player for Raspberry Pi.
+* Connect to the Raspberry Pi via SSH as the `pi` user.
 * Install and configure https://howchoo.com/g/nmrlzmq1ymn/how-to-install-docker-on-your-raspberry-pi[Docker].
 
 ----
@@ -204,10 +204,12 @@ sudo usermod -aG docker pi
 
 ----
 docker pull openksavi/sponge-mpd
-docker run --name sponge-mpd -d --restart always --network=host openksavi/sponge-mpd -Dsponge.remoteApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
+
+docker run --name sponge-mpd -d --restart always --network=host openksavi/sponge-mpd \
+-Dsponge.remoteApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
 ----
 
-Setting the `sponge.remoteApiServer.serviceDiscoveryUrl` property allows client applications (e.g. the Sponge Remote mobile application) to automatically find this service in a local network. If you want to change the service name, provide the `sponge.remoteApiServer.name` property as well, e.g. `-Dsponge.remoteApiServer.name="Docker MPD"`.
+Setting the `sponge.remoteApiServer.serviceDiscoveryUrl` property allows client applications (e.g. the Sponge Remote mobile application) to automatically find this service on the local network. If you want to change the service name, provide the `sponge.remoteApiServer.name` property as well, e.g. `-Dsponge.remoteApiServer.name="Docker MPD"`.
 
 * Check the {sponge} MPD service logs.
 

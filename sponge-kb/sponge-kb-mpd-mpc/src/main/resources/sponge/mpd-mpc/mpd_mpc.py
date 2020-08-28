@@ -103,8 +103,7 @@ class MpdSetServer(Action):
     def onCall(self, host):
         if host:
             host = host.strip()
-        if host != sponge.getVariable("mpc").host:
-            updateMpdService(Mpc(host = host))
+        updateMpdService(Mpc(host = host), True)
     def onProvideArgs(self, context):
         mpc = sponge.getVariable("mpc")
         if "host" in context.provide:
@@ -117,19 +116,27 @@ class MpdRefreshDatabase(Action):
     def onCall(self):
         sponge.getVariable("mpc").refreshDatabase()
 
-def updateMpdService(newMpc = None):
+def updateMpdService(newMpc = None, validateServer = False):
     oldMpc = sponge.getVariable("mpc") if sponge.hasVariable("mpc") else None
     if oldMpc:
         oldMpc.stopEventLoop()
 
     mpc = newMpc if newMpc else Mpc(host=oldMpc.host if oldMpc else None, port=oldMpc.port if oldMpc else None)
+
     mpc.validatePrerequisites()
+
+    if validateServer:
+        mpc.validateServer()
+
     sponge.setVariable("mpc", mpc)
 
     try:
         mpc.startEventLoop()
     except:
         sponge.logger.warn("MPD event loop error: {}", sys.exc_info()[1])
+
+def validateMpdService(host):
+    sponge.process("mpc").outputAsString().errorAsString().exceptionOnExitCode(False).run()
 
 def updateLyricsService():
     sponge.setVariable("lyricsService", LyricsService(sponge.getProperty("musixmatchApiKey", None)))

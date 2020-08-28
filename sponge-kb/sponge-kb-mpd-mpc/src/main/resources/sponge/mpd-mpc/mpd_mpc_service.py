@@ -66,6 +66,9 @@ class Mpc:
         # Check if the mpc is installed.
         self.__createProcess().outputAsString().errorAsString().exceptionOnExitCode(False).run()
 
+    def validateServer(self):
+        self.__createProcess().errorAsException().run()
+
     # Data type operations.
     def createSongValue(self, songSpec):
         tagValues = songSpec.split(self.separator)
@@ -94,7 +97,8 @@ class Mpc:
 
     def isConnected(self):
         error = self.__createProcess().outputAsString().errorAsString().exceptionOnExitCode(False).run().errorString
-        if error and (error.endswith("Cannot assign requested address") or error.endswith("Connection refused")):
+        if error and (error.endswith("Cannot assign requested address") or error.endswith("Connection refused")
+                      or error.endswith("Failed to resolve host name")):
             return False
         return True
 

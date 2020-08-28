@@ -3,6 +3,8 @@
 
 The current {sponge} version is {projectVersion} (release date: {projectDate}).
 
+== Sponge
+
 In order to use *{sponge}* you may choose to:
 
 * Embed {sponge} in your Java application using Maven dependency.
@@ -16,16 +18,33 @@ In order to use *{sponge}* you may choose to:
 ++++
 * Run the {sponge} standalone command-line program in a Docker container.
 
-The *Sponge Remote* mobile app *is now available on Google Play*. Google Play and the Google Play logo are trademarks of Google LLC.
+== Sponge Remote
+
+The *Sponge Remote* mobile app *is now available on Google Play*.
 
 [subs="attributes"]
 ++++
 <p>
-<a href='http://play.google.com/store/apps/details?id=org.openksavi.sponge.remote.mobile&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="25%"/></a>
+<a href='http://play.google.com/store/apps/details?id=org.openksavi.sponge.remote.mobile'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="25%"/></a>
 </p>
 ++++
 
+_Google Play and the Google Play logo are trademarks of Google LLC._
+
 For more information on distributions see the link:/quickstart/[Quickstart] page. For more information on history of changes see the link:/release-notes/[Release notes] page.
+
+== Sponge Digits
+
+The *Sponge Digits* demo mobile app *is now available on Google Play*.
+
+[subs="attributes"]
+++++
+<p>
+<a href='https://play.google.com/store/apps/details?id=org.openksavi.sponge.digits'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="25%"/></a>
+</p>
+++++
+
+== Programming libraries
 
 The hosted *{sponge} programming libraries*:
 

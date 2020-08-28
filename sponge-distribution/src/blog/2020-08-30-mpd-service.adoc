@@ -1,0 +1,130 @@
+= Using Sponge and the Sponge Remote Mobile App as a Remote Hi-Fi Music Player
+:page-layout: post
+:page-author: Marcin Paś
+
+If you are not familiar with *Sponge* and the *Sponge Remote* mobile app, please read the {homepage}/2020/08/14/getting-started.html[Getting Started with Sponge and the Sponge Remote Mobile App] article first.
+
+After reading this article *you will learn*:
+
+* How to *run* the *Sponge Music Player Daemon (MPD) Service* in Docker on *Raspberry Pi*.
+* How to *connect* to the service using the *Sponge Remote mobile app*.
+* How to use the *Sponge Remote* mobile app as a *remote music player*.
+
+== What you need
+
+* About 20 minutes (depending on your current Raspberry Pi configuration).
+* *Raspberry Pi 4* with a *Hi-Fi* system hardware (DAC, speakers, etc.).
+* *Micro SD card*.
+* An *Android* phone or tablet.
+
+== Introduction
+The {sponge} *Music Player Daemon (MPD) Service* publishes a basic set of Sponge actions that enable you to *use the Sponge Remote mobile app as a remote music player*.
+
+The service runs in Docker on Raspberry Pi with an *already configured MPD*. There is a number of Linux distributions for Raspberry Pi that provide well configured music player features. For this article the https://moodeaudio.org[moOde audio player] has been chosen.
+
+The *architecture of this solution* is: *Raspberry Pi* with the *MPD server* (running in the *moOde audio* distribution) and *Docker* containing the *{sponge} MPD Service*.
+
+NOTE: One of the aims of the Sponge MPD Service is to showcase the ability of Sponge to publish a set of commandline tool invocations as a Remote API and use it in a mobile application. It is not a replacement for existing MPD clients available for mobile devices because they connect to an MPD server directly. The architecture shown in this article introduces an additional layer between the MPD server and the GUI MPD client (the Sponge Remote mobile app) that can have a noticable impact on the performance.
+
+== Install the moOde audio player on your Raspberry Pi
+
+image::blog/03_050_moode.png[align="center"]
+
+* https://moodeaudio.org[Download] the *moOde audio player* for Raspberry Pi.
+* The download is a ready-to-use ISO image. Write it to a micro SD card, boot up your Raspberry Pi and then view the https://github.com/moode-player/moode/blob/master/www/setup.txt[Setup guide] to get started.
+
+== Install Docker on your Raspberry Pi
+
+* Connect to the Raspberry Pi via SSH as the `pi` user.
+* Install and configure https://howchoo.com/g/nmrlzmq1ymn/how-to-install-docker-on-your-raspberry-pi[Docker] on your Raspberry Pi.
++
+----
+sudo curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+sudo usermod -aG docker pi
+----
+* Relogin.
+
+== Run the Sponge MPD Service
+
+* *Run the Sponge MPD Service* by typing the following commands.
++
+----
+docker pull openksavi/sponge-mpd
+
+docker run --name sponge-mpd -d --restart always --network=host openksavi/sponge-mpd \
+-Dsponge.remoteApiServer.serviceDiscoveryUrl="http://$(hostname -I | awk '{print $1}'):1836"
+----
++
+The Docker image `openksavi/sponge-mpd` contains the {sponge} MPD Service.
++
+Setting the `sponge.remoteApiServer.serviceDiscoveryUrl` property allows the Sponge Remote mobile app to *automatically find this service on the local network*. If you want to change the service name, provide the `sponge.remoteApiServer.name` property as well, e.g. `-Dsponge.remoteApiServer.name="Docker MPD"`.
+* Check the {sponge} MPD service logs.
++
+----
+docker logs sponge-mpd -f
+----
+
+Optionally, if you have a https://developer.musixmatch.com[Musixmatch API key], you can configure the service to access *song lyrics* by adding `-DmusixmatchApiKey=YOUR_MUSIXMATCH_API_KEY` to the `docker run` command line. Song lyrics will be shown in the Sponge Remote app.
+
+== Open the Sponge Remote mobile app and connect to the service
+Open the *Sponge Remote mobile app* on your Android device.
+
+image::blog/03_100_actions_empty.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+Tap to *create a new connection* to the MPD service.
+
+image::blog/03_110_connections_menu.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+There are two ways to add new connections:
+
+* By *service discovery* - select the `Find new nearby services` menu item. _The service discovery may not work in Docker or would require additional configuration in some environments._
+* By *creating a connection manually* - tap the *plus sign* icon, fill in the *connection name*, *Sponge address* (the Raspberry Pi IP address) and tap the `OK` button.
++
+image::blog/03_120_connection_add.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+In the *Connections* page tap the new connection to *activate* it.
+
+image::blog/03_130_connections_activate.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+You are navigated back to the *Actions* page.
+
+== Open the remote music player
+Now you can see the Sponge *actions related to the Music Player Deamon* in the `MPD` tab.
+
+image::blog/03_140_actions.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+* Tap the `Player` action to open it.
+
+image::blog/03_150_action_player.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+* Take a look at the available context actions in the menu.
+
+image::blog/03_160_action_player_menu.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+== Explore player context actions
+
+* The `Playlist` action.
+
+image::blog/03_170_action_playlist.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+* The `Lyrics` action.
+
+image::blog/03_180_action_lyrics.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+* The `MPD status` action.
+
+image::blog/03_190_action_status.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+== How does it work?
+The Sponge MPD service uses the *`mpc`* client commandline to *communicate with the MPD server*. _For performance reasons the Sponge MPD service should be installed on the same machine that runs the MPD server just like it is shown in this article._
+
+Each action argument modification in the player _submits_ the respective argument to the service. MPD events cause refreshing of _provided_ action arguments.
+
+For more details see the source codes of the https://github.com/softelnet/sponge/tree/master/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc[`sponge-kb-mpd-mpc`] knowledge base.
+
+== Summary
+Congratulations! Now you are familiar with *using Sponge and the Sponge Remote mobile app as a remote Hi-Fi music player*.
+
+One interesting fact is that you can use *the same* Sponge Remote mobile app to connect to such *diverse* Sponge services as for example a remote music player. In this article a *predefined Sponge service* has been presented. For more information on *creating your own services* see the {homepage}/2020/08/25/creating-new-service.html[Creating a New Service with Sponge and the Sponge Remote Mobile App] article.
+
+In the forthcoming articles about Sponge you will learn how Sponge with the Sponge Remote mobile app can help you with your other daily activities (both personal and professional).
