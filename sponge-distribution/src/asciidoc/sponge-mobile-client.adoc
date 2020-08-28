@@ -1133,11 +1133,11 @@ A geographical position is represented by `GeoPosition`.
 Access to actions in the {appName} is generic. However you could build a customized GUI using your own Flutter code using the upcoming {sponge} Flutter API library.
 
 === {sponge} Digits
-The {sponge} Digits mobile app is an example of using a customized Flutter UI with the {sponge} service to recognize handwritten digits.
+The {sponge} Digits mobile app is a demo of using a customized Flutter UI with the {sponge} service to recognize handwritten digits.
 
 image::screens/mobile/digits_drawing.png[title="The digit recognition - drawing a digit",width=300,pdfwidth=35%,scaledwidth=35%]
 
-The application allows drawing a digit that will be recognized by a {sponge} action. After each stroke the remote action call is made and the result is shown in the circle.
+The application allows drawing a digit that will be recognized by a {sponge} action. After each stroke the remote action call will be made and the result will be shown in the circle.
 
 == Third party Dart/Flutter software
 The {appName} and the {sponge} Flutter API library use third party software released under various open-source licenses. Besides the dependencies stated in the respective Flutter projects, the following components use modified versions of other open-source software:

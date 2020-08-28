@@ -132,7 +132,7 @@ It's up to you to evaluate the pros and cons given your goals.
 == Summary
 Congratulations! Now you are familiar with the basics of Sponge and the Sponge Remote mobile app.
 
-However the real journey begins with *creating your own Sponge service*, *writing your own actions* and using them *in the same mobile app* you've already installed. So, I encourage you to read the next articles.
+However the real journey begins with *creating your own Sponge service*, *writing your own actions* and using them *in the same mobile app* you've already installed. So, I encourage you to read other articles about Sponge.
 
 Link to the https://medium.com/@marcin.pas/getting-started-with-sponge-and-the-sponge-remote-mobile-app-cd09b9ccc2cc[Medium article].
 
