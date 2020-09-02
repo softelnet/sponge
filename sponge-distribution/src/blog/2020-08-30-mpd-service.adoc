@@ -24,6 +24,8 @@ The service runs in Docker on Raspberry Pi with an *already configured MPD*. The
 
 The *architecture of this solution* is: *Raspberry Pi* with the *MPD server* (running in the *moOde audio* distribution) and *Docker* containing the *{sponge} MPD Service*.
 
+Although the Sponge MPD Service may seem to be only for entertainment, it is *built on the same principles as an IoT device*. In fact, the *Sponge MPD Service can be seen as an IoT device* that has as a set of *sensors* (that generate MPD events just like playing started/paused, song changed, volume changed) and *actuators* (MPD actions just like play/pause, play a song from the playlist, change volume).
+
 NOTE: One of the aims of the Sponge MPD Service is to showcase the ability of Sponge to publish a set of commandline tool invocations as a Remote API and use it in a mobile application. It is not a replacement for existing MPD clients available for mobile devices because they connect to an MPD server directly. The architecture shown in this article introduces an additional layer between the MPD server and the GUI MPD client (the Sponge Remote mobile app) that can have a noticable impact on the performance.
 
 == Install the moOde audio player on your Raspberry Pi
