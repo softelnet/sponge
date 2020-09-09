@@ -83,8 +83,8 @@
         <commons-configuration2.version>2.7</commons-configuration2.version>
         <commons-io.version>2.7</commons-io.version>
         <commons-cli.version>1.4</commons-cli.version>
-        <commons-codec.version>1.14</commons-codec.version>
-        <commons-crypto.version>1.0.0</commons-crypto.version>
+        <commons-codec.version>1.15</commons-codec.version>
+        <commons-crypto.version>1.1.0</commons-crypto.version>
         <commons-email.version>1.5</commons-email.version>
         <commons-compress.version>1.20</commons-compress.version>
         <quartz.version>2.3.2</quartz.version>
@@ -93,16 +93,16 @@
         <spring.version>5.2.8.RELEASE</spring.version>
         <spring-integration.version>5.3.2.RELEASE</spring-integration.version>
         <spring-security.version>5.3.4.RELEASE</spring-security.version>
-        <camel.version>3.4.3</camel.version>
+        <camel.version>3.5.0</camel.version>
         <awaitility.version>4.0.3</awaitility.version>
         <jline.version>3.16.0</jline.version>
-        <py4j.version>0.10.9</py4j.version>
+        <py4j.version>0.10.9.1</py4j.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
         <rxjava2.version>2.2.19</rxjava2.version>
         <okhttp.version>4.8.1</okhttp.version>
         <reflections.version>0.9.12</reflections.version>
-        <jackson.version>2.10.4</jackson.version>
+        <jackson.version>2.10.5</jackson.version>
         <swagger.version>1.6.2</swagger.version>
         <jjwt.version>0.9.1</jjwt.version>
         <jserialcomm.version>2.6.2</jserialcomm.version>
@@ -118,13 +118,13 @@
         <bitronix.version>2.1.4</bitronix.version>
         <atomikos.version>4.0.4</atomikos.version>
 
-        <jetty.version>9.4.29.v20200521</jetty.version>
+        <jetty.version>9.4.31.v20200723</jetty.version>
 
         <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit-jupiter.version>5.6.2</junit-jupiter.version>
         <junit-platform.version>5.6.2</junit-platform.version>
-        <mockito.version>3.5.2</mockito.version>
+        <mockito.version>3.5.10</mockito.version>
         <jcip.version>1.0-1</jcip.version>
 
         <log4j2.version>2.13.3</log4j2.version>
