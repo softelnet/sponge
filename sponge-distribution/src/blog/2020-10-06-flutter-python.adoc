@@ -102,7 +102,7 @@ The *`onProvideArgs` callback method* essentially modifies the MPD state by usin
 include::../{rootDir}/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc/mpd_mpc_player_runtime.py[lines=5..-1]
 ----
 
-You may notice that there is a lot of conditional statements. They are needed in order to handle only a subset of supported provided arguments while processing one request.
+You may notice that there are a bunch of `if` statements without `else` clauses. They are present in order to handle only a subset of supported provided arguments while processing one request.
 
 This is only a simplified description of the Music Player action, but I believe that it gives a feel of how the _rendering_ and handling of an action looks like in the Sponge Remote mobile app.
 

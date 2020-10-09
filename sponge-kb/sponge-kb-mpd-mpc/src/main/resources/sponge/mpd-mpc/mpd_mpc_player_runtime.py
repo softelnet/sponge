@@ -63,7 +63,7 @@ class MpdPlayerProvideArgsRuntime:
                     sponge.logger.warn("Submit error: {}", sys.exc_info()[1])
 
     def __getStatus(self):
-        # Cache an mpc command status text.
+        # Cache the mpc command status text.
         if not self.mpc.isStatusOk(self.status):
             self.status = self.mpc.getStatus()
 

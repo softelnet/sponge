@@ -89,6 +89,21 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
         }
     }
 
+    @Override
+    public Object callAction(String actionName, Map<String, ?> args) {
+        ActionAdapter action = registeredActions.get(actionName);
+        if (action == null) {
+            throw new ProcessorNotFoundException(ProcessorType.ACTION, actionName);
+        }
+
+        return callAction(action, args);
+    }
+
+    @Override
+    public Object callAction(ActionAdapter actionAdapter, Map<String, ?> args) {
+        return callAction(actionAdapter, SpongeUtils.buildActionArgsList(actionAdapter, args));
+    }
+
     protected void validateActionCallArgs(ActionAdapter actionAdapter, List<Object> args) {
         if (args == null) {
             return;
@@ -99,6 +114,16 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
 
     @Override
     public ValueHolder<Object> callActionIfExists(String actionName, List<Object> args) {
+        ActionAdapter action = registeredActions.get(actionName);
+        if (action == null) {
+            return null;
+        }
+
+        return new ValueHolder<>(callAction(action, args));
+    }
+
+    @Override
+    public ValueHolder<Object> callActionIfExists(String actionName, Map<String, ?> args) {
         ActionAdapter action = registeredActions.get(actionName);
         if (action == null) {
             return null;
@@ -128,30 +153,5 @@ public class DefaultActionManager extends BaseEngineModule implements ActionMana
                 .filter(adapter -> (knowledgeBaseRegexp == null || adapter.getKnowledgeBase().getName().matches(knowledgeBaseRegexp))
                         && (actionNameRegexp == null || adapter.getMeta().getName().matches(actionNameRegexp)))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public Object callAction(String actionName, Map<String, ?> args) {
-        ActionAdapter action = registeredActions.get(actionName);
-        if (action == null) {
-            throw new ProcessorNotFoundException(ProcessorType.ACTION, actionName);
-        }
-
-        return callAction(action, args);
-    }
-
-    @Override
-    public Object callAction(ActionAdapter actionAdapter, Map<String, ?> args) {
-        return callAction(actionAdapter, SpongeUtils.buildActionArgsList(actionAdapter, args));
-    }
-
-    @Override
-    public ValueHolder<Object> callActionIfExists(String actionName, Map<String, ?> args) {
-        ActionAdapter action = registeredActions.get(actionName);
-        if (action == null) {
-            return null;
-        }
-
-        return new ValueHolder<>(callAction(action, args));
     }
 }
