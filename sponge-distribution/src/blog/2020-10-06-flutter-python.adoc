@@ -28,6 +28,8 @@ image::blog/04_100_mobile_architecture.png[align="center"]
 
 A Sponge *action* can be implemented in *Python*, *Groovy*, *Ruby* or *JavaScript* (or *Java*, *Kotlin* if you prefer a compiled language) in a Sponge service (i.e. on the server side). An action that is to be visible in the mobile app has to have *metadata*, like a name, label, arguments, argument data types, etc.
 
+CAUTION: Sponge is written in Java so the Python interpreter used by Sponge is Jython, which is compatible with Python 2.7. You could use CPython (that would run in another process), but it would require you to configute the Py4J plugin. Ruby interpreter is JRuby, JavaScript interpreter is Nashorn.
+
 One of the key concepts here is that every Sponge action, action argument and data type can be configured in order to be rendered by a *compatible GUI rendering engine*.
 
 Currently, there is only one implementation of such rendering engine. It is the https://github.com/softelnet/sponge_flutter_api[*Sponge Flutter API*] that _renders_ action metadata as a Flutter screen and handles user interactions. The rendered GUI is *generic and opinionated* and *the out of the box options of customizing are intentionally very limited*.
@@ -40,25 +42,23 @@ To recap, *you don't write your mobile app code in Python directly*. Your *actio
 
 TIP: If you need to have a more customized GUI, you can write your own Flutter app from scratch using only a subset of the Sponge Flutter API functionalities. An example of such app is https://play.google.com/store/apps/details?id=org.openksavi.sponge.digits[Sponge Digits] (https://github.com/softelnet/sponge_flutter_app_digit_recognition[source codes]). _The Sponge Flutter API library is currently in alpha phase and supports only a limited set of Sponge features._
 
-CAUTION: Sponge is written in Java so the Python interpreter used by Sponge is Jython, which is compatible with Python 2.7. You could use CPython (that would run in another process), but it would require you to configute the Py4J plugin. Ruby interpreter is JRuby, JavaScript interpreter is Nashorn.
-
 == Why Flutter?
-I've been using many GUI SDKs and frameworks in the span of over 25 years: XView and Motif for X Windows; MFC library for MS Windows; Oracle Forms; Java AWT, Java Swing, Java SWT; Struts, JSF, Tapestry, Wicket, GWT, Angular for web; Windows Mobile SDK, Android SDK for mobile; and so on. They have features that make them more or less enjoyable to code with. They utilize many common patterns or similar solutions.
+I've been using many *GUI SDKs and frameworks* in the span of over 25 years: XView and Motif for X Windows; MFC library for MS Windows; Oracle Forms; Java AWT, Java Swing, Java SWT; Struts, JSF, Tapestry, Wicket, GWT, Angular for web; Windows Mobile SDK, Android SDK for mobile; and so on. *They have features that make them more or less enjoyable to code with. They utilize many common patterns or similar solutions.*
 
-After the Sponge engine had been created, I started wondering if there could be an easy way to create a mobile or web GUI to remotely call Sponge actions. Just to use the actions in a user friendly way, for example for connecting to an IoT device that runs Sponge. At that time, as to GUI development, I had the most experience in GWT for web and Android SDK for mobile. So, at the first glance, one of them would have been the first choice for me. However, GWT was losing popularity so the Android SDK seemed a way to go.
+After the Sponge engine had been created, I started wondering if there could be *an easy way to create a mobile or web GUI to remotely call Sponge actions*. Just to use the actions in a user friendly way, for example for connecting to an IoT device that runs Sponge. At that time, as to GUI development, I had the most experience in GWT for web and Android SDK for mobile. So, at the first glance, one of them would have been the first choice for me. However, GWT was losing popularity so the Android SDK seemed a way to go.
 
-Then some day I stumbled upon an article about *Flutter*. I really liked the way of writing GUI in the code, hot reload and the overall architecture of the framework. Another advantage was that with a single codebase the app could be run both on Android and on iOS. Moreover after some time there was an announcement of the plans to support web and desktop as well. It meant that most of the codebase would be able to run on more platforms without much effort. For me, that sealed the deal.
+Then some day I stumbled upon an article about *Flutter*. I really liked the way of writing GUI in the code, hot reload and the overall architecture of the framework. Another advantage was that *with a single codebase the app could be run both on Android and on iOS*. Moreover after some time there was an announcement of the *plans to support web and desktop* as well. It meant that most of the codebase would be able to run on more platforms without much effort. For me, that sealed the deal.
 
-After about two years of developing in Flutter I must say that it is the best GUI framework I've ever had a pleasure to use. Flutter gives so much fun that it encourages to create more functionalities in the app. I can even say that Flutter is one of the main reasons the Sponge Remote mobile app and the associated underlying Dart libraries have been created as they are.
+*After about two years of developing in Flutter I must say that it has been the best GUI framework I've ever had a pleasure to use.* Flutter gives so much fun that it encourages to create more functionalities in the app. I can even say that Flutter is one of the main reasons the Sponge Remote mobile app and the associated underlying Dart libraries have been created as they are.
 
-The Dart language became one of my favourites, along with Java, Python and Lisp. In a generic code (e.g. that recursively creates a widget tree for a Sponge data type hierarchy) the Dart's `dynamic` type is very helpful, because it spares the pain of writing a lot of boilerplate code. It is dangerous of course, but not more than, let's say, a corresponding Python code.
+*The Dart language has become one of my favourites, along with Java, Python and Lisp.* In a generic code (e.g. that recursively creates a widget tree for a Sponge data type hierarchy) the Dart's `dynamic` type is very helpful, because it spares the pain of writing a lot of boilerplate code. It is dangerous of course, but not more than, let's say, a corresponding Python code.
 
 == How does it work?
 As an example of a Sponge action that is renderable in the Sponge Remote app let's take the Music Player described in the {homepage}/2020/08/30/mpd-service.html[Using Sponge and the Sponge Remote Mobile App as a Remote Hi-Fi Music Player] article.
 
 image::blog/03_150_action_player.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
 
-I won't get into much details here in order to focus only on the outline of the main Music Player action. Firstly, let's see the action code.
+I won't get into much details here in order to focus only on the outline of the main Music Player action. First, let's see the action code.
 
 [source,python]
 ----
@@ -93,7 +93,7 @@ The `"group"` feature allows grouping of the arguments in the GUI, e.g. the navi
 
 The `mpc` variable is an instance of the {sourcesUrl}/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc/mpd_mpc_service.py[`Mpc`] class.
 
-The supported *icon names* (e.g. `"pac-man"`) correspond to the https://cdn.materialdesignicons.com/5.3.45/[material design icons].
+The supported *icon names* (e.g. `"pac-man"`) correspond to the https://cdn.materialdesignicons.com/5.6.55/[material design icons].
 
 The *`onProvideArgs` callback method* essentially modifies the MPD state by using the argument values submitted by the user and then sets the values of arguments that are to be provided, i.e. sent back to the mobile app. The code that implements provisioning of arguments is placed in the `MpdPlayerProvideArgsRuntime` class.
 
@@ -102,7 +102,7 @@ The *`onProvideArgs` callback method* essentially modifies the MPD state by usin
 include::../{rootDir}/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc/mpd_mpc_player_runtime.py[lines=5..-1]
 ----
 
-You may notice that there is a lot of conditional statements. They are needed in order to handle only a subset of supported provided arguments while processing one request.
+You may notice that there are a bunch of `if` statements without `else` clauses. They are present in order to handle only a subset of supported provided arguments while processing one request.
 
 This is only a simplified description of the Music Player action, but I believe that it gives a feel of how the _rendering_ and handling of an action looks like in the Sponge Remote mobile app.
 
@@ -113,3 +113,4 @@ So, you can create a generic Flutter based mobile app in Python, Groovy, Ruby or
 
 You could also start with a generic, opinionated Sponge Remote mobile app and then switch to your own Flutter app based on the Sponge Flutter API. Your Flutter app would connect to the same Sponge service and use the same actions as Sponge Remote but the actions would be handled differently in the GUI.
 
+Link to the https://medium.com/@marcin.pas/creating-a-generic-flutter-based-mobile-app-in-python-groovy-ruby-or-js-with-sponge-remote-d8966a536374[Medium article].
