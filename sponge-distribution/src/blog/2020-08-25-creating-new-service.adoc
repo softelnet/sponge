@@ -189,10 +189,6 @@ To see the full configuration file, go to https://github.com/softelnet/sponge/bl
 == Summary
 Congratulations! Now you are familiar with *running your own Sponge service* and know how to *write your own Sponge actions*.
 
-<<<<<<< HEAD
 However the even more interesting journey begins with *using Sponge services to help you with some of your daily activities*. For example the predefined {sponge} *Music Player Daemon (MPD) Service* provides a basic set of actions that enable you to *use the Sponge Remote mobile app as a remote music player*. So, I encourage you to read other articles about Sponge.
-=======
-However the even more interesting journey begins with *using Sponge services to help you with some of your daily activities*. For example the predefined {sponge} *Music Player Demon (MPD) Service* provides a basic set of actions that enable you to *use the Sponge Remote mobile app as a remote music player*. So, I encourage you to read other articles about Sponge.
->>>>>>> 23e72122c8eb887ad895a7fadf9ce1d0afe72d31
 
 Link to the https://medium.com/@marcin.pas/creating-a-new-service-with-sponge-and-the-sponge-remote-mobile-app-b030ce2d5805[Medium article].

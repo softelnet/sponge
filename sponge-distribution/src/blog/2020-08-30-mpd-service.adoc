@@ -91,7 +91,7 @@ image::blog/03_130_connections_activate.png[width=300,pdfwidth=35%,scaledwidth=3
 You are navigated back to the *Actions* page.
 
 == Open the remote music player
-Now you can see the Sponge *actions related to the Music Player Deamon* in the `MPD` tab.
+Now you can see the Sponge *actions related to the Music Player Daemon* in the `MPD` tab.
 
 image::blog/03_140_actions.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
 
@@ -130,3 +130,5 @@ Congratulations! Now you are familiar with *using Sponge and the Sponge Remote m
 One interesting fact is that you can use *the same* Sponge Remote mobile app to connect to such *diverse* Sponge services as for example a remote music player. In this article a *predefined Sponge service* has been presented. For more information on *creating your own services* see the {homepage}/2020/08/25/creating-new-service.html[Creating a New Service with Sponge and the Sponge Remote Mobile App] article.
 
 In the forthcoming articles about Sponge you will learn how Sponge with the Sponge Remote mobile app can help you with your other daily activities (both personal and professional).
+
+Link to the https://medium.com/@marcin.pas/using-sponge-and-the-sponge-remote-mobile-app-as-a-remote-hi-fi-music-player-4e27735fb706[Medium article].

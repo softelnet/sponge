@@ -129,7 +129,7 @@ A type properties should be set using the builder-style methods, e.g. `StringTyp
 |A metadata that specifies if a value can be submitted (i.e. written ad hoc), for example in an action, irrespectively of an action call.
 
 |`lazyUpdate`
-|A flag that specifies if a provided value should be updated lazily in a client code when a dependency changes. This flag is experimental.
+|A flag that specifies if a provided value should be updated lazily in a client code, i.e. its previous value should be retained until the new value is obtained. This flag is experimental.
 
 |`current`
 |A flag that specifies if a current value in a client code should be passed to a server when its new value is to be provided.
@@ -276,9 +276,9 @@ def onBeforeLoad():
 ----
 
 === Annotated values
-Annotated values are wrapped by an instance of the `AnnotatedValue` class. An annotated value allows passing a value label, a value description, features, type label and type description along with the value, e.g. `AnnotatedValue(imageBytes).withValueLabel("Image1").withFeatures({"filename":imageFilename})`, where the first property is the annotated value, the second is the value label and the third is the features map that may be used in a client code.
+An annotated value is wrapped by an instance of the `AnnotatedValue` class. An annotated value allows passing a value label, a value description, features, type label and type description along with the value, e.g. `AnnotatedValue(imageBytes).withValueLabel("Image1").withFeatures({"filename":imageFilename})`, where the first property is the annotated value, the second is the value label and the third is the features map that may be used in a client code.
 
-Annotated values can be used to alter a static, metadata-drived behavior of a client application. For example they are especially useful as provided action argument values that carry additional, dynamic data as features.
+Annotated values can be used to alter static, metadata-drived behavior of a client application. For example they are especially useful as provided action argument values that carry additional, dynamic data as features.
 
 .Annotated value properties
 [cols="1,3"]

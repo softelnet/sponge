@@ -410,15 +410,21 @@ An interactive form provides live update in a GUI and an instant modifications o
 
 The following example shows a very simple MPD player implemented as a {sponge} action. A change in an MPD server state generates a {sponge} event. Such event is subscribed by the action in the mobile application and causes the action to refresh its arguments. On the other hand, a change made by a user in the GUI will cause such argument to be submitted to the server.
 
+image::screens/mobile/action_mpd_player_main.png[title="The MPD player action",width=300,pdfwidth=35%,scaledwidth=35%]
+
+image::screens/mobile/action_mpd_player_context_actions.png[title="The context actions",width=300,pdfwidth=35%,scaledwidth=35%]
+
 .Interactive form example
 [source,python]
 ----
 include::{rootDir}/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc/mpd_mpc_player.py[lines=5..-1]
 ----
 
-image::screens/mobile/action_mpd_player_main.png[title="The MPD player action",width=300,pdfwidth=35%,scaledwidth=35%]
-
-image::screens/mobile/action_mpd_player_context_actions.png[title="The context actions",width=300,pdfwidth=35%,scaledwidth=35%]
+.Provided arguments in an interactive form
+[source,python]
+----
+include::{rootDir}/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc/mpd_mpc_player_runtime.py[lines=5..-1]
+----
 
 === Geographical map
 `ListType` elements can be shown on a geographical map if its list type has the `geoMap` feature configured.
@@ -614,7 +620,7 @@ If a provided argument is `submittable` with the `responsive` feature set to `tr
 |`icon`
 |`IconInfo` or `String`
 |Action
-|An action icon. The icon feature converter supports an instance of `IconInfo` or `String` (an icon name) as a value. The supported set of icon names is limited to the https://cdn.materialdesignicons.com/5.3.45/[material design icons (currently v5.3.45)].
+|An action icon. The icon feature converter supports an instance of `IconInfo` or `String` (an icon name) as a value. The supported set of icon names is limited to the https://cdn.materialdesignicons.com/5.6.55/[material design icons (currently v5.6.55)]. _Note that some icons may become deprecated from version to version._
 
 |`icon`
 |`IconInfo` or `String`

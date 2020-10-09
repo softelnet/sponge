@@ -1,0 +1,115 @@
+= Creating a generic Flutter based mobile app in Python, Groovy, Ruby or JavaScript with Sponge Remote
+:page-layout: post
+:page-author: Marcin Paś
+:page-liquid:
+
+Is the title of this article a clickbait? Well, _yes and no, if you forgive the expression_, as https://www.imdb.com/title/tt0080306/[Sir Humphrey Appleby] would have said. Let's try to investigate it.
+
+https://sponge.openksavi.org[*Sponge*] is an https://github.com/softelnet/sponge[*open-source*], Java-based *action and event processing service*.
+
+https://sponge.openksavi.org/mobile/[*Sponge Remote*] is an https://github.com/softelnet/sponge_remote[*open-source*] *mobile application* built with *Flutter*, that provides an *https://stackoverflow.com/questions/802050/what-is-opinionated-software[opinionated], minimalistic, generic user interface to call remote Sponge actions*.
+
+If you are not familiar with *Sponge* and the *Sponge Remote* mobile app, please read the {homepage}/2020/08/14/getting-started.html[Getting Started with Sponge and the Sponge Remote Mobile App] article first.
+
+The *Sponge Remote* mobile app *is available on Google Play*.
+
+[subs="attributes"]
+++++
+<p>
+<a href='http://play.google.com/store/apps/details?id=org.openksavi.sponge.remote.mobile'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="25%"/></a>
+</p>
+++++
+
+_Google Play and the Google Play logo are trademarks of Google LLC._
+
+== Concepts
+
+image::blog/04_100_mobile_architecture.png[align="center"]
+
+A Sponge *action* can be implemented in *Python*, *Groovy*, *Ruby* or *JavaScript* (or *Java*, *Kotlin* if you prefer a compiled language) in a Sponge service (i.e. on the server side). An action that is to be visible in the mobile app has to have *metadata*, like a name, label, arguments, argument data types, etc.
+
+One of the key concepts here is that every Sponge action, action argument and data type can be configured in order to be rendered by a *compatible GUI rendering engine*.
+
+Currently, there is only one implementation of such rendering engine. It is the https://github.com/softelnet/sponge_flutter_api[*Sponge Flutter API*] that _renders_ action metadata as a Flutter screen and handles user interactions. The rendered GUI is *generic and opinionated* and *the out of the box options of customizing are intentionally very limited*.
+
+In other words, the heavy lifting is done by the Sponge Flutter API, so to get things done *you only have to write a Sponge action in the backend Sponge service*.
+
+The Sponge Flutter API is used by the Sponge Remote mobile app, that allows you to *connect to any Sponge service* and run published actions. The mobile app retrieves action metadata from the Sponge service via the Remote API (compatible with JSON-RPC 2.0).
+
+To recap, *you don't write your mobile app code in Python directly*. Your *action (e.g. Python) code along with its metadata* is *stored and executed on the server side* (in a Sponge service) but can be *indirectly (remotely) interacted with on a mobile device*. One might see here some distant similarity to HTML and a web browser that renders it. However, generally Sponge Remote is intended for more straightforward or narrow use cases.
+
+TIP: If you need to have a more customized GUI, you can write your own Flutter app from scratch using only a subset of the Sponge Flutter API functionalities. An example of such app is https://play.google.com/store/apps/details?id=org.openksavi.sponge.digits[Sponge Digits] (https://github.com/softelnet/sponge_flutter_app_digit_recognition[source codes]). _The Sponge Flutter API library is currently in alpha phase and supports only a limited set of Sponge features._
+
+CAUTION: Sponge is written in Java so the Python interpreter used by Sponge is Jython, which is compatible with Python 2.7. You could use CPython (that would run in another process), but it would require you to configute the Py4J plugin. Ruby interpreter is JRuby, JavaScript interpreter is Nashorn.
+
+== Why Flutter?
+I've been using many GUI SDKs and frameworks in the span of over 25 years: XView and Motif for X Windows; MFC library for MS Windows; Oracle Forms; Java AWT, Java Swing, Java SWT; Struts, JSF, Tapestry, Wicket, GWT, Angular for web; Windows Mobile SDK, Android SDK for mobile; and so on. They have features that make them more or less enjoyable to code with. They utilize many common patterns or similar solutions.
+
+After the Sponge engine had been created, I started wondering if there could be an easy way to create a mobile or web GUI to remotely call Sponge actions. Just to use the actions in a user friendly way, for example for connecting to an IoT device that runs Sponge. At that time, as to GUI development, I had the most experience in GWT for web and Android SDK for mobile. So, at the first glance, one of them would have been the first choice for me. However, GWT was losing popularity so the Android SDK seemed a way to go.
+
+Then some day I stumbled upon an article about *Flutter*. I really liked the way of writing GUI in the code, hot reload and the overall architecture of the framework. Another advantage was that with a single codebase the app could be run both on Android and on iOS. Moreover after some time there was an announcement of the plans to support web and desktop as well. It meant that most of the codebase would be able to run on more platforms without much effort. For me, that sealed the deal.
+
+After about two years of developing in Flutter I must say that it is the best GUI framework I've ever had a pleasure to use. Flutter gives so much fun that it encourages to create more functionalities in the app. I can even say that Flutter is one of the main reasons the Sponge Remote mobile app and the associated underlying Dart libraries have been created as they are.
+
+The Dart language became one of my favourites, along with Java, Python and Lisp. In a generic code (e.g. that recursively creates a widget tree for a Sponge data type hierarchy) the Dart's `dynamic` type is very helpful, because it spares the pain of writing a lot of boilerplate code. It is dangerous of course, but not more than, let's say, a corresponding Python code.
+
+== How does it work?
+As an example of a Sponge action that is renderable in the Sponge Remote app let's take the Music Player described in the {homepage}/2020/08/30/mpd-service.html[Using Sponge and the Sponge Remote Mobile App as a Remote Hi-Fi Music Player] article.
+
+image::blog/03_150_action_player.png[width=300,pdfwidth=35%,scaledwidth=35%,align="center"]
+
+I won't get into much details here in order to focus only on the outline of the main Music Player action. Firstly, let's see the action code.
+
+[source,python]
+----
+include::../{rootDir}/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc/mpd_mpc_player.py[lines=5..-1]
+----
+
+The `MpdPlayer` class defines the Music Player *action*. The *action arguments* `"song"`, `"album"`, `"date"`, `"position"`, `"time"`, `"prev"`, `"play"`, `"next"`, `"volume"`, `"repeat"`, `"single"`, `"random"` and `"consume"` are mapped to the *corresponding Flutter widgets*. Each *argument is defined as a Sponge data type instance*.
+
+Actions and arguments can have *features*, represented as a map of names to values. Features provide additional information and they are flexible in a sense that they are not a part of the static API.
+
+A *provided argument* (i.e. one that has the `withProvided` method call) is interactive because it can be refreshed from or submitted to the remote service. This interactiveness is handled by the `onProvideArgs` callback method of the action.
+
+An *annotated argument* is wrapped by an instance of the `AnnotatedValue` class. An annotated argument allows passing a value label, a value description, features, type label and type description along with the argument value. Annotated arguments can be used to alter static, metadata-drived behavior of a client application.
+
+*Provided argument metadata*:
+
+* The `withOverwrite` flag specifies if an argument value modified in the mobile app by a user can be overwritten by a value obtained from the remote service. It is important for arguments which state can be changed on the server side independently from the mobile app.
+* The `withSubmittable` method specifies if an argument value should be submitted to the service at once after being changed by the user (e.g. `"position"` or `"volume"`).
+* The `withLazyUpdate` flag tells if an argument should be updated lazily in the GUI, i.e. its previous value should be shown until a new value is obtained from the server. It is necessary if an argument is annotated and its annotated value changes the label, e.g. `"volume"`. Otherwise the GUI widget would show a stale label for a short amount of time.
+
+The `"group"` feature allows grouping of the arguments in the GUI, e.g. the navigation arguments `"prev"`, `"play"` and `"next"`.
+
+*Action metadata*:
+
+* The `withNonCallable` flag makes the action non callable, i.e. it behaves as an interactive form.
+* The `withActivatable` flag tells that the action has the `onIsActive` callback method, that will be called remotely before the action is displayed. If the method returns `False` the action won't be shown. In this case the method checks if the `mpc` commandline client can connect to the MPD daemon.
+
+*Action features*:
+
+* The `"refreshEvents"` feature is a list of Sponge events that will cause the GUI to refresh. Events are pushed to the mobile app via gRPC.
+* The `"contextActions"` feature is a list of Sponge actions that are to be shown in the action menu. You can navigate to any of these actions in the GUI. An action screen can be closed by swiping right.
+
+The `mpc` variable is an instance of the {sourcesUrl}/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc/mpd_mpc_service.py[`Mpc`] class.
+
+The supported *icon names* (e.g. `"pac-man"`) correspond to the https://cdn.materialdesignicons.com/5.3.45/[material design icons].
+
+The *`onProvideArgs` callback method* essentially modifies the MPD state by using the argument values submitted by the user and then sets the values of arguments that are to be provided, i.e. sent back to the mobile app. The code that implements provisioning of arguments is placed in the `MpdPlayerProvideArgsRuntime` class.
+
+[source,python]
+----
+include::../{rootDir}/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc/mpd_mpc_player_runtime.py[lines=5..-1]
+----
+
+You may notice that there is a lot of conditional statements. They are needed in order to handle only a subset of supported provided arguments while processing one request.
+
+This is only a simplified description of the Music Player action, but I believe that it gives a feel of how the _rendering_ and handling of an action looks like in the Sponge Remote mobile app.
+
+For more details see the source codes of the https://github.com/softelnet/sponge/tree/master/sponge-kb/sponge-kb-mpd-mpc/src/main/resources/sponge/mpd-mpc[`sponge-kb-mpd-mpc`] knowledge base.
+
+== Summary
+So, you can create a generic Flutter based mobile app in Python, Groovy, Ruby or JavaScript using Sponge and Sponge Remote, but you must be aware that it would be suitable only for specific use cases.
+
+You could also start with a generic, opinionated Sponge Remote mobile app and then switch to your own Flutter app based on the Sponge Flutter API. Your Flutter app would connect to the same Sponge service and use the same actions as Sponge Remote but the actions would be handled differently in the GUI.
+

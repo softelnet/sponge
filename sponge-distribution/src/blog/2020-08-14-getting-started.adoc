@@ -24,7 +24,7 @@ After reading this article *you will learn*:
 _Currently Sponge Remote is in alpha phase and supports only a limited set of Sponge features._
 
 == What are the problems that Sponge and Sponge Remote solve?
-Suppose you have an idea of a service that everyone (or just you) needs. :-) 
+Suppose you had an idea of a service that everyone (or just you) needed. :-) 
 
 The service that can be *used* (managed, monitored or whatever) *remotely via a mobile app*. The service that will be available in the Internet or only in a local network.
 
