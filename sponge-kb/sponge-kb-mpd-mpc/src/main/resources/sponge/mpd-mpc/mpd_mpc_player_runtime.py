@@ -7,7 +7,8 @@ class MpdPlayerProvideArgsRuntime:
     def __init__(self, context):
         self.context = context
 
-        # An instance of the Mpc class that is a wrapper for the mpc (MPD client) commandline calls.
+        # An instance of the Mpc class that is a wrapper for the mpc (MPD client)
+        # commandline calls.
         self.mpc = sponge.getVariable("mpc")
 
         # Stores and caches the latest MPD status as returned by the mpc command.
@@ -35,7 +36,8 @@ class MpdPlayerProvideArgsRuntime:
         # Enter the critical section.
         self.mpc.lock.lock()
         try:
-            # Pass the context as an argument to the private methods in order to simplify the code.
+            # Pass the context as an argument to the private methods in order
+            # to simplify the code.
 
             # Submit arguments sent from the client.
             self.__submitArgs(self.context)
@@ -58,7 +60,8 @@ class MpdPlayerProvideArgsRuntime:
             if provider:
                 try:
                     # Cache the current MPD status.
-                    self.status = provider(context.current[name].value if context.current[name] else None)
+                    self.status = provider(
+                        context.current[name].value if context.current[name] else None)
                 except:
                     sponge.logger.warn("Submit error: {}", sys.exc_info()[1])
 
@@ -73,7 +76,8 @@ class MpdPlayerProvideArgsRuntime:
         """Provides the song info arguments to the client.
         """
         # Read the current song from the MPD daemon only if necessary.
-        currentSong = self.mpc.getCurrentSong() if any(arg in context.provide for arg in ["song", "album" , "date"]) else None
+        currentSong = self.mpc.getCurrentSong() if any(
+            arg in context.provide for arg in ["song", "album" , "date"]) else None
 
         if "song" in context.provide:
             context.provided["song"] = ProvidedValue().withValue(
@@ -92,9 +96,11 @@ class MpdPlayerProvideArgsRuntime:
         if "position" in context.provide or "context" in context.submit:
             context.provided["position"] = ProvidedValue().withValue(
                 AnnotatedValue(self.mpc.getPositionByPercentage(self.__getStatus()))
-                    .withFeature("enabled", self.mpc.isStatusPlayingOrPaused(self.__getStatus())))
+                    .withFeature("enabled", 
+                                 self.mpc.isStatusPlayingOrPaused(self.__getStatus())))
         if "time" in context.provide:
-            context.provided["time"] = ProvidedValue().withValue(self.mpc.getTimeStatus(self.__getStatus()))
+            context.provided["time"] = ProvidedValue().withValue(
+                self.mpc.getTimeStatus(self.__getStatus()))
 
     def __provideVolumeArg(self, context):
         """Provides the volume argument to the client.
