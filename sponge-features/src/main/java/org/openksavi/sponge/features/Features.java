@@ -70,6 +70,8 @@ public final class Features {
 
     public static final String TYPE_CHARACTERISTIC_NETWORK_IMAGE = "networkImage";
 
+    public static final String TYPE_CHARACTERISTIC_URL = "url";
+
     public static final String TYPE_CHARACTERISTIC_COLOR = "color";
 
     public static final String TYPE_FILENAME = "filename";

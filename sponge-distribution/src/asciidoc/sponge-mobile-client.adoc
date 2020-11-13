@@ -922,6 +922,10 @@ A _number_ can be an integer or a floating point value.
 |`networkImage`
 |`StringType`
 |A `StringType` that represents a network image URL.
+
+|`url`
+|`StringType`
+|A `StringType` that represents an URL.
 |===
 
 ==== Widgets
