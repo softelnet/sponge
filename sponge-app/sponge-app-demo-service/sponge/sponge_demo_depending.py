@@ -16,53 +16,36 @@ class DependingArgumentsAction(Action):
         self.withFeatures({"icon":"flag", "showClear":True, "showCancel":True})
     def onCall(self, continent, country, city, river, weather):
         return "There is a city {} in {} in {}. The river {} flows in {}. It's {}.".format(city, country, continent, river, continent, weather.lower())
+    def onInit(self):
+        self.countries = {
+            "Africa":["Nigeria", "Ethiopia", "Egypt"],
+            "Asia":["China", "India", "Indonesia"],
+            "Europe":["Russia", "Germany", "Turkey"]
+        }
+        self.cities = {
+            "Nigeria":["Lagos", "Kano", "Ibadan"],
+            "Ethiopia":["Addis Ababa", "Gondar", "Mek'ele"],
+            "Egypt":["Cairo", "Alexandria", "Giza"],
+            "China":["Guangzhou", "Shanghai", "Chongqing"],
+            "India":["Mumbai", "Delhi", "Bangalore"],
+            "Indonesia":["Jakarta", "Surabaya", "Medan"],
+            "Russia":["Moscow", "Saint Petersburg", "Novosibirsk"],
+            "Germany":["Berlin", "Hamburg", "Munich"],
+            "Turkey":["Istanbul", "Ankara", "Izmir"]
+        }
+        self.rivers = {
+             "Africa":["Nile", "Chambeshi", "Niger"],
+            "Asia":["Yangtze", "Yellow River", "Mekong"],
+            "Europe":["Volga", "Danube", "Dnepr"]
+        }
     def onProvideArgs(self, context):
         if "continent" in context.provide:
             context.provided["continent"] = ProvidedValue().withValueSet(["Africa", "Asia", "Europe"])
         if "country" in context.provide:
-            continent = context.current["continent"]
-            if continent == "Africa":
-                countries = ["Nigeria", "Ethiopia", "Egypt"]
-            elif continent == "Asia":
-                countries = ["China", "India", "Indonesia"]
-            elif continent == "Europe":
-                countries = ["Russia", "Germany", "Turkey"]
-            else:
-                countries = []
-            context.provided["country"] = ProvidedValue().withValueSet(countries)
+            context.provided["country"] = ProvidedValue().withValueSet(self.countries.get(context.current["continent"], []))
         if "city" in context.provide:
-            country = context.current["country"]
-            if country == "Nigeria":
-                cities = ["Lagos", "Kano", "Ibadan"]
-            elif country == "Ethiopia":
-                cities = ["Addis Ababa", "Gondar", "Mek'ele"]
-            elif country == "Egypt":
-                cities = ["Cairo", "Alexandria", "Giza"]
-            elif country == "China":
-                cities = ["Guangzhou", "Shanghai", "Chongqing"]
-            elif country == "India":
-                cities = ["Mumbai", "Delhi", "Bangalore"]
-            elif country == "Indonesia":
-                cities = ["Jakarta", "Surabaya", "Medan"]
-            elif country == "Russia":
-                cities = ["Moscow", "Saint Petersburg", "Novosibirsk"]
-            elif country == "Germany":
-                cities = ["Berlin", "Hamburg", "Munich"]
-            elif country == "Turkey":
-                cities = ["Istanbul", "Ankara", "Izmir"]
-            else:
-                cities = []
-            context.provided["city"] = ProvidedValue().withValueSet(cities)
+            context.provided["city"] = ProvidedValue().withValueSet(self.cities.get(context.current["country"], []))
         if "river" in context.provide:
-            continent = context.current["continent"]
-            if continent == "Africa":
-                rivers = ["Nile", "Chambeshi", "Niger"]
-            elif continent == "Asia":
-                rivers = ["Yangtze", "Yellow River", "Mekong"]
-            elif continent == "Europe":
-                rivers = ["Volga", "Danube", "Dnepr"]
-            else:
-                rivers = []
-            context.provided["river"] = ProvidedValue().withValueSet(rivers)
+            context.provided["river"] = ProvidedValue().withValueSet(self.rivers.get(context.current["continent"], []))
         if "weather" in context.provide:
             context.provided["weather"] = ProvidedValue().withValueSet(["Sunny", "Cloudy", "Raining", "Snowing"])

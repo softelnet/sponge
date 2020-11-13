@@ -254,7 +254,7 @@ image::screens/mobile/event_send.png[title="Action that sends events",width=300,
 === Sub-actions
 Sub-actions provide references to actions associated with a parent entity (e.g. a parent action, a record). A sub-action is represented by the `SubAction` class.
 
-Sub-actions support argument and result substitutions.
+Sub-actions support simple argument and result substitutions.
 
 .Sub-action properties
 [cols="1,3"]
@@ -922,6 +922,10 @@ A _number_ can be an integer or a floating point value.
 |`networkImage`
 |`StringType`
 |A `StringType` that represents a network image URL.
+
+|`url`
+|`StringType`
+|A `StringType` that represents an URL.
 |===
 
 ==== Widgets

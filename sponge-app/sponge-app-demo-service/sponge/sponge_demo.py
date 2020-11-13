@@ -256,3 +256,20 @@ class LowerCaseHello(Action):
         self.withArg(StringType("text").withLabel("Text to lower case")).withResult(StringType().withLabel("Lower case text"))
     def onCall(self, text):
         return "Hello " + remoteApiServer.session.userAuthentication.userContext.name + ": " + text.lower()
+
+class UrlAction(Action):
+    def onConfigure(self):
+        self.withLabel("URL action").withDescription("Shows an URL.")
+        self.withArgs([
+            StringType("webUrl").withLabel("Web URL").withFeatures({"characteristic":"url"}).withReadOnly()
+                .withDefaultValue("https://sponge.openksavi.org"),
+            StringType("smsUrl").withLabel("SMS URL").withFeatures({"characteristic":"url"}).withReadOnly().withAnnotated()
+                .withDefaultValue(AnnotatedValue("sms:123456789").withValueLabel("Send SMS to the author")),
+            StringType("phoneUrl").withLabel("Phone URL").withFeatures({"characteristic":"url"}).withReadOnly().withAnnotated()
+                .withDefaultValue(AnnotatedValue("tel:123456789").withValueLabel("Phone the author")),
+            StringType("mailUrl").withLabel("Mail URL").withFeatures({"characteristic":"url"}).withReadOnly().withAnnotated()
+                .withDefaultValue(AnnotatedValue("mailto:opensource@softelnet.com?subject=Hello&body=Hello%20Sponge")
+                                  .withValueLabel("Send email to the authors")),
+            StringType("youtubeUrl").withLabel("Youtube URL").withFeatures({"characteristic":"url"}).withReadOnly().withAnnotated()
+                .withDefaultValue(AnnotatedValue("vnd.youtube://fq4N0hgOWzU").withValueLabel("Introducing Flutter")),
+        ]).withNonCallable()

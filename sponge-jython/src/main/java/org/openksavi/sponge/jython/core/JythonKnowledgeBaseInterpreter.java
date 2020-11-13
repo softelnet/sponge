@@ -84,6 +84,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         String scripEngineName = SCRIPT_ENGINE_NAME;
         ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName(scripEngineName);
 
+        Validate.notNull("ScriptingEngine %s is null", scripEngineName);
         Validate.isInstanceOf(Compilable.class, scriptEngine, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
         Validate.isInstanceOf(Invocable.class, scriptEngine, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
 
