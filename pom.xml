@@ -118,7 +118,7 @@
         <bitronix.version>2.1.4</bitronix.version>
         <atomikos.version>4.0.4</atomikos.version>
 
-        <jetty.version>9.4.31.v20200723</jetty.version>
+        <jetty.version>9.4.34.v20201102</jetty.version>
 
         <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.2.3</logback.version>
