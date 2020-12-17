@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.openksavi.sponge.SpongeConstants;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.kb.KnowledgeBaseScript;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
@@ -34,7 +35,7 @@ import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 public class DefaultScriptKnowledgeBase extends BaseKnowledgeBase implements ScriptKnowledgeBase {
 
     /** The flag indicating if the knowledge base should be cleared on reload. */
-    private boolean clearOnReload = false;
+    private boolean clearOnReload = SpongeConstants.DEFAULT_KNOWLEDGE_BASE_CLEAR_ON_RELOAD;
 
     /** Knowledge base scripts. */
     private List<KnowledgeBaseScript> scripts = Collections.synchronizedList(new ArrayList<>());

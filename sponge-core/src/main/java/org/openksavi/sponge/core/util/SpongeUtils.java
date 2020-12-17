@@ -1040,4 +1040,21 @@ public abstract class SpongeUtils {
 
         return indexes;
     }
+
+    public static String removeLeadingExceptionClassNamesFromMessage(Throwable e) {
+        String message = e.getMessage();
+
+        if (message != null) {
+            List<Throwable> causes = ExceptionUtils.getThrowableList(e);
+
+            for (Throwable cause : causes) {
+                String causeClassNamePrefix = cause.getClass().getName() + ": ";
+                while (message.startsWith(causeClassNamePrefix)) {
+                    message = message.substring(causeClassNamePrefix.length());
+                }
+            }
+        }
+
+        return message;
+    }
 }

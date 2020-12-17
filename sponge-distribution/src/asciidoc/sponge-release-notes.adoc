@@ -8,6 +8,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 [discrete]
 == 1.16.4 (not released yet)
 * Added `url` to the supported `characteristic` feature values.
+* Exception class names are now removed from messages of exceptions originating in Jython-based knowledge bases.
 * Documentation updates.
 * Dependencies upgrade.
 
