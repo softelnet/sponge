@@ -254,7 +254,7 @@ image::screens/mobile/event_send.png[title="Action that sends events",width=300,
 === Sub-actions
 Sub-actions provide references to actions associated with a parent entity (e.g. a parent action, a record). A sub-action is represented by the `SubAction` class.
 
-Sub-actions support argument and result substitutions.
+Sub-actions support simple argument and result substitutions.
 
 .Sub-action properties
 [cols="1,3"]

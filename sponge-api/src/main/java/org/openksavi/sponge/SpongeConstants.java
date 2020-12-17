@@ -33,6 +33,8 @@ public final class SpongeConstants {
     /** Default rule event event mode: first. */
     public static final EventMode DEFAULT_RULE_EVENT_MODE = EventMode.FIRST;
 
+    public static final boolean DEFAULT_KNOWLEDGE_BASE_CLEAR_ON_RELOAD = false;
+
     private SpongeConstants() {
     }
 }

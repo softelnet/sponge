@@ -26,6 +26,7 @@ import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -84,6 +85,7 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         String scripEngineName = SCRIPT_ENGINE_NAME;
         ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName(scripEngineName);
 
+        Validate.notNull("ScriptingEngine %s is null", scripEngineName);
         Validate.isInstanceOf(Compilable.class, scriptEngine, "ScriptingEngine %s doesn't implement Compilable", scripEngineName);
         Validate.isInstanceOf(Invocable.class, scriptEngine, "ScriptingEngine %s doesn't implement Invocable", scripEngineName);
 
@@ -188,6 +190,11 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
 
     @Override
     public String getSpecificExceptionMessage(Throwable e) {
+        // Remove unnecessary leading exception class names added by Jython.
+        if (e.getMessage() != null && (e instanceof ScriptException || e instanceof PyException)) {
+            return SpongeUtils.removeLeadingExceptionClassNamesFromMessage(e);
+        }
+
         // Jython exception message may be null.
         if (e.getMessage() == null && e instanceof PyException) {
             return e.toString();

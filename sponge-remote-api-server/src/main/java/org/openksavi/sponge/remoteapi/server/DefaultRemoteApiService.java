@@ -338,6 +338,8 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
     protected ActionAdapter getActionAdapterForRequest(String actionName, ProcessorQualifiedVersion qualifiedVersion,
             UserContext userContext) {
+        Validate.notNull(actionName, "The action name is not set", actionName);
+
         ActionAdapter actionAdapter = getEngine().getActionManager().getActionAdapter(actionName);
 
         Validate.notNull(actionAdapter, "The action %s doesn't exist", actionName);
@@ -471,11 +473,10 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
     @Override
     public ProvideActionArgsResponse provideActionArgs(ProvideActionArgsRequest request) {
-        ActionAdapter actionAdapter = null;
-
         Validate.notNull(request, "The request must not be null");
         UserContext userContext = authenticateRequest(request);
-        actionAdapter = getActionAdapterForRequest(request.getParams().getName(), request.getParams().getQualifiedVersion(), userContext);
+        ActionAdapter actionAdapter =
+                getActionAdapterForRequest(request.getParams().getName(), request.getParams().getQualifiedVersion(), userContext);
 
         Map<String, ProvidedValue<?>> provided = getEngine().getOperations().provideActionArgs(actionAdapter.getMeta().getName(),
                 new ProvideArgsParameters(request.getParams().getProvide(), request.getParams().getSubmit(),

@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.SpongeConstants;
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
@@ -154,8 +155,10 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
             if (knowledgeBase instanceof ScriptKnowledgeBase) {
                 ((ScriptKnowledgeBase) knowledgeBase).setClearOnReload(clearOnReload);
             } else {
-                logger.warn("The knowledge base {} clearOnReload property is ignored because the knowledge base is not script-based",
-                        knowledgeBase.getName());
+                if (clearOnReload != SpongeConstants.DEFAULT_KNOWLEDGE_BASE_CLEAR_ON_RELOAD) {
+                    logger.warn("The knowledge base {} clearOnReload property is ignored because the knowledge base is not script-based",
+                            knowledgeBase.getName());
+                }
             }
         }
 
