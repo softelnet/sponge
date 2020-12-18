@@ -73,8 +73,8 @@
         <javax.inject.version>1</javax.inject.version>
 
         <jython.version>2.7.2</jython.version>
-        <jruby.version>9.2.13.0</jruby.version>
-        <groovy.version>3.0.6</groovy.version>
+        <jruby.version>9.2.14.0</jruby.version>
+        <groovy.version>3.0.7</groovy.version>
         <kotlin.version>1.4.10</kotlin.version>
 
         <commons-lang3.version>3.11</commons-lang3.version>
