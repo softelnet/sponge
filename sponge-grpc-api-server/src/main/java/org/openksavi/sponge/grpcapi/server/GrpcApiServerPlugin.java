@@ -23,10 +23,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 import io.grpc.Server;
-import io.grpc.netty.GrpcSslContexts;
-import io.grpc.netty.NettyServerBuilder;
+import io.grpc.netty.shaded.io.grpc.netty.GrpcSslContexts;
+import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
+import io.grpc.netty.shaded.io.netty.handler.ssl.SslContextBuilder;
 import io.grpc.protobuf.services.ProtoReflectionService;
-import io.netty.handler.ssl.SslContextBuilder;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
