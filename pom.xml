@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openksavi.sponge</groupId>
     <artifactId>sponge-parent</artifactId>
-    <version>1.16.5-SNAPSHOT</version>
+    <version>1.16.5</version>
     <name>Sponge - Parent</name>
     <description>Sponge Parent POM</description>
     <url>https://sponge.openksavi.org</url>
@@ -55,8 +55,8 @@
     </issueManagement>
 
     <properties>
-        <release.version>1.16.4</release.version>
-        <release.date>2021-01-19</release.date>
+        <release.version>1.16.5</release.version>
+        <release.date>2021-01-20</release.date>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -95,7 +95,7 @@
         <spring-security.version>5.4.2</spring-security.version>
         <camel.version>3.7.0</camel.version>
         <awaitility.version>4.0.3</awaitility.version>
-        <jline.version>3.19.0</jline.version>
+        <jline.version>3.16.0</jline.version>
         <py4j.version>0.10.9.1</py4j.version>
         <grovepi.version>0.1.0-SNAPSHOT</grovepi.version>
         <pi4j.version>1.2</pi4j.version>
