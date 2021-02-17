@@ -54,6 +54,6 @@ public class SpongeProducer extends DefaultProducer {
             actionName = action != null ? action : CamelProducerAction.NAME;
         }
 
-        exchange.getIn().setBody(engine.getOperations().call(actionName, Arrays.asList(exchange)));
+        engine.getOperations().call(actionName, Arrays.asList(exchange));
     }
 }

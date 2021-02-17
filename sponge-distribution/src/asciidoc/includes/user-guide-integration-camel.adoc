@@ -185,7 +185,7 @@ Send me to the Sponge
 ----
 
 === Camel producer action
-Camel producer action will be invoked by {sponge} synchronously when a Camel exchange comes to the {sponge} engine. The result returned by this action is placed as the body of the Camel _IN_ message. So it can be used by the next endpoint in the route if there is any.
+A Camel producer action will be invoked by {sponge} synchronously when a Camel exchange comes to the {sponge} engine. An action behaviour is similar to Camel processor. It is recommended that a Camel producer action implement the `org.openksavi.sponge.camel.CamelAction` interface, that specifies the `void onCall(Exchange exchange)` method.
 
 NOTE: To avoid any misconception please note that events in the Output Event Queue are not sent to the Camel route.
 
@@ -203,7 +203,7 @@ You could provide a custom implementation of a Camel producer action in two ways
 ----
 class CustomAction(Action):
     def onCall(self, exchange):
-        return "OK"
+        exchange.message.body = "OK"
 ----
 +
 .Camel route that sets the action in the endpoint URI

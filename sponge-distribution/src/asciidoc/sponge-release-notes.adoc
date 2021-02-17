@@ -6,7 +6,8 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
-== 1.16.6 (not released yet)
+== 1.17.0 (not released yet)
+* API change: Camel producer action `onCall` specification has been changed from `Object onCall(Exchange)` to `void onCall(Exchange)`.
 * Added support in the `SpringSpongeEngine` for automatically enabling sigleton processors that are registered as Spring beans.
 
 [discrete]

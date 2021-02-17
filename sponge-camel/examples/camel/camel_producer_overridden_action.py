@@ -4,7 +4,7 @@ Camel integration
 """
 
 from java.util.concurrent.atomic import AtomicBoolean
-from org.openksavi.sponge.camel import CamelUtils
+from org.openksavi.sponge.camel import CamelAction, CamelUtils
 
 def onInit():
     # Variables for assertions only
@@ -25,6 +25,7 @@ class UnusedCamelTrigger(Trigger):
         print event.body
         sponge.getVariable("sentCamelMessage_" + event.name).set(True)
 
-class CamelProducerAction(Action):
+class CamelProducerAction(Action, CamelAction):
     def onCall(self, exchange):
-        return sponge.event(camel.makeInputEvent("camelEvent", exchange)).send()
+        event = sponge.event(camel.makeInputEvent("camelEvent", exchange)).send()
+        exchange.message.body = event

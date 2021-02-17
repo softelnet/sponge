@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 The Sponge authors.
+ * Copyright 2016-2021 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,10 @@ package org.openksavi.sponge.camel;
 
 import org.apache.camel.Exchange;
 
-import org.openksavi.sponge.event.Event;
-import org.openksavi.sponge.java.JAction;
-
 /**
- * Default producer action.
+ * A Camel integration action interface.
  */
-public class CamelProducerAction extends JAction implements CamelAction {
+public interface CamelAction {
 
-    public static final String NAME = "CamelProducerAction";
-
-    @Override
-    public void onConfigure() {
-        withName(NAME);
-    }
-
-    @Override
-    public void onCall(Exchange exchange) {
-        Event event = getSponge().event(CamelUtils.getOrCreateInputEvent(getSponge().getEngine(), exchange)).send();
-
-        exchange.getMessage().setBody(event);
-    }
+    void onCall(Exchange exchange);
 }
