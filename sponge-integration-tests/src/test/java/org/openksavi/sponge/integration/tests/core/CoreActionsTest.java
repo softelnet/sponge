@@ -58,6 +58,8 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.WrappedException;
 import org.openksavi.sponge.examples.CustomObject;
 import org.openksavi.sponge.features.Features;
+import org.openksavi.sponge.java.JAction;
+import org.openksavi.sponge.java.JKnowledgeBase;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.test.util.TestUtils;
 import org.openksavi.sponge.type.AnyType;
@@ -1540,6 +1542,50 @@ public class CoreActionsTest {
             assertEquals(text.toUpperCase(), engine.getOperations().call(String.class, "ActionDelegateWithNamedArgs", args));
         } finally {
             engine.shutdown();
+        }
+    }
+
+    @Test
+    public void testActionAsInstance() {
+        SpongeEngine engine = DefaultSpongeEngine.builder().knowledgeBase(new TestKnowledgeBase()).build();
+        engine.startup();
+
+        try {
+            String result = engine.getOperations().call(String.class, "TestAction", Arrays.asList("text"));
+
+            assertEquals("text", result);
+        } finally {
+            engine.shutdown();
+        }
+    }
+
+    public static class TestKnowledgeBase extends JKnowledgeBase {
+
+        private static final Logger logger = LoggerFactory.getLogger(TestKnowledgeBase.class);
+
+        public TestKnowledgeBase(String name) {
+            super(name);
+        }
+
+        public TestKnowledgeBase() {
+            //
+        }
+
+        @Override
+        public void onLoad() {
+            getSponge().enableJava(new TestAction());
+        }
+
+        @Override
+        public void onStartup() {
+            logger.debug("onStartup");
+        }
+    }
+
+    public static class TestAction extends JAction {
+
+        public String onCall(String text) {
+            return text;
         }
     }
 }

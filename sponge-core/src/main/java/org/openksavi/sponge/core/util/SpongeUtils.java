@@ -90,6 +90,7 @@ import org.openksavi.sponge.ProcessorOperations;
 import org.openksavi.sponge.ProcessorQualifiedName;
 import org.openksavi.sponge.SpongeConstants;
 import org.openksavi.sponge.SpongeException;
+import org.openksavi.sponge.action.Action;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.config.Configuration;
 import org.openksavi.sponge.core.engine.EngineConstants;
@@ -102,6 +103,7 @@ import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.engine.WrappedException;
 import org.openksavi.sponge.event.ControlEvent;
 import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.filter.Filter;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
@@ -111,6 +113,7 @@ import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.rule.EventCondition;
 import org.openksavi.sponge.rule.Rule;
 import org.openksavi.sponge.rule.RuleEventSpec;
+import org.openksavi.sponge.trigger.Trigger;
 import org.openksavi.sponge.type.AnyType;
 import org.openksavi.sponge.type.BinaryType;
 import org.openksavi.sponge.type.BooleanType;
@@ -1056,5 +1059,9 @@ public abstract class SpongeUtils {
         }
 
         return message;
+    }
+
+    public static boolean isSingleton(Processor<?> processor) {
+        return processor instanceof Action || processor instanceof Filter || processor instanceof Trigger;
     }
 }

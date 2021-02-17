@@ -58,6 +58,12 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
         engine.getProcessorManager().enable(knowledgeBase, processorClass);
     }
 
+    @SuppressWarnings("rawtypes")
+    @Override
+    public void enableJava(Processor processorInstance) {
+        engine.getProcessorManager().enable(knowledgeBase, processorInstance);
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void enableJavaAll(Class<?>... processorClasses) {
@@ -75,6 +81,12 @@ public class BaseKnowledgeBaseEngineOperations extends BaseEngineOperations impl
     @Override
     public void disableJava(Class<? extends Processor> processorClass) {
         engine.getProcessorManager().disable(knowledgeBase, processorClass);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public void disableJava(Processor processorInstance) {
+        engine.getProcessorManager().disable(knowledgeBase, processorInstance);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

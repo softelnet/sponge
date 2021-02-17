@@ -118,13 +118,21 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
     @Override
     public void enable(KnowledgeBase knowledgeBase, Object processorClass) {
         Validate.notNull(processorClass, "Processor class cannot be null");
-        doEnable(knowledgeBase, new ClassProcessorProvider(processorClass), null);
+        doEnable(knowledgeBase, createProcessorProvider(processorClass), null);
     }
 
     @Override
     public <T extends Processor<?>> void enable(KnowledgeBase knowledgeBase, ProcessorBuilder<T> processorBuilder) {
         Validate.notNull(processorBuilder, "Processor builder cannot be null");
         doEnable(knowledgeBase, new BuilderProcessorProvider(processorBuilder), null);
+    }
+
+    protected ProcessorProvider createProcessorProvider(Object processorClassOrInstance) {
+        if (processorClassOrInstance instanceof Processor) {
+            return new SingleInstanceProcessorProvider((Processor) processorClassOrInstance);
+        }
+
+        return new ClassProcessorProvider(processorClassOrInstance);
     }
 
     protected void doEnable(KnowledgeBase knowledgeBase, ProcessorProvider processorProvider, ProcessorType requiredType) {
@@ -162,17 +170,23 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
         doDisable(knowledgeBase, processorClass, null);
     }
 
-    protected void doDisable(KnowledgeBase knowledgeBase, Object processorClass, ProcessorType requiredType) {
+    protected void doDisable(KnowledgeBase knowledgeBase, Object processorClassOrInstance, ProcessorType requiredType) {
         lock.lock();
         try {
-            ProcessorProvider processorProvider = new ClassProcessorProvider(processorClass);
-            // Creating temporary instance of a processor to resolve its type.
-            InitialProcessorInstance initialInstance = processorProvider.createInitialProcessorInstance(knowledgeBase, Processor.class);
+            if (processorClassOrInstance instanceof Processor) {
+                Processor processor = (Processor) processorClassOrInstance;
 
-            BaseProcessorAdapter adapter = createAdapter(initialInstance.getProcessor(), requiredType, processorProvider);
-            bindAdapter(knowledgeBase, initialInstance.getName(), initialInstance.getProcessor(), adapter);
+                getRegistrationHandler(processor.getAdapter().getType()).deregister(processor.getAdapter().getMeta().getName());
+            } else {
+                ProcessorProvider processorProvider = new ClassProcessorProvider(processorClassOrInstance);
+                // Creating temporary instance of a processor to resolve its type.
+                InitialProcessorInstance initialInstance = processorProvider.createInitialProcessorInstance(knowledgeBase, Processor.class);
 
-            getRegistrationHandler(adapter.getType()).deregister(adapter.getMeta().getName());
+                BaseProcessorAdapter adapter = createAdapter(initialInstance.getProcessor(), requiredType, processorProvider);
+                bindAdapter(knowledgeBase, initialInstance.getName(), initialInstance.getProcessor(), adapter);
+
+                getRegistrationHandler(adapter.getType()).deregister(adapter.getMeta().getName());
+            }
         } finally {
             lock.unlock();
         }
@@ -243,27 +257,27 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
 
     @Override
     public void enableAction(KnowledgeBase knowledgeBase, Object actionClass) {
-        doEnable(knowledgeBase, new ClassProcessorProvider(actionClass), ProcessorType.ACTION);
+        doEnable(knowledgeBase, createProcessorProvider(actionClass), ProcessorType.ACTION);
     }
 
     @Override
     public void enableFilter(KnowledgeBase knowledgeBase, Object filterClass) {
-        doEnable(knowledgeBase, new ClassProcessorProvider(filterClass), ProcessorType.FILTER);
+        doEnable(knowledgeBase, createProcessorProvider(filterClass), ProcessorType.FILTER);
     }
 
     @Override
     public void enableTrigger(KnowledgeBase knowledgeBase, Object triggerClass) {
-        doEnable(knowledgeBase, new ClassProcessorProvider(triggerClass), ProcessorType.TRIGGER);
+        doEnable(knowledgeBase, createProcessorProvider(triggerClass), ProcessorType.TRIGGER);
     }
 
     @Override
     public void enableRule(KnowledgeBase knowledgeBase, Object ruleClass) {
-        doEnable(knowledgeBase, new ClassProcessorProvider(ruleClass), ProcessorType.RULE);
+        doEnable(knowledgeBase, createProcessorProvider(ruleClass), ProcessorType.RULE);
     }
 
     @Override
     public void enableCorrelator(KnowledgeBase knowledgeBase, Object correlatorClass) {
-        doEnable(knowledgeBase, new ClassProcessorProvider(correlatorClass), ProcessorType.CORRELATOR);
+        doEnable(knowledgeBase, createProcessorProvider(correlatorClass), ProcessorType.CORRELATOR);
     }
 
     @Override

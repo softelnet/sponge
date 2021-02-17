@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
@@ -29,8 +30,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.openksavi.sponge.ProcessorNotFoundException;
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.config.ConfigException;
 import org.openksavi.sponge.engine.SpongeEngine;
+import org.openksavi.sponge.event.Event;
+import org.openksavi.sponge.java.JAction;
+import org.openksavi.sponge.java.JRule;
 import org.openksavi.sponge.spring.SpringPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -140,6 +146,158 @@ public class SpringTest {
             fail("Exception expected");
         } catch (Exception e) {
             assertTrue(e.getCause() instanceof ConfigException);
+        } finally {
+            if (ctx != null) {
+                ctx.close();
+            }
+        }
+    }
+
+    @Configuration
+    public static class BeanProcessorsTestConfig {
+
+        @Bean
+        public SpongeEngine spongeEngine() {
+            return SpringSpongeEngine.builder().plugin(springPlugin()).build();
+        }
+
+        @Bean
+        public SpringPlugin springPlugin() {
+            return new SpringPlugin();
+        }
+
+        @Bean
+        public TestAction testAction() {
+            return new TestAction();
+        }
+    }
+
+    public static class TestAction extends JAction {
+
+        public String onCall(String text) {
+            return text;
+        }
+    }
+
+    @Test
+    public void testSpringProcessorBeans() {
+        AnnotationConfigApplicationContext ctx = null;
+
+        try {
+            ctx = new AnnotationConfigApplicationContext(BeanProcessorsTestConfig.class);
+
+            ctx.start();
+
+            SpongeEngine engine = ctx.getBean(SpongeEngine.class);
+
+            String result = engine.getOperations().call(String.class, "TestAction", Arrays.asList("text"));
+
+            assertEquals("text", result);
+        } finally {
+            if (ctx != null) {
+                ctx.close();
+            }
+        }
+    }
+
+    @Configuration
+    public static class BeanProcessorsErrorTestConfig {
+
+        @Bean
+        public SpongeEngine spongeEngine() {
+            return SpringSpongeEngine.builder().plugin(springPlugin()).build();
+        }
+
+        @Bean
+        public SpringPlugin springPlugin() {
+            return new SpringPlugin();
+        }
+
+        @Bean
+        public TestRule testRule() {
+            return new TestRule();
+        }
+    }
+
+    public static class TestRule extends JRule {
+
+        @Override
+        public void onConfigure() {
+            withEvents("e1", "e2");
+        }
+
+        @Override
+        public void onRun(Event event) {
+        }
+    }
+
+    @Test
+    public void testSpringProcessorBeansError() {
+        AnnotationConfigApplicationContext ctx = null;
+
+        try {
+            ctx = new AnnotationConfigApplicationContext(BeanProcessorsErrorTestConfig.class);
+
+            ctx.start();
+            fail("Exception expected");
+        } catch (Exception e) {
+            assertTrue(e.getCause() instanceof SpongeException);
+        } finally {
+            if (ctx != null) {
+                ctx.close();
+            }
+        }
+    }
+
+    @Configuration
+    public static class BeanProcessorsDisableConfig {
+
+        @Bean
+        public SpongeEngine spongeEngine() {
+            return SpringSpongeEngine.builder().plugin(springPlugin()).build();
+        }
+
+        @Bean
+        public SpringPlugin springPlugin() {
+            return new SpringPlugin();
+        }
+
+        @Bean
+        public TestDisableAction testAction() {
+            return new TestDisableAction();
+        }
+    }
+
+    public static class TestDisableAction extends JAction {
+
+        public String onCall(String text) {
+            return text;
+        }
+    }
+
+    @Test
+    public void testSpringProcessorBeansDisable() {
+        AnnotationConfigApplicationContext ctx = null;
+
+        try {
+            ctx = new AnnotationConfigApplicationContext(BeanProcessorsDisableConfig.class);
+
+            ctx.start();
+
+            SpongeEngine engine = ctx.getBean(SpongeEngine.class);
+
+            String actionName = "TestDisableAction";
+
+            engine.getOperations().call(String.class, actionName, Arrays.asList("text"));
+
+            engine.getOperations().disableJava(ctx.getBean(TestDisableAction.class));
+
+            engine.getOperations().call(String.class, actionName, Arrays.asList("text"));
+
+            fail("Exception expected");
+        } catch (Exception e) {
+            assertTrue(e instanceof ProcessorNotFoundException);
+            assertEquals("Action TestDisableAction not found", e.getMessage());
         } finally {
             if (ctx != null) {
                 ctx.close();

@@ -32,6 +32,10 @@ public class SpringEngineBuilder extends EngineBuilder<SpringSpongeEngine> {
         super(engine);
 
         knowledgeBaseFileProvider(new SpringKnowledgeBaseFileProvider());
+
+        engine.addOnStartupListener(() -> {
+            engine.tryEnableProcessorBeans();
+        });
     }
 
     /**

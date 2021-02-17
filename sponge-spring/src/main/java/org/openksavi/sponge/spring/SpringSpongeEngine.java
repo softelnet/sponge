@@ -16,17 +16,25 @@
 
 package org.openksavi.sponge.spring;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.SmartLifecycle;
 
+import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 
 /**
  * A Spring aware Sponge engine. Startup and shutdown is managed by Spring.
  */
 public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationContextAware, SmartLifecycle {
+
+    private static final Logger logger = LoggerFactory.getLogger(SpringSpongeEngine.class);
 
     private ApplicationContext applicationContext;
 
@@ -89,5 +97,22 @@ public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationC
     @Override
     public int getPhase() {
         return phase;
+    }
+
+    public void tryEnableProcessorBeans() {
+        if (applicationContext != null) {
+            enableProcessorBeans();
+        } else {
+            logger.warn("A Spring application context is not set. Processor beans will not be scanned.");
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public void enableProcessorBeans() {
+        Validate.notNull(applicationContext, "A Spring application context is not set");
+
+        Map<String, Processor> processors = applicationContext.getBeansOfType(Processor.class);
+
+        processors.values().forEach((processor) -> getOperations().enableJava(processor));
     }
 }

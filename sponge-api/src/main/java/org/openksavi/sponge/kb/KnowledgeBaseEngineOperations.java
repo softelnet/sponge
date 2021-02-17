@@ -54,6 +54,14 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
     void enableJava(Class<? extends Processor> processorClass);
 
     /**
+     * Enables the Java-based processor.
+     *
+     * @param processorInstance Java-based processor instance.
+     */
+    @SuppressWarnings("rawtypes")
+    void enableJava(Processor processorInstance);
+
+    /**
      * Enables Java-based processors.
      *
      * @param processorClasses Java-based processor classes.
@@ -74,6 +82,14 @@ public interface KnowledgeBaseEngineOperations extends EngineOperations {
      */
     @SuppressWarnings("rawtypes")
     void disableJava(Class<? extends Processor> processorClass);
+
+    /**
+     * Disables the Java-based processor.
+     *
+     * @param processorInstance Java-based processor instance.
+     */
+    @SuppressWarnings("rawtypes")
+    void disableJava(Processor processorInstance);
 
     /**
      * Disables Java-based processors.
