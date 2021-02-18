@@ -410,6 +410,18 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     }
 
     /**
+     * Sets the default knowledge base name.
+     *
+     * @param defaultKnowledgeBaseName the default knowledge base name.
+     * @return this builder.
+     */
+    public EngineBuilder<T> defaultKnowledgeBaseName(String defaultKnowledgeBaseName) {
+        engine.setDefaultKnowledgeBaseName(defaultKnowledgeBaseName);
+
+        return this;
+    }
+
+    /**
      * Returns the engine default parameters. This method allows changing the values of default parameters.
      *
      * @return the engine default parameters

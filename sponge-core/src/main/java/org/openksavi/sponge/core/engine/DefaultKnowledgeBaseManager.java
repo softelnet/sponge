@@ -107,7 +107,7 @@ public class DefaultKnowledgeBaseManager extends BaseEngineModule implements Kno
         super("KnowledgeBaseManager", engine);
 
         // Add default, Java-based knowledge base (mainly for plugin registration).
-        defaultKnowledgeBase = new DefaultKnowledgeBase();
+        defaultKnowledgeBase = new DefaultKnowledgeBase(engine.getDefaultKnowledgeBaseName());
         knowledgeBases.put(defaultKnowledgeBase.getName(), defaultKnowledgeBase);
 
         knowledgeBaseScriptProviderMapping = new KnowledgeBaseScriptProviderMapping(engine);

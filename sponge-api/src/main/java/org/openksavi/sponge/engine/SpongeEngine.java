@@ -631,4 +631,18 @@ public interface SpongeEngine extends EngineModule {
      * @return a new process instance.
      */
     ProcessInstance createProcessInstance(ProcessConfiguration configuration);
+
+    /**
+     * Returns the default knowledge base name.
+     *
+     * @return the default knowledge base name.
+     */
+    String getDefaultKnowledgeBaseName();
+
+    /**
+     * Sets the default knowledge base name.
+     *
+     * @param defaultKnowledgeBaseName the default knowledge base name.
+     */
+    void setDefaultKnowledgeBaseName(String defaultKnowledgeBaseName);
 }

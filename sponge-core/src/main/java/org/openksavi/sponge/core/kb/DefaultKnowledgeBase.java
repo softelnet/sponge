@@ -20,9 +20,13 @@ import org.openksavi.sponge.java.JKnowledgeBase;
 
 public final class DefaultKnowledgeBase extends JKnowledgeBase {
 
-    public static final String NAME = "_DEFAULT_";
+    public static final String NAME = "default";
+
+    public DefaultKnowledgeBase(String name) {
+        super(name);
+    }
 
     public DefaultKnowledgeBase() {
-        super(NAME);
+        this(NAME);
     }
 }

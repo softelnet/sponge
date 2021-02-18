@@ -9,6 +9,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 == 1.17.0 (not released yet)
 * API change: Camel producer action `onCall` specification has been changed from `Object onCall(Exchange)` to `void onCall(Exchange)`.
 * Added support in the `SpringSpongeEngine` for automatically enabling sigleton processors that are registered as Spring beans.
+* Added support for changing a default knowledge base name.
 
 [discrete]
 == 1.16.5 (2021-01-20)

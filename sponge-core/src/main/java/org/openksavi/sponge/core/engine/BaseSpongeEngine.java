@@ -44,6 +44,7 @@ import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.core.VersionInfo;
 import org.openksavi.sponge.core.engine.processing.QueuedEventSetProcessorDurationStrategy;
 import org.openksavi.sponge.core.kb.BaseKnowledgeBaseEngineOperations;
+import org.openksavi.sponge.core.kb.DefaultKnowledgeBase;
 import org.openksavi.sponge.core.kb.DefaultKnowledgeBaseFileProvider;
 import org.openksavi.sponge.core.spi.DefaultEngineModuleProvider;
 import org.openksavi.sponge.core.spi.DefaultEventQueueProvider;
@@ -213,6 +214,9 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
 
     /** The engine UUID. */
     private String uuid = SpongeUtils.getRandomUuidString();
+
+    /** The default knowledge base name. */
+    private String defaultKnowledgeBaseName = DefaultKnowledgeBase.NAME;
 
     /**
      * Creates a new engine. Engine module provider will be loaded using Java ServiceLoader.
@@ -1099,5 +1103,13 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @Override
     public ProcessInstance createProcessInstance(ProcessConfiguration configuration) {
         return new DefaultProcessInstance(this, configuration);
+    }
+
+    public String getDefaultKnowledgeBaseName() {
+        return defaultKnowledgeBaseName;
+    }
+
+    public void setDefaultKnowledgeBaseName(String defaultKnowledgeBaseName) {
+        this.defaultKnowledgeBaseName = defaultKnowledgeBaseName;
     }
 }

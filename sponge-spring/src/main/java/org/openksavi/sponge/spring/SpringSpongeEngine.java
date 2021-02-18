@@ -28,6 +28,7 @@ import org.springframework.context.SmartLifecycle;
 
 import org.openksavi.sponge.Processor;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
+import org.openksavi.sponge.kb.KnowledgeBase;
 
 /**
  * A Spring aware Sponge engine. Startup and shutdown is managed by Spring.
@@ -41,6 +42,8 @@ public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationC
     private boolean autoStartup = true;
 
     private int phase = DEFAULT_PHASE;
+
+    private String processorBeansKnowledgeBaseName;
 
     /**
      * Creates a new engine.
@@ -99,6 +102,14 @@ public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationC
         return phase;
     }
 
+    public String getProcessorBeansKnowledgeBaseName() {
+        return processorBeansKnowledgeBaseName;
+    }
+
+    public void setProcessorBeansKnowledgeBaseName(String processorBeansKnowledgeBaseName) {
+        this.processorBeansKnowledgeBaseName = processorBeansKnowledgeBaseName;
+    }
+
     public void tryEnableProcessorBeans() {
         if (applicationContext != null) {
             enableProcessorBeans();
@@ -113,6 +124,10 @@ public class SpringSpongeEngine extends BaseSpongeEngine implements ApplicationC
 
         Map<String, Processor> processors = applicationContext.getBeansOfType(Processor.class);
 
-        processors.values().forEach((processor) -> getOperations().enableJava(processor));
+        KnowledgeBase knowledgeBase =
+                processorBeansKnowledgeBaseName != null ? getKnowledgeBaseManager().getKnowledgeBase(processorBeansKnowledgeBaseName)
+                        : getKnowledgeBaseManager().getDefaultKnowledgeBase();
+
+        processors.values().forEach((processor) -> getProcessorManager().enable(knowledgeBase, processor));
     }
 }

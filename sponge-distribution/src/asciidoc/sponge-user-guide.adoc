@@ -1051,7 +1051,33 @@ Actions should be created only when there is a need to provide some functionalit
 === Python
 
 ==== Limitations
-Note that Jython 2.7.1 has a few bugs that could in some cases impact the stability of the system, e.g.: http://bugs.jython.org/issue2487.
+
+===== Spring Boot jar
+If you run your application with a Spring Boot jar, you should add the following dependency to `requiresUnpack` to prevent a ScriptEngine error: `ScriptingEngine is null`. For more details see https://stackoverflow.com/questions/34144715/jython-module-not-found-when-packaged-with-spring-boot/48468037[jython-module-not-found-when-packaged-with-spring-boot].
+
+[source,xml,subs="verbatim,attributes"]
+----
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                    <requiresUnpack>
+                        <dependency>
+                            <groupId>org.python</groupId>
+                            <artifactId>jython-slim</artifactId>
+                        </dependency>
+                    </requiresUnpack>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+----
 
 [discrete]
 ==== Maven configuration
