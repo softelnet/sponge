@@ -17,6 +17,7 @@
 package org.openksavi.sponge.type;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,6 +163,15 @@ public class RecordType extends DataType<Map<String, Object>> {
         refreshFieldLookupMap();
 
         return this;
+    }
+    /**
+     * Adds new fields. Replaces an already existing field that has the same name.
+     *
+     * @param fields the fields.
+     * @return this type.
+     */
+    public RecordType withFields(DataType... fields) {
+        return withFields(Arrays.asList(fields));
     }
 
     /**

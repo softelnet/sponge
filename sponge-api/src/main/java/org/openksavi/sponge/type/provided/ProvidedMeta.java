@@ -85,6 +85,10 @@ public class ProvidedMeta {
         return this;
     }
 
+    public ProvidedMeta withDependencies(String... dependencies) {
+        return withDependencies(Arrays.asList(dependencies));
+    }
+
     public ProvidedMeta withDependency(String dependency) {
         return withDependencies(Arrays.asList(dependency));
     }

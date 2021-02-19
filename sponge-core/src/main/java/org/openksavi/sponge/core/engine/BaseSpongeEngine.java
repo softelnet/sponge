@@ -1105,10 +1105,12 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
         return new DefaultProcessInstance(this, configuration);
     }
 
+    @Override
     public String getDefaultKnowledgeBaseName() {
         return defaultKnowledgeBaseName;
     }
 
+    @Override
     public void setDefaultKnowledgeBaseName(String defaultKnowledgeBaseName) {
         this.defaultKnowledgeBaseName = defaultKnowledgeBaseName;
     }
