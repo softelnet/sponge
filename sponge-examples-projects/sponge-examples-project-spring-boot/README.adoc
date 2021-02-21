@@ -1,0 +1,5 @@
+= Sponge with Spring Boot example
+
+This is the source code for the Sponge with Spring Boot example.
+
+The sample password for user `admin` configured in the `password.txt` is: `password`.

@@ -24,5 +24,6 @@
         <module>sponge-examples-project-remote-api-client-test-service</module>
         <module>sponge-examples-project-iot-rpi</module>
         <module>sponge-examples-project-user-management</module>
+        <module>sponge-examples-project-spring-boot</module>
     </modules>
  </project>
