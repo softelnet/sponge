@@ -929,7 +929,7 @@ public class CoreActionsTest {
 
         try {
             assertEquals("myActions", engine.getActionMeta("MyAction1").getCategory());
-            assertEquals("myActions", engine.getActionMeta("MyAction2").getCategory());
+            assertEquals("yourActions", engine.getActionMeta("MyAction2").getCategory());
             assertEquals("yourActions", engine.getActionMeta("YourAction1").getCategory());
             assertNull(engine.getActionMeta("OtherAction").getCategory());
 

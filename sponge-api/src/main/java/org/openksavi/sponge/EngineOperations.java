@@ -24,7 +24,6 @@ import org.openksavi.sponge.action.ActionMeta;
 import org.openksavi.sponge.action.IsActionActiveContext;
 import org.openksavi.sponge.action.ProvideArgsParameters;
 import org.openksavi.sponge.correlator.CorrelatorMeta;
-import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
@@ -38,7 +37,6 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.util.DataTypeSupplier;
-import org.openksavi.sponge.util.ProcessorPredicate;
 import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessInstanceBuilder;
@@ -561,23 +559,6 @@ public interface EngineOperations {
      * @return the categories.
      */
     List<CategoryMeta> getCategories();
-
-    /**
-     * Dynamically selects processors that are to assigned to the category.
-     *
-     * @param categoryName the category name.
-     * @param processorType the processor type. If {@code null}, all processor types will be considered.
-     * @param predicate the processor predicate.
-     */
-    void selectCategory(String categoryName, ProcessorType processorType, ProcessorPredicate predicate);
-
-    /**
-     * Dynamically selects processors of all types that are to assigned to the category.
-     *
-     * @param categoryName the category name.
-     * @param predicate the processor predicate.
-     */
-    void selectCategory(String categoryName, ProcessorPredicate predicate);
 
     /**
      * Returns the action metadata. Throws exception if not found.

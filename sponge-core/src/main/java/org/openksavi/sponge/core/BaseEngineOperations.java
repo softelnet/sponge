@@ -33,7 +33,6 @@ import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.event.DefaultEventDefinition;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.correlator.CorrelatorMeta;
-import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.event.Event;
 import org.openksavi.sponge.event.EventClonePolicy;
 import org.openksavi.sponge.event.EventDefinition;
@@ -46,7 +45,6 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.util.DataTypeSupplier;
-import org.openksavi.sponge.util.ProcessorPredicate;
 import org.openksavi.sponge.util.ValueHolder;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessInstanceBuilder;
@@ -442,16 +440,6 @@ public class BaseEngineOperations implements EngineOperations {
     @Override
     public List<CategoryMeta> getCategories() {
         return engine.getCategories();
-    }
-
-    @Override
-    public void selectCategory(String categoryName, ProcessorType processorType, ProcessorPredicate predicate) {
-        engine.selectCategory(categoryName, processorType, predicate);
-    }
-
-    @Override
-    public void selectCategory(String categoryName, ProcessorPredicate predicate) {
-        engine.selectCategory(categoryName, predicate);
     }
 
     @Override

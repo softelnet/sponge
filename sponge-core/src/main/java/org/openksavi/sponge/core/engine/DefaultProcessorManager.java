@@ -243,6 +243,10 @@ public class DefaultProcessorManager extends BaseEngineModule implements Process
             SpongeUtils.doInWrappedException(adapter.getKnowledgeBase(), () -> processor.onInit(),
                     SpongeUtils.getProcessorQualifiedName(adapter) + ".onInit");
         }
+
+        if (processor.getAdapter().getMeta().getCategory() == null) {
+            SpongeUtils.applyCategory(adapter);
+        }
     }
 
     protected Optional<Map.Entry<ProcessorType, RegistrationHandler>> findAlreadyRegisteredByDifferentType(ProcessorAdapter adapter) {

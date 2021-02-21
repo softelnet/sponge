@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.CategoryMeta;
 import org.openksavi.sponge.EventProcessorAdapter;
-import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.action.ActionAdapter;
 import org.openksavi.sponge.action.ActionMeta;
@@ -95,7 +94,6 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.PatternMatcher;
-import org.openksavi.sponge.util.ProcessorPredicate;
 import org.openksavi.sponge.util.SpongeApiUtils;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessInstance;
@@ -954,21 +952,6 @@ public class BaseSpongeEngine extends BaseEngineModule implements SpongeEngine {
     @Override
     public List<CategoryMeta> getCategories() {
         return Collections.unmodifiableList(new ArrayList<>(categories.values()));
-    }
-
-    @Override
-    public void selectCategory(String categoryName, ProcessorType processorType, ProcessorPredicate predicate) {
-        Validate.notNull(getCategory(categoryName), "Category %s not found", categoryName);
-
-        getProcessors().stream()
-                .filter(adapter -> (processorType == null || processorType == adapter.getType())
-                        && !(adapter instanceof EventSetProcessorAdapterGroup))
-                .filter(adapter -> predicate.test(adapter.getProcessor())).forEach(adapter -> adapter.getMeta().setCategory(categoryName));
-    }
-
-    @Override
-    public void selectCategory(String categoryName, ProcessorPredicate predicate) {
-        selectCategory(categoryName, null, predicate);
     }
 
     @Override

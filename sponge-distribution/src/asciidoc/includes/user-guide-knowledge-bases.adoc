@@ -241,12 +241,6 @@ def onStartup():
 |`get<_Processor_>Meta(String processorName)`
 A set of methods that return processor metadata.
 
-|`void selectCategory(String categoryName, ProcessorType processorType, ProcessorPredicate predicate)`
-|Dynamically selects processors that are to assigned to the category.
-
-|`void selectCategory(String categoryName, ProcessorPredicate predicate)`
-|Dynamically selects processors of supported types that are to assigned to the category.
-
 |`void addEventType(String eventTypeName, RecordType dataType)`
 |Registers an event type as a record.
 |===
@@ -550,19 +544,19 @@ The builder-style methods in the metadata classes follow the naming convention `
 == Categories
 Processors may be assigned to registered categories. Categories could be used in a client code to group processors independently of knowledge bases. This feature can be useful if you don't want to group processor by knowledge bases which requires more resources because each knowledge base has its own interpreter.
 
-A registered category can be manually assigned to a processor in the processor configuration callback method `onConfigure` or dynamically by selecting processors that are to assigned to the category. The latter option could assign for example all processors defined in several knowledge bases to a single category in one line. Dynamic selection overwrites manual assigning.
+A registered category will be automatically assigned to a corresponding processor when it is being enabled by using the category predicate. However if a processor has its category already set in the processor configuration callback method `onConfigure` it will not be changed.
 
-NOTE: The dynamic selection of processors is supported only for actions, filters and triggers. It is not supported for event set processors.
+NOTE: The automatic assigning of categories to processors is supported only for actions, filters and triggers. It is not supported for event set processors.
 
-.Example of registering categories and dynamically selecting processor categories by knowledge bases.
+Categories can be registered by the `addCategories` or `addCategory` methods. They should be invoked before enabling of processors, i.e. in most cases in the `onInit` callback function.
+
+.Example of registering categories.
 [source,python]
 ----
 def onInit():
-    sponge.addCategories(CategoryMeta("basic").withLabel("Basic"), CategoryMeta("extra").withLabel("Extra"))
-
-def onLoad():
-    sponge.selectCategory("basic", lambda processor: processor.kb.name in ("demo", "engine"))
-    sponge.selectCategory("extra", ProcessorType.ACTION, lambda processor: processor.kb.name in ("demoExtra"))
+    sponge.addCategories(
+        CategoryMeta("basic").withLabel("Basic").withPredicate(lambda processor: processor.kb.name in ("demo", "engine")),
+        CategoryMeta("extra").withLabel("Extra").withPredicate(lambda processor: processor.kb.name in ("demoExtra"))
 ----
 
 .Example of manually assigning a processor to a category in a processor configuration.

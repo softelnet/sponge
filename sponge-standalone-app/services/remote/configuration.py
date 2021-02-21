@@ -5,8 +5,5 @@ Remote service configuration
 
 def onInit():
     sponge.addCategories(
-        CategoryMeta("service").withLabel("My Service")
+        CategoryMeta("service").withLabel("My Service").withPredicate(lambda processor: processor.kb.name.startswith("service"))
     )
-
-def onLoad():
-    sponge.selectCategory("service", lambda processor: processor.kb.name.startswith("service"))

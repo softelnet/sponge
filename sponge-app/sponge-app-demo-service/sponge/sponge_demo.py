@@ -14,25 +14,23 @@ def onInit():
         sponge.logger.info("RUNNING IN THE READ ONLY MODE")
 
     sponge.addCategories(
-        CategoryMeta("start").withLabel("Start"),
-        CategoryMeta("basic").withLabel("Basic"),
-        CategoryMeta("forms").withLabel("Forms"),
-        CategoryMeta("types").withLabel("Types"),
-        CategoryMeta("digits").withLabel("Digits"),
-        CategoryMeta("admin").withLabel("Admin"),
-        CategoryMeta("plus").withLabel("Extra"),
+        CategoryMeta("start").withLabel("Start")
+            .withPredicate(lambda processor: processor.kb.name in ("start")),
+        CategoryMeta("basic").withLabel("Basic")
+            .withPredicate(lambda processor: processor.kb.name in ("demo", "engine")),
+        CategoryMeta("forms").withLabel("Forms")
+            .withPredicate(lambda processor: processor.kb.name in ("demoForms", "demoFormsLibraryArgs", "demoFormsLibraryRecord")),
+        CategoryMeta("types").withLabel("Types")
+            .withPredicate(lambda processor: processor.kb.name in ("types")),
+        CategoryMeta("digits").withLabel("Digits")
+            .withPredicate(lambda processor: processor.kb.name in ("digits")),
+        CategoryMeta("admin").withLabel("Admin")
+            .withPredicate(lambda processor: processor.kb.name in ("admin")),
+        CategoryMeta("plus").withLabel("Extra")
+            .withPredicate(lambda processor: processor.kb.name in ("demoPlus", "digitsLearn")),
         CategoryMeta("events").withLabel("Events")
+            .withPredicate(lambda processor: processor.kb.name in ("events", "eventsNotification", "eventsMemo", "eventsCounter"))
     )
-
-def onLoad():
-    sponge.selectCategory("start", lambda processor: processor.kb.name in ("start"))
-    sponge.selectCategory("basic", lambda processor: processor.kb.name in ("demo", "engine"))
-    sponge.selectCategory("forms", lambda processor: processor.kb.name in ("demoForms", "demoFormsLibraryArgs", "demoFormsLibraryRecord"))
-    sponge.selectCategory("types", lambda processor: processor.kb.name in ("types"))
-    sponge.selectCategory("digits", lambda processor: processor.kb.name in ("digits"))
-    sponge.selectCategory("admin", lambda processor: processor.kb.name in ("admin"))
-    sponge.selectCategory("plus", lambda processor: processor.kb.name in ("demoPlus", "digitsLearn"))
-    sponge.selectCategory("events", lambda processor: processor.kb.name in ("events", "eventsNotification", "eventsMemo", "eventsCounter"))
 
 class UpperCase(Action):
     def onConfigure(self):

@@ -85,7 +85,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.openksavi.sponge.CategoryMeta;
+import org.openksavi.sponge.EventSetProcessorAdapterGroup;
 import org.openksavi.sponge.Processor;
+import org.openksavi.sponge.ProcessorAdapter;
 import org.openksavi.sponge.ProcessorOperations;
 import org.openksavi.sponge.ProcessorQualifiedName;
 import org.openksavi.sponge.SpongeConstants;
@@ -1063,5 +1065,22 @@ public abstract class SpongeUtils {
 
     public static boolean isSingleton(Processor<?> processor) {
         return processor instanceof Action || processor instanceof Filter || processor instanceof Trigger;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static void applyCategory(CategoryMeta categoryMeta, ProcessorAdapter processorAdapter) {
+        if (processorAdapter instanceof EventSetProcessorAdapterGroup) {
+            return;
+        }
+
+        if (categoryMeta.getPredicate().test(processorAdapter.getProcessor())) {
+            processorAdapter.getMeta().setCategory(categoryMeta.getName());
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static void applyCategory(ProcessorAdapter processorAdapter) {
+        processorAdapter.getKnowledgeBase().getEngineOperations().getCategories()
+            .forEach(categoryMeta -> applyCategory(categoryMeta, processorAdapter));
     }
 }

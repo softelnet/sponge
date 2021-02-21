@@ -4,12 +4,12 @@ Action category selection
 """
 
 def onInit():
-    sponge.addCategories(CategoryMeta("myActions").withLabel("My actions").withDescription("My actions description"),
-                         CategoryMeta("yourActions").withLabel("Your actions").withDescription("Your actions description"),
-                         CategoryMeta("notUsedCategory"))
-def onLoad():
-    sponge.selectCategory("myActions", ProcessorType.ACTION, lambda processor: processor.meta.name in ("MyAction1", "MyAction2"))
-    sponge.selectCategory("yourActions", lambda processor: processor.meta.name in ("YourAction1") and processor.kb.name == "kb")
+    sponge.addCategories(
+        CategoryMeta("myActions").withLabel("My actions").withDescription("My actions description")
+            .withPredicate(lambda processor: processor.adapter.type == ProcessorType.ACTION and processor.meta.name in ("MyAction1", "MyAction2")),
+        CategoryMeta("yourActions").withLabel("Your actions").withDescription("Your actions description")
+            .withPredicate(lambda processor: processor.meta.name in ("YourAction1") and processor.kb.name == "kb"),
+        CategoryMeta("notUsedCategory"))
 
 class MyAction1(Action):
     def onConfigure(self):

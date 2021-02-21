@@ -44,7 +44,6 @@ import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.util.DataTypeSupplier;
 import org.openksavi.sponge.util.PatternMatcher;
-import org.openksavi.sponge.util.ProcessorPredicate;
 import org.openksavi.sponge.util.process.ProcessConfiguration;
 import org.openksavi.sponge.util.process.ProcessInstance;
 
@@ -475,23 +474,6 @@ public interface SpongeEngine extends EngineModule {
      * @return the categories.
      */
     List<CategoryMeta> getCategories();
-
-    /**
-     * Dynamically selects processors that are to assigned to the category.
-     *
-     * @param categoryName the category name.
-     * @param processorType the processor type. If {@code null}, all processor types will be considered.
-     * @param predicate the processor predicate.
-     */
-    void selectCategory(String categoryName, ProcessorType processorType, ProcessorPredicate predicate);
-
-    /**
-     * Dynamically selects processors of all types that are to assigned to the category.
-     *
-     * @param categoryName the category name.
-     * @param predicate the processor predicate.
-     */
-    void selectCategory(String categoryName, ProcessorPredicate predicate);
 
     /**
      * Returns the action metadata. Throws exception if not found.

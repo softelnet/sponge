@@ -23,6 +23,7 @@ import org.apache.commons.lang3.Validate;
 
 import org.openksavi.sponge.util.Descriptive;
 import org.openksavi.sponge.util.HasFeatures;
+import org.openksavi.sponge.util.ProcessorPredicate;
 
 /**
  * A category metadata.
@@ -40,6 +41,9 @@ public class CategoryMeta implements Descriptive, HasFeatures {
 
     /** The category features. */
     private Map<String, Object> features = new LinkedHashMap<>();
+
+    /** The predicate for assigning processors to this category. */
+    private ProcessorPredicate predicate = (processor) -> false;
 
     @SuppressWarnings("unused")
     private CategoryMeta() {
@@ -90,6 +94,14 @@ public class CategoryMeta implements Descriptive, HasFeatures {
         this.features = new LinkedHashMap<>(features);
     }
 
+    public ProcessorPredicate getPredicate() {
+        return predicate;
+    }
+
+    public void setPredicate(ProcessorPredicate predicate) {
+        this.predicate = predicate;
+    }
+
     public CategoryMeta withLabel(String label) {
         setLabel(label);
         return this;
@@ -107,6 +119,11 @@ public class CategoryMeta implements Descriptive, HasFeatures {
 
     public CategoryMeta withFeature(String name, Object value) {
         getFeatures().put(name, value);
+        return this;
+    }
+
+    public CategoryMeta withPredicate(ProcessorPredicate predicate) {
+        setPredicate(predicate);
         return this;
     }
 }
