@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sponge xmlns="https://sponge.openksavi.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://sponge.openksavi.org https://sponge.openksavi.org/schema/config.xsd">
+
+    <properties>
+        <property name="password.file">${sponge.home}/password.txt</property>
+    </properties>
+
+    <knowledgeBases>
+        <knowledgeBase name="python">
+            <file>${sponge.home}/sponge/sponge.py</file>
+            <file>${sponge.home}/sponge/employees.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="admin" label="Admin">
+            <file>classpath:sponge/engine/engine_admin_library.py</file>
+            <file>classpath:sponge/engine/engine_public_library.py</file>
+        </knowledgeBase>
+        <knowledgeBase name="security" label="Security">
+            <file>${sponge.home}/sponge/remote_api_security.py</file>
+        </knowledgeBase>
+    </knowledgeBases>
+</sponge>
+
