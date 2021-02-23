@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openksavi.sponge.examples.project.springboot.sponge;
+package org.openksavi.sponge.springboot.remoteservice;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 
+import org.openksavi.sponge.camel.CamelPlugin;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.security.AccessService;
@@ -32,7 +36,12 @@ import org.openksavi.sponge.remoteapi.server.security.SecurityService;
 import org.openksavi.sponge.remoteapi.server.security.spring.SpringSecurityService;
 
 @Configuration
-public class SpongeRemoteConfiguration {
+@ConditionalOnClass({ RemoteApiServerPlugin.class, GrpcApiServerPlugin.class })
+@EnableConfigurationProperties(SpongeRemoteServiceProperties.class)
+public class SpongeRemoteServiceAutoConfiguration {
+
+    @Autowired
+    private SpongeRemoteServiceProperties serviceProperties;
 
     @Bean
     public RemoteApiServerPlugin spongeRemoteApiPlugin(SecurityProvider securityProvider) {
@@ -63,7 +72,7 @@ public class SpongeRemoteConfiguration {
     @ConditionalOnMissingBean(SecurityProvider.class)
     public SecurityProvider spongeSecurityProvider(SecurityService securityService, AccessService accessService,
             RequestAuthenticationService requestAuthenticationService) {
-        return new DefaultSecurityProvider(securityService,  accessService, requestAuthenticationService);
+        return new DefaultSecurityProvider(securityService, accessService, requestAuthenticationService);
     }
 
     @Bean
@@ -82,5 +91,11 @@ public class SpongeRemoteConfiguration {
     @ConditionalOnMissingBean(RequestAuthenticationService.class)
     public RequestAuthenticationService spongeRequestAuthenticationService() {
         return new DefaultRequestAuthenticationService();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(CamelPlugin.class)
+    public CamelPlugin camelPlugin() {
+        return new CamelPlugin();
     }
 }

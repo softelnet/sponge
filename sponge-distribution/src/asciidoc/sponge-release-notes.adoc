@@ -6,12 +6,13 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
-== 1.17.0 (not released yet)
+== 1.16.6 (not released yet)
 * API change: Camel producer action `onCall` specification has been changed from `Object onCall(Exchange)` to `void onCall(Exchange)`.
 * API change: Processor categories should now be added in the `onInit` callback function and must specify a predicate that will filter the processors in order to be assigned to the corresponding category. The unnecessary `selectCategory` methods have been removed.
 * Added support in the `SpringSpongeEngine` for automatically enabling sigleton processors that are registered as Spring beans.
 * Added support for changing a default knowledge base name.
 * Enhanced Spring Security integration in the Remote API server.
+* Added new artifacts for Spring Boot integration: `sponge-spring-boot-starter` and `sponge-remote-service-spring-boot-starter`.
 
 [discrete]
 == 1.16.5 (2021-01-20)

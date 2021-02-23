@@ -13,19 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openksavi.sponge.examples.project.springboot.sponge;
 
-import org.openksavi.sponge.java.JKnowledgeBase;
+package org.openksavi.sponge.springboot.remoteservice;
 
-public class BootKnowledgeBase extends JKnowledgeBase {
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-    public static final String NAME = "boot";
+@ConfigurationProperties(prefix = "sponge.remote")
+public class SpongeRemoteServiceProperties {
 
-    public BootKnowledgeBase(String name) {
-        super(name);
-    }
-
-    public BootKnowledgeBase() {
-        this(NAME);
-    }
 }

@@ -16,20 +16,17 @@
 
 package org.openksavi.sponge.examples.project.springboot;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.openksavi.sponge.springboot.remoteservice.SpongeRemoteWebSecurityConfigurerAdapter;
+
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends SpongeRemoteWebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -37,24 +34,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Enable in memory based authentication with a user named "admin".
         auth.inMemoryAuthentication().withUser("admin").password(encoder.encode("password")).roles("ADMIN");
-    }
-
-    @Bean(name = "userDetailsService")
-    @Override
-    public UserDetailsService userDetailsServiceBean() throws Exception {
-        return super.userDetailsServiceBean();
-    }
-
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        // Spring Security should completely ignore URLs starting with /sponge/
-        // Note that this URL prefix corresponds to camel.component.servlet.mapping.context-path.
-        web.ignoring().antMatchers("/sponge/**");
     }
 }

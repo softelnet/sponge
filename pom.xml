@@ -114,6 +114,8 @@
         <netty-tcnative.version>2.0.34.Final</netty-tcnative.version>
         <jmdns.version>3.5.6</jmdns.version>
 
+        <spring-boot.version>2.4.2</spring-boot.version>
+
         <activemq.version>5.14.5</activemq.version>
         <bitronix.version>2.1.4</bitronix.version>
         <atomikos.version>4.0.4</atomikos.version>
@@ -898,6 +900,24 @@
                 <artifactId>log4j-to-slf4j</artifactId>
                 <version>${log4j2.version}</version>
             </dependency>
+
+            <!-- Spring Boot dependencies versions (must be placed after other dependencies). -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Boot Camel dependencies versions (must be placed after other dependencies). -->
+            <dependency>
+                <groupId>org.apache.camel.springboot</groupId>
+                <artifactId>camel-spring-boot-dependencies</artifactId>
+                <version>${camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -967,6 +987,8 @@
                 <module>sponge-remote-api-integration-tests</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
+                <module>sponge-spring-boot-starter</module>
+                <module>sponge-remote-service-spring-boot-starter</module>
                 <module>sponge-kb</module>
                 <module>sponge-integration-tests</module>
                 <module>sponge-standalone</module>
@@ -1090,6 +1112,8 @@
                 <module>sponge-grpc-api-server</module>
                 <module>sponge-tensorflow</module>
                 <module>sponge-gsm-modem</module>
+                <module>sponge-spring-boot-starter</module>
+                <module>sponge-remote-service-spring-boot-starter</module>
                 <module>sponge-kb</module>
                 <module>sponge-standalone</module>
                 <module>sponge-bom</module>
