@@ -21,11 +21,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import org.openksavi.sponge.camel.CamelPlugin;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
+import org.openksavi.sponge.remoteapi.server.RemoteApiSettings;
+import org.openksavi.sponge.remoteapi.server.discovery.ServiceDiscoveryInfo;
 import org.openksavi.sponge.remoteapi.server.security.AccessService;
 import org.openksavi.sponge.remoteapi.server.security.DefaultRequestAuthenticationService;
 import org.openksavi.sponge.remoteapi.server.security.DefaultSecurityProvider;
@@ -34,11 +37,19 @@ import org.openksavi.sponge.remoteapi.server.security.RoleBasedAccessService;
 import org.openksavi.sponge.remoteapi.server.security.SecurityProvider;
 import org.openksavi.sponge.remoteapi.server.security.SecurityService;
 import org.openksavi.sponge.remoteapi.server.security.spring.SpringSecurityService;
+import org.openksavi.sponge.springboot.remoteservice.SpongeRemoteServiceProperties.GrpcProperties;
 
 @Configuration
 @ConditionalOnClass({ RemoteApiServerPlugin.class, GrpcApiServerPlugin.class })
 @EnableConfigurationProperties(SpongeRemoteServiceProperties.class)
+@PropertySource("classpath:/org/openksavi/sponge/springboot/remoteservice/remoteservice.properties")
 public class SpongeRemoteServiceAutoConfiguration {
+
+    private static final String COMPONENT_ID = "servlet";
+
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+
+    private static final String ROLE_ANONYMOUS = "ROLE_ANONYMOUS";
 
     @Autowired
     private SpongeRemoteServiceProperties serviceProperties;
@@ -48,15 +59,9 @@ public class SpongeRemoteServiceAutoConfiguration {
         RemoteApiServerPlugin plugin = new RemoteApiServerPlugin();
 
         // Use the servlet configuration.
-        plugin.getSettings().setComponentId("servlet");
+        plugin.getSettings().setComponentId(COMPONENT_ID);
 
-        plugin.getSettings().setAllowAnonymous(true);
-        plugin.getSettings().setIncludeDetailedErrorMessage(false);
-        plugin.getSettings().setPrettyPrint(true);
-
-        // Conform to Spring Security standards.
-        plugin.getSettings().setAdminRole("ROLE_ADMIN");
-        plugin.getSettings().setAnonymousRole("ROLE_ANONYMOUS");
+        setupRemoteApiServerPlugin(plugin.getSettings());
 
         plugin.setSecurityProvider(securityProvider);
 
@@ -65,7 +70,11 @@ public class SpongeRemoteServiceAutoConfiguration {
 
     @Bean
     public GrpcApiServerPlugin spongeGrpcApiPlugin() {
-        return new GrpcApiServerPlugin();
+        GrpcApiServerPlugin grpcPlugin = new GrpcApiServerPlugin();
+
+        setupGrpcApiServerPlugin(grpcPlugin);
+
+        return grpcPlugin;
     }
 
     @Bean
@@ -97,5 +106,81 @@ public class SpongeRemoteServiceAutoConfiguration {
     @ConditionalOnMissingBean(CamelPlugin.class)
     public CamelPlugin camelPlugin() {
         return new CamelPlugin();
+    }
+
+    protected void setupRemoteApiServerPlugin(RemoteApiSettings settings) {
+        if (serviceProperties.getVersion() != null) {
+            settings.setVersion(serviceProperties.getVersion());
+        }
+
+        if (serviceProperties.getName() != null) {
+            settings.setName(serviceProperties.getName());
+        }
+
+        if (serviceProperties.getDescription() != null) {
+            settings.setDescription(serviceProperties.getDescription());
+        }
+
+        if (serviceProperties.getLicense() != null) {
+            settings.setLicense(serviceProperties.getLicense());
+        }
+
+        if (serviceProperties.getPrettyPrint() != null) {
+            settings.setPrettyPrint(serviceProperties.getPrettyPrint());
+        }
+
+        if (serviceProperties.getPublishReload() != null) {
+            settings.setPublishReload(serviceProperties.getPublishReload());
+        }
+
+        if (serviceProperties.getAllowAnonymous() != null) {
+            settings.setAllowAnonymous(serviceProperties.getAllowAnonymous());
+        }
+
+        // Conform to Spring Security standards.
+        settings.setAdminRole(serviceProperties.getAdminRole() != null ? serviceProperties.getAdminRole() : ROLE_ADMIN);
+        settings.setAnonymousRole(serviceProperties.getAnonymousRole() != null ? serviceProperties.getAnonymousRole() : ROLE_ANONYMOUS);
+
+        if (serviceProperties.getIncludeDetailedErrorMessage() != null) {
+            settings.setIncludeDetailedErrorMessage(serviceProperties.getIncludeDetailedErrorMessage());
+        }
+
+        if (serviceProperties.getAuthTokenExpirationDuration() != null) {
+            settings.setAuthTokenExpirationDuration(serviceProperties.getAuthTokenExpirationDuration());
+        }
+
+        if (serviceProperties.getIncludeResponseTimes() != null) {
+            settings.setIncludeResponseTimes(serviceProperties.getIncludeResponseTimes());
+        }
+
+        if (serviceProperties.getRegisterServiceDiscovery() != null) {
+            settings.setRegisterServiceDiscovery(serviceProperties.getRegisterServiceDiscovery());
+        }
+
+        if (serviceProperties.getIgnoreUnknownArgs() != null) {
+            settings.setIgnoreUnknownArgs(serviceProperties.getIgnoreUnknownArgs());
+        }
+
+        settings.getOpenApiProperties().putAll(serviceProperties.getOpenApiProperties());
+
+        if (serviceProperties.getDiscovery().getUrl() != null) {
+            ServiceDiscoveryInfo discoveryInfo = new ServiceDiscoveryInfo();
+
+            discoveryInfo.setUrl(serviceProperties.getDiscovery().getUrl());
+
+            settings.setServiceDiscoveryInfo(discoveryInfo);
+        }
+    }
+
+    protected void setupGrpcApiServerPlugin(GrpcApiServerPlugin grpcPlugin) {
+        GrpcProperties grpc = serviceProperties.getGrpc();
+
+        if (grpc.getPort() != null) {
+            grpcPlugin.setPort(grpc.getPort());
+        }
+
+        if (grpc.getAutoStart() != null) {
+            grpcPlugin.setAutoStart(grpc.getAutoStart());
+        }
     }
 }

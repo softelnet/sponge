@@ -1,0 +1,33 @@
+sponge:
+    home: src/test/resources/sponge
+    config-file: sponge_config.xml
+    name: Sponge name
+    label: Sponge label
+    description: Sponge description
+    license: Sponge license
+    
+    properties:
+        property1: value1
+        property2: value2
+    systemProperties:
+        systemProperty1: value1
+        systemProperty2: value2
+    variableProperties:
+        variableProperty1: value1
+        variableProperty2: value2
+
+    defaultKnowledgeBaseName: defaultKb
+
+    autoStartup: true
+    phase: 10
+    processorBeansKnowledgeBaseName: defaultKb
+    
+    engine:
+        mainProcessingUnitThreadCount: 7
+        eventClonePolicy: DEEP
+        eventQueueCapacity: 1001
+        durationThreadCount: 16
+        asyncEventSetProcessorExecutorThreadCount: 17
+        eventSetProcessorDefaultSynchronous: true
+        autoEnable: true
+        executorShutdownTimeout: 1111

@@ -26,17 +26,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.openksavi.sponge.core.engine.ConfigurationConstants;
+import org.openksavi.sponge.engine.ConfigurationManager;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.kb.KnowledgeBase;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.spring.SpringEngineBuilder;
 import org.openksavi.sponge.spring.SpringPlugin;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
+import org.openksavi.sponge.springboot.SpongeProperties.EngineProperties;
 
 @Configuration
 @ConditionalOnClass(SpongeEngine.class)
 @EnableConfigurationProperties(SpongeProperties.class)
 public class SpongeAutoConfiguration {
+
+    private static final String DEFAULT_CONFIG_FILE = "config/sponge.xml";
 
     @Autowired
     private SpongeProperties spongeProperties;
@@ -53,9 +57,11 @@ public class SpongeAutoConfiguration {
         knowledgeBases.forEach(builder::knowledgeBase);
 
         String processorBeansKnowledgeBaseName = spongeProperties.getProcessorBeansKnowledgeBaseName();
-        builder.processorBeansKnowledgeBaseName(processorBeansKnowledgeBaseName != null ? processorBeansKnowledgeBaseName : bootKnowledgeBase.getName());
+        builder.processorBeansKnowledgeBaseName(
+                processorBeansKnowledgeBaseName != null ? processorBeansKnowledgeBaseName : bootKnowledgeBase.getName());
 
-        String spongeHome = spongeProperties.getHome() != null ? spongeProperties.getHome() : System.getProperty(ConfigurationConstants.PROP_HOME);
+        String spongeHome =
+                spongeProperties.getHome() != null ? spongeProperties.getHome() : System.getProperty(ConfigurationConstants.PROP_HOME);
         if (spongeHome == null) {
             spongeHome = ".";
         }
@@ -64,14 +70,110 @@ public class SpongeAutoConfiguration {
         String configFile = spongeProperties.getConfigFile();
         if (configFile != null) {
             builder.config(spongeProperties.getConfigFile());
+
+            if (spongeProperties.getIgnoreConfigurationFileNotFound() != null) {
+                builder.ignoreConfigurationFileNotFound(spongeProperties.getIgnoreConfigurationFileNotFound());
+            }
+        } else {
+            builder.config(DEFAULT_CONFIG_FILE);
+
+            // If a default config file is used, set it to optional.
+            builder.ignoreConfigurationFileNotFound(spongeProperties.getIgnoreConfigurationFileNotFound() != null
+                    ? spongeProperties.getIgnoreConfigurationFileNotFound() : true);
+
         }
 
-        return builder.build();
+        setupSpongeEngineBuilder(builder);
+
+        SpongeEngine engine = builder.build();
+
+        setupSpongeProperties(engine);
+        setupSpongeEngine(engine, spongeProperties.getEngine());
+
+        return engine;
     }
 
     @Bean
     @ConditionalOnMissingBean(SpringPlugin.class)
     public SpringPlugin springPlugin() {
         return new SpringPlugin();
+    }
+
+    protected void setupSpongeEngineBuilder(SpringEngineBuilder builder) {
+        if (spongeProperties.getName() != null) {
+            builder.name(spongeProperties.getName());
+        }
+
+        if (spongeProperties.getLabel() != null) {
+            builder.label(spongeProperties.getLabel());
+        }
+
+        if (spongeProperties.getDescription() != null) {
+            builder.description(spongeProperties.getDescription());
+        }
+
+        if (spongeProperties.getLicense() != null) {
+            builder.license(spongeProperties.getLicense());
+        }
+
+        if (spongeProperties.getDefaultKnowledgeBaseName() != null) {
+            builder.defaultKnowledgeBaseName(spongeProperties.getDefaultKnowledgeBaseName());
+        }
+
+        if (spongeProperties.getAutoStartup() != null) {
+            builder.autoStartup(spongeProperties.getAutoStartup());
+        }
+
+        if (spongeProperties.getPhase() != null) {
+            builder.phase(spongeProperties.getPhase());
+        }
+
+        if (spongeProperties.getProcessorBeansKnowledgeBaseName() != null) {
+            builder.processorBeansKnowledgeBaseName(spongeProperties.getProcessorBeansKnowledgeBaseName());
+        }
+    }
+
+    protected void setupSpongeProperties(SpongeEngine engine) {
+        ConfigurationManager configuration = engine.getConfigurationManager();
+
+        spongeProperties.getProperties().forEach((name, value) -> configuration.setProperty(name, value));
+        spongeProperties.getSystemProperties().forEach((name, value) -> configuration.setSystemProperty(name, value));
+        spongeProperties.getVariableProperties().forEach((name, value) -> configuration.setVariableProperty(name, value));
+    }
+
+    protected void setupSpongeEngine(SpongeEngine engine, EngineProperties engineProperties) {
+        ConfigurationManager configuration = engine.getConfigurationManager();
+
+        if (engineProperties.getMainProcessingUnitThreadCount() != null) {
+            configuration.setMainProcessingUnitThreadCount(engineProperties.getMainProcessingUnitThreadCount());
+        }
+
+        if (engineProperties.getEventClonePolicy() != null) {
+            configuration.setEventClonePolicy(engineProperties.getEventClonePolicy());
+        }
+
+        if (engineProperties.getEventQueueCapacity() != null) {
+            configuration.setEventQueueCapacity(engineProperties.getEventQueueCapacity());
+        }
+
+        if (engineProperties.getDurationThreadCount() != null) {
+            configuration.setDurationThreadCount(engineProperties.getDurationThreadCount());
+        }
+
+        if (engineProperties.getAsyncEventSetProcessorExecutorThreadCount() != null) {
+            configuration.setAsyncEventSetProcessorExecutorThreadCount(engineProperties.getAsyncEventSetProcessorExecutorThreadCount());
+        }
+
+        if (engineProperties.getEventSetProcessorDefaultSynchronous() != null) {
+            configuration.setEventSetProcessorDefaultSynchronous(engineProperties.getEventSetProcessorDefaultSynchronous());
+        }
+
+        if (engineProperties.getAutoEnable() != null) {
+            configuration.setAutoEnable(engineProperties.getAutoEnable());
+        }
+
+        if (engineProperties.getExecutorShutdownTimeout() != null) {
+            configuration.setExecutorShutdownTimeout(engineProperties.getExecutorShutdownTimeout());
+        }
     }
 }

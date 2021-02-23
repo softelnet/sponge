@@ -1,0 +1,26 @@
+sponge:
+    home: src/test/resources/sponge
+
+    remote:
+        version: 1
+        name: Remote name
+        description: Remote description
+        license: Remote license
+        prettyPrint: true
+        publishReload: true
+        allowAnonymous: true
+        adminRole: ROLE_ADMIN2
+        anonymousRole: ROLE_ANONYMOUS2
+        includeDetailedErrorMessage: true
+        authTokenExpirationDuration: 22000
+        includeResponseTimes: true
+        registerServiceDiscovery: false
+        ignoreUnknownArgs: true
+        
+        openApiProperties:
+            property1: value1
+        discovery:
+            url: http://localhost/test
+        grpc:
+            port: 9191
+            autoStart: true
