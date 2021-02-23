@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 The Sponge authors.
+ * Copyright 2016-2021 The Sponge authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -28,25 +27,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.openksavi.sponge.remoteapi.server.InvalidUsernamePasswordServerException;
-import org.openksavi.sponge.remoteapi.server.security.BaseInMemorySecurityService;
+import org.openksavi.sponge.remoteapi.server.security.BaseSecurityService;
 import org.openksavi.sponge.remoteapi.server.security.User;
 import org.openksavi.sponge.remoteapi.server.security.UserAuthentication;
 import org.openksavi.sponge.remoteapi.server.security.UserAuthenticationQuery;
 import org.openksavi.sponge.remoteapi.server.security.UserContext;
 
-public class SimpleSpringInMemorySecurityService extends BaseInMemorySecurityService {
+public class SpringSecurityService extends BaseSecurityService {
 
-    private AuthenticationManager authenticationManager = new SimpleAuthenticationManager();
+    private final AuthenticationManager authenticationManager;
 
-    public SimpleSpringInMemorySecurityService() {
-        //
-    }
-
-    public AuthenticationManager getAuthenticationManager() {
-        return authenticationManager;
-    }
-
-    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+    public SpringSecurityService(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
@@ -92,19 +83,5 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemorySecuritySer
     protected Authentication createAuthentication(User user) {
         return new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword(),
                 user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList()));
-    }
-
-    class SimpleAuthenticationManager implements AuthenticationManager {
-
-        @Override
-        public Authentication authenticate(Authentication auth) throws AuthenticationException {
-            User user = verifyInMemory(String.valueOf(auth.getPrincipal()), String.valueOf(auth.getCredentials()));
-
-            if (user != null) {
-                return createAuthentication(user);
-            }
-
-            throw new BadCredentialsException("Incorrect username or password");
-        }
     }
 }

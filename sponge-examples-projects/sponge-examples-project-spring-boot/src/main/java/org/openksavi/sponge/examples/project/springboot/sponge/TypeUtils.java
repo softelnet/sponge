@@ -38,6 +38,12 @@ public final class TypeUtils {
     }
 
     public static Employee createEmployeeFromMap(Map<String, Object> employeeMap) {
-        return new Employee((String) employeeMap.get("name"), (String) employeeMap.get("role"));
+        Employee employee = new Employee((String) employeeMap.get("name"), (String) employeeMap.get("role"));
+
+        if (employeeMap.containsKey("id")) {
+            employee.setId(((Number) employeeMap.get("id")).longValue());
+        }
+
+        return employee;
     }
 }

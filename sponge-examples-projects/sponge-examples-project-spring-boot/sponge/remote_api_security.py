@@ -3,24 +3,20 @@ Sponge Knowledge Base
 Remote API security
 """
 
-# Simple access configuration: role -> knowledge base names regexps.
-ROLES_TO_KB = { "admin":[".*"], "anonymous":[".*"]}
-# Simple access configuration: role -> event names regexps.
-ROLES_TO_SEND_EVENT = { "admin":[".*"], "anonymous":[]}
-ROLES_TO_SUBSCRIBE_EVENT = { "admin":[".*"], "anonymous":[".*"]}
+def configureAccessService():
+    # Configure the RoleBasedAccessService.
 
-class RemoteApiCanUseKnowledgeBase(Action):
-    def onCall(self, userContext, kbName):
-        return remoteApiServer.canAccessResource(ROLES_TO_KB, userContext, kbName)
+    # Simple access configuration: role -> knowledge base names regexps.
+    remoteApiServer.accessService.addRolesToKb({ "ROLE_ADMIN":[".*"], "ROLE_ANONYMOUS":["boot", "python"]})
 
-class RemoteApiCanSendEvent(Action):
-    def onCall(self, userContext, eventName):
-        return remoteApiServer.canAccessResource(ROLES_TO_SEND_EVENT, userContext, eventName)
-
-class RemoteApiCanSubscribeEvent(Action):
-    def onCall(self, userContext, eventName):
-        return remoteApiServer.canAccessResource(ROLES_TO_SUBSCRIBE_EVENT, userContext, eventName)
+    # Simple access configuration: role -> event names regexps.
+    remoteApiServer.accessService.addRolesToSendEvent({ "ROLE_ADMIN":[".*"], "ROLE_ANONYMOUS":[]})
+    remoteApiServer.accessService.addRolesToSubscribeEvent({ "ROLE_ADMIN":[".*"], "ROLE_ANONYMOUS":[".*"]})
 
 def onStartup():
-    # Load users from a password file.
-    remoteApiServer.service.securityService.loadUsers()
+    # Configure the access service on startup.
+    configureAccessService()
+
+def onAfterReload():
+    # Reconfigure the access service after each reload.
+    configureAccessService()

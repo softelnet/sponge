@@ -11,6 +11,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * API change: Processor categories should now be added in the `onInit` callback function and must specify a predicate that will filter the processors in order to be assigned to the corresponding category. The unnecessary `selectCategory` methods have been removed.
 * Added support in the `SpringSpongeEngine` for automatically enabling sigleton processors that are registered as Spring beans.
 * Added support for changing a default knowledge base name.
+* Enhanced Spring Security integration in the Remote API server.
 
 [discrete]
 == 1.16.5 (2021-01-20)

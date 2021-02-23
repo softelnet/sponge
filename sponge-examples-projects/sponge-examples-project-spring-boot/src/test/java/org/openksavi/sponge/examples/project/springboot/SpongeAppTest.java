@@ -18,6 +18,7 @@ package org.openksavi.sponge.examples.project.springboot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -93,7 +94,19 @@ public class SpongeAppTest {
         }
     }
 
+    @Test
+    public void getVersionAdmin() {
+        try (SpongeClient client = createRemoteClientAdmin()) {
+            assertNotNull(client.getVersion());
+        }
+    }
+
     protected SpongeClient createRemoteClient() {
         return new DefaultSpongeClient(SpongeClientConfiguration.builder().url(String.format("%s/sponge", template.getRootUri())).build());
+    }
+
+    protected SpongeClient createRemoteClientAdmin() {
+        return new DefaultSpongeClient(SpongeClientConfiguration.builder().url(String.format("%s/sponge", template.getRootUri()))
+                .username("admin").password("password").build());
     }
 }

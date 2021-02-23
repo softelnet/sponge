@@ -18,13 +18,20 @@ package org.openksavi.sponge.examples.project.springboot.sponge;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
+import org.openksavi.sponge.remoteapi.server.security.AccessService;
+import org.openksavi.sponge.remoteapi.server.security.DefaultRequestAuthenticationService;
+import org.openksavi.sponge.remoteapi.server.security.DefaultSecurityProvider;
+import org.openksavi.sponge.remoteapi.server.security.RequestAuthenticationService;
+import org.openksavi.sponge.remoteapi.server.security.RoleBasedAccessService;
 import org.openksavi.sponge.remoteapi.server.security.SecurityProvider;
-import org.openksavi.sponge.remoteapi.server.security.spring.SimpleSpringInMemorySecurityProvider;
+import org.openksavi.sponge.remoteapi.server.security.SecurityService;
+import org.openksavi.sponge.remoteapi.server.security.spring.SpringSecurityService;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class SpongeRemoteConfiguration {
 
     @Bean
@@ -38,6 +45,10 @@ public class SpongeRemoteConfiguration {
         plugin.getSettings().setIncludeDetailedErrorMessage(false);
         plugin.getSettings().setPrettyPrint(true);
 
+        // Conform to Spring Security standards.
+        plugin.getSettings().setAdminRole("ROLE_ADMIN");
+        plugin.getSettings().setAnonymousRole("ROLE_ANONYMOUS");
+
         plugin.setSecurityProvider(securityProvider);
 
         return plugin;
@@ -48,10 +59,28 @@ public class SpongeRemoteConfiguration {
         return new GrpcApiServerPlugin();
     }
 
-    // TODO Should be injectable
     @Bean
     @ConditionalOnMissingBean(SecurityProvider.class)
-    public SecurityProvider spongeSecurityProvider() {
-        return new SimpleSpringInMemorySecurityProvider();
+    public SecurityProvider spongeSecurityProvider(SecurityService securityService, AccessService accessService,
+            RequestAuthenticationService requestAuthenticationService) {
+        return new DefaultSecurityProvider(securityService,  accessService, requestAuthenticationService);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(SecurityService.class)
+    public SecurityService spongeSecurityService(AuthenticationManager authenticationManager) {
+        return new SpringSecurityService(authenticationManager);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(AccessService.class)
+    public AccessService spongeAccessService() {
+        return new RoleBasedAccessService();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RequestAuthenticationService.class)
+    public RequestAuthenticationService spongeRequestAuthenticationService() {
+        return new DefaultRequestAuthenticationService();
     }
 }
