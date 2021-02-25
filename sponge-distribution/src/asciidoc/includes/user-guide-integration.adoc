@@ -72,6 +72,8 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 === Automatic enabling of processors registered in Spring as beans
 `SpringSpongeEngine` supports automatic enabling of singleton processors (e.g. action, filter, trigger) registered as Spring beans. The enabling is performed during the engine startup. If a non sigleton processor (e.g. rule, correlator) is defined as a Spring bean, an exception will be thrown. Prosessors will be registred in the default knowledge base unless the `processorBeansKnowledgeBaseName` is set in the builder and points to another existing knowledge base. Prosessor names will correspond to their simple class names.
 
+include::user-guide-integration-spring-boot.adoc[leveloffset=+1]
+
 include::user-guide-integration-camel.adoc[leveloffset=+1]
 
 include::user-guide-integration-remote-api.adoc[leveloffset=+1]

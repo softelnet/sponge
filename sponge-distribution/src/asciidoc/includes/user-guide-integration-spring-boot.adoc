@@ -1,0 +1,130 @@
+= Spring Boot
+There are two Spring Boot starters that aim to facilitate integration of {sponge} with Spring Boot applications.
+
+== The base {sponge} starter
+The base {sponge} starter is provided by the `sponge-spring-boot-starter` artifact. The starter runs a {sponge} engine and enables its configuration according to Spring Boot standards.
+
+[discrete]
+=== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml` for this component:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-spring-boot-starter</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
+Then, for example, you can just add classes with your Sponge processors such as:
+
+[source,java]
+----
+@Component
+public class LowerCase extends JAction {
+
+    private final StringService stringService;
+
+    @Autowired
+    public LowerCase(StringService stringService) {
+        this.stringService = stringService;
+    }
+
+    @Override
+    public void onConfigure() {
+        withLabel("Lower case").withArg(new StringType("text")).withResult(new StringType());
+    }
+
+    public String onCall(String text) {
+        return stringService.toLowerCase(text);
+    }
+}
+----
+
+or create your own {sponge} configuration XML file in the default location `config/sponge.xml`.
+
+=== Configuration
+You can customize the {sponge} engine in the `application.properties` or `application.yaml` file.
+
+The component supports the options listed below.
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *sponge.home* | The {sponge} home directory. | . | String
+| *sponge.config-file* | The {sponge} configuration file. | config/sponge.xml | String
+| *sponge.ignore-configuration-file-not-found* | The flag whether a missing configuration file should be ignored, Defaults to `true` if the `sponge.config-file` is not set. | true | Boolean
+| *sponge.name* | The {sponge} engine name. | | String
+| *sponge.label* | The {sponge} engine label. | | String
+| *sponge.description* | The {sponge} engine description. | | String
+| *sponge.license* | The {sponge} instance license. | | String
+| *sponge.properties* | The {sponge} properties. | | Map<String, Object>
+| *sponge.system-properties* | The {sponge} system properties. | | Map<String, String>
+| *sponge.variable-properties* | The {sponge} variable properties. | | Map<String, String>
+| *sponge.default-knowledge-base-name* | The {sponge} default knowledge base name. | default | String
+| *sponge.auto-startup* | The {sponge} auto startup flag. | true | Boolean
+| *sponge.phase* | The {sponge} engine Spring SmartLifecycle phase. | Integer.MAX_VALUE | Integer
+| *sponge.processor-beans-knowledge-base-name* | The knowledge base name that {sponge} processor Spring beans will be registered in. | boot | String
+| *sponge.engine.main-processing-unit-thread-count* | The number of the Main Processing Unit worker threads. | 10 | Integer
+| *sponge.engine.event-clone-policy* | The event clone policy. | SHALLOW | EventClonePolicy
+| *sponge.engine.event-queue-capacity* | The event queue capacity. Defaults to -1 (infinity) | -1 | Integer
+| *sponge.engine.duration-thread-count* | The number of duration executor threads. | 2 | Integer
+| *sponge.engine.async-event-set-processor-executor-thread-count* | The number of threads used by an event set processor asynchronous executor. | 10 | Integer
+| *sponge.engine.event-set-processor-default-synchronous* | The event set processor default synchronous flag. | false | Boolean
+| *sponge.engine.auto-enable* | Auto-enable processors. | true | Boolean
+| *sponge.engine.executor-shutdown-timeout* | Executor shutdown timeout (in milliseconds). | 60000 | Long
+|===
+
+== The {sponge} Remote Service starter
+The base {sponge} Remote Service starter is provided by the `sponge-remote-service-spring-boot-starter` artifact. The starter includes the base {sponge} `sponge-spring-boot-starter` starter and runs the {sponge} Remote API service along with the gRPC API service. The Remote API service starter depends on `spring-boot-starter-web`, `spring-boot-starter-security` and `camel-servlet-starter`.
+
+The service leverages the configuration of these starters, however it redefines:
+
+* the server port: `server.port=8080` (in order to calculate the default gRPC API port, i.e. `server.port + 1`),
+* the Camel servlet context path: `camel.component.servlet.mapping.context-path=/sponge/*`.
+
+You may, of course, change these values in your application properties.
+
+TIP: If you use your own Camel or Spring Boot Security configuration in your Spring Boot application, make sure that the configurations don't interfere with each other.
+
+[discrete]
+=== Maven configuration
+Maven users will need to add the following dependency to their `pom.xml` for this component:
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.openksavi.sponge</groupId>
+    <artifactId>sponge-remote-service-spring-boot-starter</artifactId>
+    <version>{projectVersion}</version>
+</dependency>
+----
+
+=== Configuration
+The component supports the options listed below.
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *sponge.remote.version* | The API version. | | String
+| *sponge.remote.name* | The API name. | | String
+| *sponge.remote.description* | The API description. | | String
+| *sponge.remote.license* | The API license. | | String
+| *sponge.remote.pretty-print* | The pretty print option. | false | Boolean
+| *sponge.remote.publish-reload* | If `true` then the reload method will be published. | false | Boolean
+| *sponge.remote.allow-anonymous* | Should an anonymous user be allowed. | true | Boolean
+| *sponge.remote.admin-role* | The admin role. | ROLE_ADMIN | String
+| *sponge.remote.anonymous-role* | The anonymous role. | ROLE_ANONYMOUS | String
+| *sponge.remote.include-detailed-error-message* | Should the detailed error message (e.g. an exception stack trace) be present in error responses. | false | Boolean
+| *sponge.remote.auth-token-expiration-duration* | The duration after which an authentication token will expire. Defaults to 30 minutes. | 30m | String
+| *sponge.remote.openApiProperties* | The Open API properties | | Map<String, String>
+| *sponge.remote.include-response-times* | The flag specifying if a response header should have request and response time set. | false | Boolean
+| *sponge.remote.register-service-discovery* | The flag specifying if the service should be registered in a service discovery. | false | Boolean
+| *sponge.remote.discovery.url* | The service URL used in a service discovery. | | String
+| *sponge.remote.ignore-unknown-args* | The flag specifying if the service should ignore unknown action arguments passed by the client. | false | Boolean
+| *sponge.remote.grpc.autoStart* | Should the gRPC API be started. | true | Boolean
+| *sponge.remote.grpc.port* | The gRPC API port. | Remote API port + 1 | Integer
+|===
+
+See the {sourcesUrl}/sponge-examples-projects/sponge-examples-project-spring-boot[example project] for a sample how to use `sponge-remote-service-spring-boot-starter`.

@@ -84,7 +84,8 @@ public class SpongeSpringBootTest {
     }
 
     @Test
-    public void hasAction() {
+    public void hasActions() {
         assertEquals("TO UPPER", engine.getOperations().call(String.class, "UpperCase", Arrays.asList("to upper")));
+        assertEquals("to lower", engine.getOperations().call(String.class, "LowerCase", Arrays.asList("TO LOWER")));
     }
 }

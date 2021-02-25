@@ -15,6 +15,9 @@
  */
 package org.openksavi.sponge.springboot.remoteservice;
 
+import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,10 +25,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import org.openksavi.sponge.camel.CamelPlugin;
 import org.openksavi.sponge.grpcapi.server.GrpcApiServerPlugin;
+import org.openksavi.sponge.grpcapi.server.util.GrpcApiServerUtils;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.RemoteApiSettings;
 import org.openksavi.sponge.remoteapi.server.discovery.ServiceDiscoveryInfo;
@@ -45,6 +50,8 @@ import org.openksavi.sponge.springboot.remoteservice.SpongeRemoteServiceProperti
 @PropertySource("classpath:/org/openksavi/sponge/springboot/remoteservice/remoteservice.properties")
 public class SpongeRemoteServiceAutoConfiguration {
 
+    private static final Logger logger = LoggerFactory.getLogger(SpongeRemoteServiceAutoConfiguration.class);
+
     private static final String COMPONENT_ID = "servlet";
 
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
@@ -53,6 +60,9 @@ public class SpongeRemoteServiceAutoConfiguration {
 
     @Autowired
     private SpongeRemoteServiceProperties serviceProperties;
+
+    @Autowired
+    private Environment environment;
 
     @Bean
     public RemoteApiServerPlugin spongeRemoteApiPlugin(SecurityProvider securityProvider) {
@@ -177,6 +187,15 @@ public class SpongeRemoteServiceAutoConfiguration {
 
         if (grpc.getPort() != null) {
             grpcPlugin.setPort(grpc.getPort());
+        } else {
+            Integer remoteApiPort = environment.getProperty("server.port", Integer.class);
+            Validate.notNull(remoteApiPort, "The server.port property must be set explicitely for the gRPC API to calculate its port");
+
+            if (remoteApiPort == 0) {
+                logger.warn("The server.port property is set to random. Can't determine the gRPC port. Using default.");
+            } else {
+                grpcPlugin.setPort(GrpcApiServerUtils.calculateDefaultPortByRemoteApi(remoteApiPort));
+            }
         }
 
         if (grpc.getAutoStart() != null) {

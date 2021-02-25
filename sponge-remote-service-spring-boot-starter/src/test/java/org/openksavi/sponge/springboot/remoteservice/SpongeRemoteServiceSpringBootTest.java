@@ -35,7 +35,6 @@ import org.openksavi.sponge.remoteapi.client.SpongeClient;
 import org.openksavi.sponge.remoteapi.client.SpongeClientConfiguration;
 import org.openksavi.sponge.remoteapi.server.RemoteApiServerPlugin;
 import org.openksavi.sponge.remoteapi.server.RemoteApiSettings;
-import org.openksavi.sponge.spring.SpringSpongeEngine;
 
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @SpringBootApplication

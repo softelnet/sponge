@@ -4,7 +4,6 @@ Sponge Knowledge Base
 
 from org.openksavi.sponge.examples.project.springboot.service import EmployeeService
 from org.openksavi.sponge.examples.project.springboot.sponge import TypeUtils
-from java.lang import Long
 
 def getEmployeeService():
     return spring.context.getBean(EmployeeService)

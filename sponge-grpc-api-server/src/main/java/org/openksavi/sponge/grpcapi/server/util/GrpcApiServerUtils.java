@@ -132,4 +132,8 @@ public abstract class GrpcApiServerUtils {
         return StatusProto.toStatusRuntimeException(
                 Status.newBuilder().setCode(responseError.getCode()).setMessage(responseError.getMessage()).build());
     }
+
+    public static int calculateDefaultPortByRemoteApi(int remoteApiPort) {
+        return remoteApiPort + 1;
+    }
 }
