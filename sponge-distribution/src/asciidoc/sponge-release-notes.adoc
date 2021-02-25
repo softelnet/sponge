@@ -13,6 +13,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added support for changing a default knowledge base name.
 * Enhanced Spring Security integration in the Remote API server.
 * Added new artifacts for Spring Boot integration: `sponge-spring-boot-starter` and `sponge-remote-service-spring-boot-starter`.
+* Dependencies upgrade.
 
 [discrete]
 == 1.16.5 (2021-01-20)

@@ -16,12 +16,13 @@
 
 package org.openksavi.sponge.camel;
 
-import org.apache.camel.Component;
+import org.apache.camel.Category;
 import org.apache.camel.Consumer;
 import org.apache.camel.Exchange;
 import org.apache.camel.MultipleConsumersSupport;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriPath;
@@ -34,7 +35,7 @@ import org.openksavi.sponge.engine.SpongeEngine;
 /**
  * Sponge Camel endpoint.
  */
-@UriEndpoint(scheme = "sponge", title = "Sponge", syntax = "sponge:engineRef", consumerClass = SpongeConsumer.class, label = "sponge")
+@UriEndpoint(firstVersion = "1.0.0", scheme = "sponge", title = "Sponge", syntax = "sponge:engineRef", category = { Category.JAVA })
 public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumersSupport {
 
     public static final Boolean DEFAULT_MANAGED = true;
@@ -42,18 +43,25 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
     private SpongeEngine engine;
 
     @UriPath
+    @Metadata(label = "engineRef", required = true)
     private String engineRef;
 
     @UriParam
+    @Metadata(label = "action")
     private String action;
 
     @UriParam
+    @Metadata(label = "managed")
     private Boolean managed;
 
     private boolean autoStarted = false;
 
-    public SpongeEndpoint(String endpointUri, Component component, SpongeEngine engine, String action, Boolean managed) {
-        super(endpointUri, component);
+    public SpongeEndpoint() {
+    }
+
+    public SpongeEndpoint(String uri, SpongeComponent component, SpongeEngine engine, String action, Boolean managed) {
+        super(uri, component);
+
         this.engine = engine;
         this.action = action;
         this.managed = managed != null ? managed : DEFAULT_MANAGED;
@@ -113,29 +121,54 @@ public class SpongeEndpoint extends DefaultEndpoint implements MultipleConsumers
         this.engine = engine;
     }
 
+    /**
+     * Returns the action name.
+     *
+     * @return the action name.
+     */
     public String getAction() {
         return action;
     }
 
+    /**
+     * Sets the action name.
+     *
+     * @param action the action name.
+     */
     public void setAction(String action) {
         this.action = action;
     }
 
+    /**
+     * Returns the managed flag.
+     *
+     * @return the managed flag.
+     */
     public Boolean getManaged() {
         return managed;
     }
 
+    /**
+     * Sets the managed flag.
+     *
+     * @param managed the managed flag.
+     */
     public void setManaged(Boolean managed) {
         this.managed = managed;
     }
 
     @Override
-    protected void doStart() throws Exception {
-        super.doStart();
+    protected void doInit() throws Exception {
+        super.doInit();
 
         if (engineRef != null && engine == null) {
             engine = CamelContextHelper.mandatoryLookup(getCamelContext(), engineRef, SpongeEngine.class);
         }
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+        super.doStart();
 
         synchronized (getComponent()) {
             configurePlugin();
