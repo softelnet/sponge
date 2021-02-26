@@ -157,6 +157,7 @@ public class DefaultRemoteApiService implements RemoteApiService {
     protected void setupDefaultFeatures() {
         setFeature(RemoteApiConstants.REMOTE_API_FEATURE_SPONGE_VERSION, getEngine().getVersion());
         setFeature(RemoteApiConstants.REMOTE_API_FEATURE_API_VERSION, settings.getVersion());
+        setFeature(RemoteApiConstants.REMOTE_API_FEATURE_PROTOCOL_VERSION, RemoteApiConstants.PROTOCOL_VERSION);
         setFeature(RemoteApiConstants.REMOTE_API_FEATURE_GRPC_ENABLED, false);
         setFeature(RemoteApiConstants.REMOTE_API_FEATURE_NAME, RemoteApiServerUtils.resolveServiceName(getEngine(), settings));
         setFeature(RemoteApiConstants.REMOTE_API_FEATURE_DESCRIPTION,

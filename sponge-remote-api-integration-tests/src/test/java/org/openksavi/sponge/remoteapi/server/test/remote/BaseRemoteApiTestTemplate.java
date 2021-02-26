@@ -131,8 +131,9 @@ public abstract class BaseRemoteApiTestTemplate {
     public void testFeatures() {
         try (SpongeClient client = createClient()) {
             Map<String, Object> features = client.getFeatures();
-            assertEquals(6, features.size());
+            assertEquals(7, features.size());
             assertEquals(engine.getVersion(), features.get(RemoteApiConstants.REMOTE_API_FEATURE_SPONGE_VERSION));
+            assertEquals(RemoteApiConstants.PROTOCOL_VERSION, features.get(RemoteApiConstants.REMOTE_API_FEATURE_PROTOCOL_VERSION));
 
             assertEquals("Sponge Test Remote API", features.get(RemoteApiConstants.REMOTE_API_FEATURE_NAME));
             assertEquals("Sponge Test Remote API description", features.get(RemoteApiConstants.REMOTE_API_FEATURE_DESCRIPTION));
