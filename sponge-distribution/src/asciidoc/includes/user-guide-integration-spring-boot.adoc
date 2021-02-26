@@ -127,4 +127,58 @@ The component supports the options listed below.
 | *sponge.remote.grpc.port* | The gRPC API port. | Remote API port + 1 | Integer
 |===
 
+=== Example
 See the {sourcesUrl}/sponge-examples-projects/sponge-examples-project-spring-boot[example project] for a sample how to use `sponge-remote-service-spring-boot-starter`.
+
+The purpose of this example is to allow users to call remote actions defined in the Spring Boot environment. In this scenario, if you already have Spring services, you will be able to interact with them, indirectly through {sponge} actions, from the Sponge Remote mobile application. After the initial configuration you will be able to write your own actions.
+
+The most important step to use the starter in your Spring Boot application is to add necessary Maven dependencies in your `pom.xml`. Besides `sponge-remote-service-spring-boot-starter` you can add for example `sponge-jython`, `sponge-groovy`, `sponge-jruby` or `sponge-nashorn` to be able to write knowledge bases in these scripting languages.
+
+Then you can specify your {sponge} XML configuration file in the default location `config/sponge.xml`.
+
+[source,xml,subs="verbatim,attributes"]
+----
+include::{completeExamplesProjectIncludes}/sponge-examples-project-spring-boot/config/sponge.xml[]
+----
+
+You should setup Spring Boot Web security, e.g.:
+
+[source,java]
+----
+include::{completeExamplesProjectIncludes}/sponge-examples-project-spring-boot/src/main/java/org/openksavi/sponge/examples/project/springboot/WebSecurityConfig.java[lines=17..-1]
+----
+
+Access control to {sponge} in this example is configured in `remote_api_security.py`. The code below (`addRolesToKb`) gives `ROLE_ADMIN` access to run remotely any actions from any knowledge bases and `ROLE_ANONYMOUS` access to run actions only from knowledge bases `boot` and `python`.
+
+[source,python]
+----
+include::{completeExamplesProjectIncludes}/sponge-examples-project-spring-boot/sponge/remote_api_security.py[lines=5..-1]
+----
+
+The `boot` knowledge base will register Java-based actions that are annotated as Spring beans.
+
+[source,java]
+----
+include::{completeExamplesProjectIncludes}/sponge-examples-project-spring-boot/src/main/java/org/openksavi/sponge/examples/project/springboot/sponge/actions/ListEmployees.java[lines=17..-1]
+----
+
+The `python` knowledge base is defined in the following files.
+
+.sponge.py
+[source,python]
+----
+include::{completeExamplesProjectIncludes}/sponge-examples-project-spring-boot/sponge/sponge.py[lines=5..-1]
+----
+
+Categories group actions from different knowledge bases, so they can be accordingly shown in the mobile application.
+
+.employees.py
+[source,python]
+----
+include::{completeExamplesProjectIncludes}/sponge-examples-project-spring-boot/sponge/employees.py[lines=5..-1]
+----
+
+After starting the Spring Boot application you can connect to the {sponge} Remote service in the Sponge Remote mobile application, entering an URL of the format `http://host:8080/sponge` in the Connections page. Change the `host` to your server address. The main action lists the employees.
+
+image::screens/mobile/example_employees.png[title="List of employees",width=300,pdfwidth=35%,scaledwidth=35%]
+
