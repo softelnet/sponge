@@ -18,7 +18,9 @@ package org.openksavi.sponge.camel;
 
 import java.util.Map;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
+import org.apache.camel.spi.Metadata;
 import org.apache.camel.support.DefaultComponent;
 
 import org.openksavi.sponge.engine.SpongeEngine;
@@ -26,15 +28,24 @@ import org.openksavi.sponge.engine.SpongeEngine;
 /**
  * Sponge Camel component.
  */
+@org.apache.camel.spi.annotations.Component("sponge")
 public class SpongeComponent extends DefaultComponent {
 
+    @Metadata(label = "engine")
     private SpongeEngine engine;
 
+    @Metadata(label = "action", description = "Action name")
     private String action;
 
+    @Metadata(label = "managed", description = "Managed")
     private Boolean managed;
 
     public SpongeComponent() {
+        this(null);
+    }
+
+    public SpongeComponent(CamelContext context) {
+        super(context);
     }
 
     @Override

@@ -37,6 +37,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.core.util.SslConfiguration;
 import org.openksavi.sponge.grpcapi.server.core.kb.GrpcApiSubscribeCorrelator;
 import org.openksavi.sponge.grpcapi.server.support.kb.GrpcApiManageSubscription;
+import org.openksavi.sponge.grpcapi.server.util.GrpcApiServerUtils;
 import org.openksavi.sponge.java.JPlugin;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.remoteapi.RemoteApiConstants;
@@ -121,7 +122,7 @@ public class GrpcApiServerPlugin extends JPlugin {
         }
 
         // Default port convention.
-        return remoteApiServerPlugin.getSettings().getPort() + 1;
+        return GrpcApiServerUtils.calculateDefaultPortByRemoteApi(remoteApiServerPlugin.getSettings().getPort());
     }
 
     /**

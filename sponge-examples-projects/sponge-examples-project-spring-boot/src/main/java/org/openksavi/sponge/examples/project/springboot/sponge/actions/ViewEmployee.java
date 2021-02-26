@@ -41,7 +41,7 @@ public class ViewEmployee extends JAction {
     @Override
     public void onConfigure() {
         withLabel("View employee").withArgs(
-                new IntegerType("employeeId").withAnnotated().withNullable().withFeature("visible", false),
+            new IntegerType("employeeId").withAnnotated().withFeature("visible", false),
                 TypeUtils.createEmployeeRecordType("employee").withReadOnly().withProvided(
                         new ProvidedMeta().withValue().withOverwrite().withDependency("employeeId"))
         ).withNonCallable()

@@ -1343,6 +1343,10 @@ The Remote API supports a username/password and an authentication token authenti
 |`String`
 |The {sponge} Remote API version that is set in the configuration (can be `null`).
 
+|`protocolVersion`
+|`String`
+|The {sponge} Remote API protocol version. For compatibility, both server and client should use the same protocol version.
+
 |`name`
 |`String`
 |The Remote API service name.

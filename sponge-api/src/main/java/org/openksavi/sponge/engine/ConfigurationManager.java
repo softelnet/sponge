@@ -40,6 +40,20 @@ public interface ConfigurationManager extends EngineModule {
     String getProperty(String name);
 
     /**
+     * Returns the flag whether a missing configuration file should be ignored.
+     *
+     * @return the flag.
+     */
+    boolean isIgnoreConfigurationFileNotFound();
+
+    /**
+     * Sets the flag whether a missing configuration file should be ignored.
+     *
+     * @param ignoreConfigurationFileNotFound the flag.
+     */
+    void setIgnoreConfigurationFileNotFound(boolean ignoreConfigurationFileNotFound);
+
+    /**
      * Returns the root configuration.
      *
      * @return the root configuration.

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openksavi.sponge.examples.project.springboot.sponge;
+package org.openksavi.sponge.springboot;
 
 import org.openksavi.sponge.java.JKnowledgeBase;
 

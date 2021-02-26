@@ -27,6 +27,8 @@ public final class RemoteApiConstants {
 
     public static final int DEFAULT_PORT = 1836;
 
+    public static final String PROTOCOL_VERSION = "1";
+
     public static final String ENDPOINT_JSONRPC = "jsonrpc";
 
     public static final String ENDPOINT_DOC = "doc";
@@ -69,6 +71,8 @@ public final class RemoteApiConstants {
     public static final String REMOTE_API_FEATURE_SPONGE_VERSION = "spongeVersion";
 
     public static final String REMOTE_API_FEATURE_API_VERSION = "apiVersion";
+
+    public static final String REMOTE_API_FEATURE_PROTOCOL_VERSION = "protocolVersion";
 
     public static final String REMOTE_API_FEATURE_GRPC_ENABLED = "grpcEnabled";
 

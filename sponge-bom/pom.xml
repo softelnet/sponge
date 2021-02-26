@@ -154,6 +154,18 @@
                 <artifactId>sponge-gsm-modem</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openksavi.sponge</groupId>
+                <artifactId>sponge-remote-service-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.openksavi.sponge</groupId>
                 <artifactId>sponge-standalone</artifactId>

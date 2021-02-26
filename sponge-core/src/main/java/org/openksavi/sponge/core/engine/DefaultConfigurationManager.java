@@ -67,6 +67,9 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     /** Configuration filename. */
     private String configurationFilename;
 
+    /** The flag whether a missing configuration file should be ignored. */
+    private boolean ignoreConfigurationFileNotFound = false;
+
     /** The engine home directory. */
     private String home;
 
@@ -313,7 +316,7 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         }
     }
 
-    protected Triple<XMLConfiguration, URL, PropertiesConfiguration> createXmlConfiguration(String filename) {
+    protected Triple<XMLConfiguration, URL, PropertiesConfiguration> createXmlConfiguration(String filename, boolean required) {
         FallbackBasePathLocationStrategy locationStrategy =
                 new FallbackBasePathLocationStrategy(FileLocatorUtils.DEFAULT_LOCATION_STRATEGY, home);
         FileBasedConfigurationBuilder<XMLConfiguration> builder = new FileBasedConfigurationBuilder<>(XMLConfiguration.class)
@@ -324,8 +327,15 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
         try {
             xmlConfiguration = builder.getConfiguration();
         } catch (ConfigurationException e) {
-            throw new ConfigException(locationStrategy.isNotFound() ? "Configuration file " + filename + " not found"
-                    : "Error reading configuration file " + filename, e);
+            if (locationStrategy.isNotFound()) {
+                if (required) {
+                    throw new ConfigException("Configuration file " + filename + " not found");
+                } else {
+                    return null;
+                }
+            }
+
+            throw new ConfigException("Error reading configuration file " + filename, e);
         }
 
         String propertiesFilename =
@@ -356,23 +366,30 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
 
         CombinedConfiguration cc = new CombinedConfiguration(combiner);
 
-        XMLConfiguration defaultConfiguration = createXmlConfiguration(ConfigurationConstants.DEFAULT_CONFIG).getLeft();
+        XMLConfiguration defaultConfiguration = createXmlConfiguration(ConfigurationConstants.DEFAULT_CONFIG, true).getLeft();
 
         // Try to add explicit configuration.
         if (configurationFilename != null) {
-            logger.info("Loading the configuration file {}...", configurationFilename);
-            Triple<XMLConfiguration, URL, PropertiesConfiguration> configurationResult = createXmlConfiguration(configurationFilename);
+            logger.info("Loading " + (ignoreConfigurationFileNotFound ? "an optional" : "a") + " configuration file {}...",
+                    configurationFilename);
 
-            XMLConfiguration xmlConfiguration = configurationResult.getLeft();
-            configurationFileUrl = configurationResult.getMiddle();
-            propertiesConfig = configurationResult.getRight();
+            Triple<XMLConfiguration, URL, PropertiesConfiguration> configurationResult =
+                    createXmlConfiguration(configurationFilename, !ignoreConfigurationFileNotFound);
 
-            cc.addConfiguration(xmlConfiguration);
-            String configFileDir = SpongeUtils.getFileDir(configurationFileUrl);
-            if (configFileDir != null) {
-                xmlConfiguration.setProperty(ConfigurationConstants.PROP_CONFIG_DIR, configFileDir);
+            if (configurationResult != null) {
+                XMLConfiguration xmlConfiguration = configurationResult.getLeft();
+                configurationFileUrl = configurationResult.getMiddle();
+                propertiesConfig = configurationResult.getRight();
+
+                cc.addConfiguration(xmlConfiguration);
+                String configFileDir = SpongeUtils.getFileDir(configurationFileUrl);
+                if (configFileDir != null) {
+                    xmlConfiguration.setProperty(ConfigurationConstants.PROP_CONFIG_DIR, configFileDir);
+                } else {
+                    xmlConfiguration.clearProperty(ConfigurationConstants.PROP_CONFIG_DIR);
+                }
             } else {
-                xmlConfiguration.clearProperty(ConfigurationConstants.PROP_CONFIG_DIR);
+                logger.info("Configuration file {} not found", configurationFilename);
             }
         }
 
@@ -418,6 +435,16 @@ public class DefaultConfigurationManager extends BaseEngineModule implements Con
     @Override
     public Configuration getEngineConfig() {
         return engineConfig;
+    }
+
+    @Override
+    public boolean isIgnoreConfigurationFileNotFound() {
+        return ignoreConfigurationFileNotFound;
+    }
+
+    @Override
+    public void setIgnoreConfigurationFileNotFound(boolean ignoreConfigurationFileNotFound) {
+        this.ignoreConfigurationFileNotFound = ignoreConfigurationFileNotFound;
     }
 
     @Override

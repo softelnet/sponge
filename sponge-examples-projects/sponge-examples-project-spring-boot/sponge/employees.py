@@ -4,7 +4,6 @@ Sponge Knowledge Base
 
 from org.openksavi.sponge.examples.project.springboot.service import EmployeeService
 from org.openksavi.sponge.examples.project.springboot.sponge import TypeUtils
-from java.lang import Long
 
 def getEmployeeService():
     return spring.context.getBean(EmployeeService)
@@ -42,7 +41,7 @@ class DeleteEmployee(Action):
     def onConfigure(self):
         self.withLabel("Delete the employee")
         self.withArg(IntegerType("employeeId").withAnnotated().withFeature("visible", False)).withNoResult()
-        self.withFeatures({"visible":False, "callLabel":"Save", "cancelLabel":"Cancel", "icon":"delete", "confirmation":True})
+        self.withFeatures({"visible":False, "icon":"delete", "confirmation":True})
 
     def onCall(self, employeeId):
         getEmployeeService().delete(employeeId.value)

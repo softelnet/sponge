@@ -1363,6 +1363,14 @@ The `groupId` of {sponge} Maven artifacts is `org.openksavi.sponge`.
 |Yes
 |The Spring framework integration.
 
+|`sponge-spring-boot-starter`
+|Yes
+|The Spring Boot starter for {sponge}.
+
+|`sponge-remote-service-spring-boot-starter`
+|Yes
+|The Spring Boot starter for {sponge} Remote API service.
+
 |`sponge-py4j`
 |Yes
 |The CPython integration that uses Py4J.

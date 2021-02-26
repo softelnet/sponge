@@ -18,8 +18,7 @@ package org.openksavi.sponge.examples.project.springboot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-// Security configuration disabled.
-@SpringBootApplication(exclude = { org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class })
+@SpringBootApplication
 public class SpongeApp {
 
     public static void main(String[] args) {

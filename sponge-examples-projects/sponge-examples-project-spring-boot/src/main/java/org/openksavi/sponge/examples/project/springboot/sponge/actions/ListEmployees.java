@@ -35,12 +35,12 @@ import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.type.value.AnnotatedValue;
 
 @Component
-public class EmployeesAction extends JAction {
+public class ListEmployees extends JAction {
 
     private final EmployeeService employeeService;
 
     @Autowired
-    public EmployeesAction(EmployeeService employeeService) {
+    public ListEmployees(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 

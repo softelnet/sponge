@@ -18,6 +18,7 @@ package org.openksavi.sponge.examples.project.springboot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -77,7 +78,7 @@ public class SpongeAppTest {
         try (SpongeClient client = createRemoteClient()) {
             ProvideArgsParameters employeesParams = new ProvideArgsParameters(Arrays.asList("employees"));
 
-            List<AnnotatedValue<Map<String, Object>>> employees = (List<AnnotatedValue<Map<String, Object>>>) client.provideActionArgs("EmployeesAction",
+            List<AnnotatedValue<Map<String, Object>>> employees = (List<AnnotatedValue<Map<String, Object>>>) client.provideActionArgs("ListEmployees",
                     employeesParams).get("employees").getValue();
             assertEquals(2, employees.size());
 
@@ -93,7 +94,19 @@ public class SpongeAppTest {
         }
     }
 
+    @Test
+    public void getVersionAdmin() {
+        try (SpongeClient client = createRemoteClientAdmin()) {
+            assertNotNull(client.getVersion());
+        }
+    }
+
     protected SpongeClient createRemoteClient() {
         return new DefaultSpongeClient(SpongeClientConfiguration.builder().url(String.format("%s/sponge", template.getRootUri())).build());
+    }
+
+    protected SpongeClient createRemoteClientAdmin() {
+        return new DefaultSpongeClient(SpongeClientConfiguration.builder().url(String.format("%s/sponge", template.getRootUri()))
+                .username("admin").password("password").build());
     }
 }

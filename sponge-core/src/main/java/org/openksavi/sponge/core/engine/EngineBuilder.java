@@ -70,6 +70,8 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
     /** Properties. */
     protected Map<String, PropertyEntry> propertyEntries = new LinkedHashMap<>();
 
+    protected Boolean ignoreConfigurationFileNotFound;
+
     private boolean initialized = false;
 
     /**
@@ -421,6 +423,13 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
         return this;
     }
 
+    public EngineBuilder<T> ignoreConfigurationFileNotFound(Boolean ignoreConfigurationFileNotFound) {
+        this.ignoreConfigurationFileNotFound = ignoreConfigurationFileNotFound;
+
+        return this;
+    }
+
+
     /**
      * Returns the engine default parameters. This method allows changing the values of default parameters.
      *
@@ -457,6 +466,10 @@ public class EngineBuilder<T extends BaseSpongeEngine> {
 
         engine.getConfigurationManager().addPreConfigKnowledgeBases(preConfigKnowledgeBases);
         engine.getConfigurationManager().addPostConfigKnowledgeBases(postConfigKnowledgeBases);
+
+        if (ignoreConfigurationFileNotFound != null) {
+            engine.getConfigurationManager().setIgnoreConfigurationFileNotFound(ignoreConfigurationFileNotFound);
+        }
 
         return engine;
     }

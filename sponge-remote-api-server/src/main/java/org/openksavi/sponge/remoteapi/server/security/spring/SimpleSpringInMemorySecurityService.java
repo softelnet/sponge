@@ -62,7 +62,7 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemorySecuritySer
             UserContext userContext = new UserContext(username,
                     authentication.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.toList()));
 
-            return new SimpleSpringUserAuthentication(userContext, authentication);
+            return new SpringUserAuthentication(userContext, authentication);
         } catch (AuthenticationException e) {
             throw new InvalidUsernamePasswordServerException("Incorrect username or password", e);
         }
@@ -70,15 +70,15 @@ public class SimpleSpringInMemorySecurityService extends BaseInMemorySecuritySer
 
     @Override
     public UserAuthentication authenticateAnonymous(User anonymous) {
-        return new SimpleSpringUserAuthentication(new UserContext(anonymous.getName(), anonymous.getRoles()),
+        return new SpringUserAuthentication(new UserContext(anonymous.getName(), anonymous.getRoles()),
                 createAuthentication(anonymous));
     }
 
     @Override
     public void openSecurityContext(UserAuthentication userAuthentication) {
-        Validate.isTrue(userAuthentication instanceof SimpleSpringUserAuthentication, "The user authentication class should extend %s",
-                SimpleSpringUserAuthentication.class);
-        SimpleSpringUserAuthentication customUserAuthentication = (SimpleSpringUserAuthentication) userAuthentication;
+        Validate.isTrue(userAuthentication instanceof SpringUserAuthentication, "The user authentication class should extend %s",
+                SpringUserAuthentication.class);
+        SpringUserAuthentication customUserAuthentication = (SpringUserAuthentication) userAuthentication;
         if (customUserAuthentication.getAuthentication() != null) {
             SecurityContextHolder.getContext().setAuthentication(customUserAuthentication.getAuthentication());
         }
