@@ -131,6 +131,13 @@ public class BaseActionBuilder extends BaseProcessorBuilder<Action> implements A
     }
 
     @Override
+    public ActionBuilder withActivatable(boolean activatable) {
+        getMeta().setActivatable(activatable);
+
+        return this;
+    }
+
+    @Override
     public BaseActionBuilder withOnInit(ProcessorOnInitCallback<Action> onInitCallback) {
         return (BaseActionBuilder) super.withOnInit(onInitCallback);
     }

@@ -21,5 +21,6 @@
         <module>sponge-kb-engine</module>
         <module>sponge-kb-user-management</module>
         <module>sponge-kb-mpd-mpc</module>
+        <module>sponge-kb-designer</module>
     </modules>
 </project>

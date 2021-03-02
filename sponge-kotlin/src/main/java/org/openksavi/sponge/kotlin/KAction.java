@@ -108,4 +108,14 @@ public abstract class KAction extends BaseAction {
     public final KAction withCallable(boolean callable) {
         return (KAction) super.withCallable(callable);
     }
+
+    @Override
+    public final KAction withNonCallable() {
+        return (KAction) super.withNonCallable();
+    }
+
+    @Override
+    public final KAction withActivatable() {
+        return (KAction) super.withActivatable();
+    }
 }

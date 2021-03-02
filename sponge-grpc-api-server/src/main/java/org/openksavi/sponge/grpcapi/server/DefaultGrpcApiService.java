@@ -31,6 +31,7 @@ import org.openksavi.sponge.grpcapi.proto.VersionResponse;
 import org.openksavi.sponge.grpcapi.server.util.GrpcApiServerUtils;
 import org.openksavi.sponge.remoteapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.remoteapi.model.response.GetVersionResponse;
+import org.openksavi.sponge.remoteapi.server.InvalidAuthTokenServerException;
 import org.openksavi.sponge.remoteapi.server.RemoteApiService;
 import org.openksavi.sponge.remoteapi.server.security.UserContext;
 
@@ -85,7 +86,10 @@ public class DefaultGrpcApiService extends SpongeGrpcApiImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (Throwable e) {
-            logger.error("getVersion error", e);
+            // Do not log auth errors from stale clients.
+            if (!(e instanceof InvalidAuthTokenServerException)) {
+                logger.error("getVersion error", e);
+            }
 
             responseObserver.onError(GrpcApiServerUtils.createStatusException(remoteApiService, e));
         } finally {
