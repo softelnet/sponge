@@ -308,10 +308,10 @@ Sub-actions support simple argument and result substitutions.
 |===
 
 
-.Substitution keywords
+.Specific substitution notation
 [cols="1,2,4"]
 |===
-|Keyword |Substitution |Description
+|Notation |Substitution |Description
 
 |`@this`
 |argument source
@@ -332,6 +332,14 @@ Sub-actions support simple argument and result substitutions.
 |`@parent`
 |result target
 |A whole list for a list element sub-actions. Applies only for lists.
+
+|`/argumentName`
+|argument source
+|An action argument relative to the action arguments root, e.g. `"/header"` corresponds to an argument named `header` of the action. If the argument name is missing (e.g. `"/"`), all action arguments as a record type (represented by a map value) are taken into account.
+
+|`/argumentName`
+|result target
+|An action argument relative to the action arguments root, e.g. `"/header"` corresponds to an argument named `header` of the action. If the argument name is missing (e.g. `"/"`), all action arguments as a record type (represented by a map value) are taken into account.
 |===
 
 ==== Argument substitution

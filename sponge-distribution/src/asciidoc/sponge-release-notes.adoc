@@ -14,6 +14,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Enhanced Spring Security integration in the Remote API server.
 * Added new artifacts for Spring Boot integration: `sponge-spring-boot-starter` and `sponge-remote-service-spring-boot-starter`.
 * Added a new Remote API feature `protocolVersion`. For compatibility, both a server and a client should use the same protocol version.
+* Added support for `/argumentName` and `/` sub-action substitutions.
 * Dependencies upgrade.
 
 [discrete]

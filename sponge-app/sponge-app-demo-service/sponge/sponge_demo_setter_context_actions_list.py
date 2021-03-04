@@ -12,6 +12,7 @@ def createFruitWithColorRecordType(name = None):
 class FruitsWithColorsContextSetter(Action):
     def onConfigure(self):
         self.withLabel("Fruits with colors - context setter").withArgs([
+            StringType("header").withLabel("Header").withNullable(),
             ListType("fruits").withLabel("Fruits").withElement(createFruitWithColorRecordType("fruit")).withDefaultValue([
                 AnnotatedValue({"name":"Orange", "color":"orange"}),
                 AnnotatedValue({"name":"Lemon", "color":"yellow"}),
@@ -21,6 +22,9 @@ class FruitsWithColorsContextSetter(Action):
                         SubAction("FruitsWithColorsContextSetter_Choose").withLabel("Choose a new fruit").withArg("chosenFruit", "@this").withResult("@this"),
                         SubAction("FruitsWithColorsContextSetter_Index").withArg("indexArg", "@index"),
                         SubAction("FruitsWithColorsContextSetter_Parent").withArg("parentArg", "@parent").withResult("@parent"),
+                        SubAction("FruitsWithColorsContextSetter_Root").withArg("header", "/header").withResult("/header"),
+                        SubAction("FruitsWithColorsContextSetter_ActionRecord").withArg("record", "/").withResult("/"),
+                        SubAction("FruitsWithColorsContextSetter_ActionRecordFull").withArg("/", "/").withResult("/"),
                     ]})
         ]).withNonCallable()
 
@@ -92,3 +96,43 @@ class FruitsWithColorsContextSetter_Parent(Action):
             return parentArg + [AnnotatedValue({"name":"Strawberry", "color":"red"})]
         else:
             return parentArg[:-1]
+
+class FruitsWithColorsContextSetter_Root(Action):
+    def onConfigure(self):
+        self.withLabel("Update a header").withArgs([
+            StringType("header").withLabel("Header").withNullable(),
+        ]).withResult(StringType())
+        self.withFeatures({"visible":False})
+    def onCall(self, header):
+        return header
+
+class FruitsWithColorsContextSetter_ActionRecord(Action):
+    def onConfigure(self):
+        self.withLabel("Action record").withArg(self.createActionRecordType("record")).withResult(self.createActionRecordType())
+        self.withFeatures({"visible":False})
+
+    def createActionRecordType(self, name = None):
+        return RecordType(name).withFields([
+                StringType("header").withLabel("Header").withNullable(),
+                ListType("fruits").withLabel("Fruits").withElement(createFruitWithColorRecordType("fruit"))
+            ])
+
+    def onCall(self, record):
+        return record
+
+class FruitsWithColorsContextSetter_ActionRecordFull(Action):
+    def onConfigure(self):
+        self.withLabel("Action record full").withArgs([
+            StringType("header").withLabel("Header").withNullable(),
+            ListType("fruits").withLabel("Fruits").withElement(createFruitWithColorRecordType("fruit"))
+        ]).withResult(self.createActionRecordType())
+        self.withFeatures({"visible":False})
+
+    def createActionRecordType(self, name = None):
+        return RecordType(name).withFields([
+                StringType("header").withLabel("Header").withNullable(),
+                ListType("fruits").withLabel("Fruits").withElement(createFruitWithColorRecordType("fruit"))
+            ])
+
+    def onCall(self, header, fruits):
+        return {"header":header, "fruits":fruits}

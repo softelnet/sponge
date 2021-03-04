@@ -31,6 +31,9 @@ public final class DataTypeConstants {
     @Experimental
     public static final String PATH_INDEX = "@index";
 
+    @Experimental
+    public static final String ROOT_PATH_PREFIX = "/";
+
     private DataTypeConstants() {
         //
     }
