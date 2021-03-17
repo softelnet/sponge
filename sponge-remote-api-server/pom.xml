@@ -28,7 +28,7 @@
             <version>${project.version}</version>
         </dependency>
 
-       <!-- TODO Change to Open API 3 camel-openapi-java after the issue https://issues.apache.org/jira/browse/CAMEL-15503 is resolved. -->
+        <!-- TODO Change to Open API 3 camel-openapi-java after the issue https://issues.apache.org/jira/browse/CAMEL-15503 is resolved. -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-swagger-java</artifactId>
@@ -54,6 +54,10 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

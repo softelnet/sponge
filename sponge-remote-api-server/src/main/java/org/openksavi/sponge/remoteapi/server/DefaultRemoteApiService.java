@@ -104,6 +104,8 @@ import org.openksavi.sponge.remoteapi.server.security.SecurityService;
 import org.openksavi.sponge.remoteapi.server.security.UserAuthentication;
 import org.openksavi.sponge.remoteapi.server.security.UserAuthenticationQuery;
 import org.openksavi.sponge.remoteapi.server.security.UserContext;
+import org.openksavi.sponge.remoteapi.server.util.FormDataMultiPartContext;
+import org.openksavi.sponge.remoteapi.server.util.LazyInputStreamValue;
 import org.openksavi.sponge.remoteapi.server.util.RemoteApiServerUtils;
 import org.openksavi.sponge.remoteapi.type.converter.BaseTypeConverter;
 import org.openksavi.sponge.remoteapi.type.converter.DefaultTypeConverter;
@@ -356,6 +358,41 @@ public class DefaultRemoteApiService implements RemoteApiService {
     }
 
     @SuppressWarnings("unchecked")
+    private Object callActionByArgList(ActionAdapter actionAdapter, List args, FormDataMultiPartContext formDataMultiPartContext) {
+        List effectiveArgs = args;
+
+        // Add input streams at the and of the args list.
+        if (formDataMultiPartContext != null) {
+            final List localEffectiveArgs = effectiveArgs != null ? new ArrayList<>(effectiveArgs) : new ArrayList<>();
+
+            if (actionAdapter.getMeta().getArgs() != null) {
+                actionAdapter.getMeta().getArgs().stream().skip(effectiveArgs.size())
+                        .forEach(argMeta -> localEffectiveArgs.add(new LazyInputStreamValue(argMeta.getName(), formDataMultiPartContext)));
+            }
+
+            effectiveArgs = localEffectiveArgs;
+        }
+
+        return getEngine().getOperations().call(actionAdapter.getMeta().getName(), unmarshalActionArgs(actionAdapter, effectiveArgs));
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object callActionByArgMap(ActionAdapter actionAdapter, Map args, FormDataMultiPartContext formDataMultiPartContext) {
+        final Map<String, Object> effectiveArgs = new LinkedHashMap<>((Map<String, Object>) args);
+
+        if (formDataMultiPartContext != null) {
+            if (actionAdapter.getMeta().getArgs() != null) {
+                actionAdapter.getMeta().getArgs().stream().skip(effectiveArgs.size()).forEach(argMeta -> effectiveArgs
+                        .put(argMeta.getName(), new LazyInputStreamValue(argMeta.getName(), formDataMultiPartContext)));
+            }
+        }
+
+        List<Object> unmarshalActionArgs = unmarshalActionArgs(actionAdapter,
+                SpongeUtils.buildActionArgsList(actionAdapter, (Map<String, ?>) effectiveArgs, settings.isIgnoreUnknownArgs()));
+
+        return getEngine().getOperations().call(actionAdapter.getMeta().getName(), unmarshalActionArgs);
+    }
+
     @Override
     public ActionCallResponse call(ActionCallRequest request) {
         ActionAdapter actionAdapter = null;
@@ -369,11 +406,13 @@ public class DefaultRemoteApiService implements RemoteApiService {
         Object args = request.getParams().getArgs();
         Object actionResult;
 
+        FormDataMultiPartContext formDataMultiPartContext = ((CamelRemoteApiSession) session.get()).getExchange()
+                .getProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_FORM_DATA_MULTI_PART_CONTEXT, FormDataMultiPartContext.class);
+
         if (args instanceof List || args == null) {
-            actionResult = getEngine().getOperations().call(actionName, unmarshalActionArgs(actionAdapter, (List) args));
+            actionResult = callActionByArgList(actionAdapter, (List) args, formDataMultiPartContext);
         } else if (args instanceof Map) {
-            actionResult = getEngine().getOperations().call(actionName, unmarshalActionArgs(actionAdapter,
-                    SpongeUtils.buildActionArgsList(actionAdapter, (Map<String, ?>) args, settings.isIgnoreUnknownArgs())));
+            actionResult = callActionByArgMap(actionAdapter, (Map) args, formDataMultiPartContext);
         } else {
             throw new IllegalArgumentException("Action args should be an instance of a List or a Map");
         }

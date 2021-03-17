@@ -226,7 +226,7 @@ class NumberTypeResultAction(Action):
 
 # TODO RecordType
 
-# TODO StreamType
+# TODO OutputStreamType and InputStreamType
 
 class StringTypeArgAction(Action):
     def onConfigure(self):

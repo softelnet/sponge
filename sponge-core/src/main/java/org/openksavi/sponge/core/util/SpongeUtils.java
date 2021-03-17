@@ -122,13 +122,14 @@ import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.DataType;
 import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.DynamicType;
+import org.openksavi.sponge.type.InputStreamType;
 import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.MapType;
 import org.openksavi.sponge.type.NumberType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.RecordType;
-import org.openksavi.sponge.type.StreamType;
+import org.openksavi.sponge.type.OutputStreamType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.VoidType;
@@ -159,7 +160,7 @@ public abstract class SpongeUtils {
     @SuppressWarnings("rawtypes")
     private static final List<Class<? extends DataType>> SUPPORTED_TYPES = Arrays.asList(AnyType.class, BinaryType.class, BooleanType.class,
             DateTimeType.class, DynamicType.class, IntegerType.class, ListType.class, MapType.class, NumberType.class, ObjectType.class,
-            RecordType.class, StreamType.class, StringType.class, TypeType.class, VoidType.class);
+            RecordType.class, OutputStreamType.class, InputStreamType.class, StringType.class, TypeType.class, VoidType.class);
 
     @SuppressWarnings("unchecked")
     public static <T> T createInstance(String className, Class<T> javaClass) {
@@ -1081,6 +1082,6 @@ public abstract class SpongeUtils {
     @SuppressWarnings("rawtypes")
     public static void applyCategory(ProcessorAdapter processorAdapter) {
         processorAdapter.getKnowledgeBase().getEngineOperations().getCategories()
-            .forEach(categoryMeta -> applyCategory(categoryMeta, processorAdapter));
+                .forEach(categoryMeta -> applyCategory(categoryMeta, processorAdapter));
     }
 }

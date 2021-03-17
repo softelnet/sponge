@@ -41,8 +41,11 @@ public class RemoteApiOperation<I extends SpongeRequest<P>, P, O extends SpongeR
 
     private RemoteApiMethodHandler<I, O> handler;
 
+    private boolean supportsFormDataMultiPart = false;
+
     public RemoteApiOperation(String method, String description, Class<I> requestClass, Class<P> requestParamsClass,
-            String requestDescription, Class<O> responseClass, String responseDescription, RemoteApiMethodHandler<I, O> handler) {
+            String requestDescription, Class<O> responseClass, String responseDescription, RemoteApiMethodHandler<I, O> handler,
+            boolean supportsFormDataMultiPart) {
         this.method = method;
         this.description = description;
         this.requestClass = requestClass;
@@ -51,6 +54,12 @@ public class RemoteApiOperation<I extends SpongeRequest<P>, P, O extends SpongeR
         this.responseClass = responseClass;
         this.responseDescription = responseDescription;
         this.handler = handler;
+        this.supportsFormDataMultiPart = supportsFormDataMultiPart;
+    }
+
+    public RemoteApiOperation(String method, String description, Class<I> requestClass, Class<P> requestParamsClass,
+            String requestDescription, Class<O> responseClass, String responseDescription, RemoteApiMethodHandler<I, O> handler) {
+        this(method, description, requestClass, requestParamsClass, requestDescription, responseClass, responseDescription, handler, false);
     }
 
     public String getMethod() {
@@ -115,5 +124,13 @@ public class RemoteApiOperation<I extends SpongeRequest<P>, P, O extends SpongeR
 
     public void setHandler(RemoteApiMethodHandler<I, O> handler) {
         this.handler = handler;
+    }
+
+    public boolean isSupportsFormDataMultiPart() {
+        return supportsFormDataMultiPart;
+    }
+
+    public void setSupportsFormDataMultiPart(boolean supportsFormDataMultiPart) {
+        this.supportsFormDataMultiPart = supportsFormDataMultiPart;
     }
 }

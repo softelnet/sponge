@@ -740,8 +740,6 @@ Calls an action.
 |A response header.
 |===
 
-If an action result type is `StreamType` the response won't be compatible with the JSON-RPC 2.0. The HTTP response will contain a raw result of the action.
-
 .Examples
 [source,bash]
 ----
@@ -780,6 +778,71 @@ curl -i -k -X POST -H "Content-type:application/json" http://localhost:8888/call
 
 # Request
 curl -G "http://localhost:8888/call?" --data-urlencode "params=`echo '{"name":"OutputStreamResultAction"}' | base64`"
+----
+
+==== Output stream type
+If an action result type is `OutputStreamType` the response won't be compatible with the JSON-RPC 2.0. The HTTP response will contain a raw result of the action.
+
+==== Input stream type
+An action argument of the `InputStreamType` type can be used to upload files (including large files) to the server. Files can be uploaded via HTML forms and JavaScript `FormData`. However there are several limitations:
+
+* Only trailing action arguments may be of type `InputStreamType`. They must be accessed in the `onCall` method sequentially, in the same order as in the action metadata, because they are lazily loaded due to the requirements of the underlying libraries.
+* Action arguments metadata are required.
+* The value of the first field of an HTML form must be a JSON-RPC 2.0 request. The name of this field is not significant. Action arguments in this JSON-RPC 2.0 request mustn't contain any entries for input stream arguments. In most cases this field would be hidden.
+* All `file` form fields must be present after the JSON-RPC 2.0 field and they must be put in the same order as specified in the action metadata. A `file` form field shouldn't be `multiple`.
+* Supported only for the non strict JSON-RPC 2.0 endpoint: `/call`.
+
+.Example of an HTML form with file upload
+[source,html]
+----
+<!DOCTYPE html>
+<html>
+  <body>
+    <form id="uploadForm">
+      <input type="hidden" id="jsonrpc" name="jsonrpc" value='{"jsonrpc":"2.0","method":"call","params":{"name":"InputStreamArgAction","args":["VALUE"]},"id":1}'>
+      <label for="file">Filename:</label>
+      <input type="file" name="fileStream" id="file" />
+      <input id="submit" type="submit" value="Upload">
+      <p/>
+      <div id="message"></div>
+    </form>
+
+  <script type="text/javascript">
+  document.getElementById("uploadForm").onsubmit = async (e) => {
+      e.preventDefault();
+
+      document.getElementById("message").innerHTML = "Uploading file...";
+
+      let response = await fetch("/call", {
+        method: "POST",
+        body: new FormData(uploadForm)
+      });
+
+      let json = await response.json();
+
+      document.getElementById("message").innerHTML = json.result.value;
+    };
+  </script>
+  </body>
+</html>
+----
+
+.Example of an action that allows uploading files
+[source,python]
+----
+from java.io import File
+from org.apache.commons.io import FileUtils
+
+class InputStreamArgAction(Action):
+    def onConfigure(self):
+        self.withLabel("Input stream arg").withArgs([
+            StringType("value"),
+            InputStreamType("fileStream")
+        ]).withResult(StringType())
+    def onCall(self, value, fileStream):
+        uploadDir = "{}/upload/".format(sponge.home)
+        FileUtils.copyInputStreamToFile(fileStream.inputStream, File(uploadDir + fileStream.filename))
+        return "Uploaded {}".format(fileStream.filename)
 ----
 
 === The `isActionActive` method

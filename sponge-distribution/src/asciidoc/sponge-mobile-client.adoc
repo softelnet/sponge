@@ -543,7 +543,10 @@ Supported only if an object type defines a companion type that is supported.
 ==== `RecordType`
 Supported. This functionality is considered experimental.
 
-==== `StreamType`
+==== `InputStreamType`
+Not supported.
+
+==== `OutputStreamType`
 Not supported.
 
 ==== `StringType`

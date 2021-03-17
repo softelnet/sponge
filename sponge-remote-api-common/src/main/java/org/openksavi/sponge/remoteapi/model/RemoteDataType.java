@@ -28,13 +28,14 @@ import org.openksavi.sponge.type.BooleanType;
 import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.DateTimeType;
 import org.openksavi.sponge.type.DynamicType;
+import org.openksavi.sponge.type.InputStreamType;
 import org.openksavi.sponge.type.IntegerType;
 import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.MapType;
 import org.openksavi.sponge.type.NumberType;
 import org.openksavi.sponge.type.ObjectType;
 import org.openksavi.sponge.type.RecordType;
-import org.openksavi.sponge.type.StreamType;
+import org.openksavi.sponge.type.OutputStreamType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.VoidType;
@@ -49,7 +50,9 @@ import org.openksavi.sponge.type.VoidType;
         @Type(value = IntegerType.class, name = DataTypeKind.CODE_INTEGER), @Type(value = ListType.class, name = DataTypeKind.CODE_LIST),
         @Type(value = MapType.class, name = DataTypeKind.CODE_MAP), @Type(value = NumberType.class, name = DataTypeKind.CODE_NUMBER),
         @Type(value = ObjectType.class, name = DataTypeKind.CODE_OBJECT), @Type(value = RecordType.class, name = DataTypeKind.CODE_RECORD),
-        @Type(value = StreamType.class, name = DataTypeKind.CODE_STREAM), @Type(value = StringType.class, name = DataTypeKind.CODE_STRING),
-        @Type(value = TypeType.class, name = DataTypeKind.CODE_TYPE), @Type(value = VoidType.class, name = DataTypeKind.CODE_VOID) })
+        @Type(value = OutputStreamType.class, name = DataTypeKind.CODE_OUTPUT_STREAM),
+        @Type(value = InputStreamType.class, name = DataTypeKind.CODE_INPUT_STREAM),
+        @Type(value = StringType.class, name = DataTypeKind.CODE_STRING), @Type(value = TypeType.class, name = DataTypeKind.CODE_TYPE),
+        @Type(value = VoidType.class, name = DataTypeKind.CODE_VOID) })
 public abstract class RemoteDataType {
 }

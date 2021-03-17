@@ -21,6 +21,7 @@ package org.openksavi.sponge.type;
  */
 @SuppressWarnings("rawtypes")
 public enum DataTypeKind {
+
     ANY(AnyType.class),
     BINARY(BinaryType.class),
     BOOLEAN(BooleanType.class),
@@ -32,7 +33,8 @@ public enum DataTypeKind {
     NUMBER(NumberType.class),
     OBJECT(ObjectType.class),
     RECORD(RecordType.class),
-    STREAM(StreamType.class),
+    OUTPUT_STREAM(OutputStreamType.class),
+    INPUT_STREAM(InputStreamType.class),
     STRING(StringType.class),
     TYPE(TypeType.class),
     VOID(VoidType.class);
@@ -59,7 +61,9 @@ public enum DataTypeKind {
 
     public static final String CODE_RECORD = "RECORD";
 
-    public static final String CODE_STREAM = "STREAM";
+    public static final String CODE_OUTPUT_STREAM = "OUTPUT_STREAM";
+
+    public static final String CODE_INPUT_STREAM = "INPUT_STREAM";
 
     public static final String CODE_STRING = "STRING";
 

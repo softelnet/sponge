@@ -119,6 +119,8 @@ public final class RemoteApiServerConstants {
 
     public static final String EXCHANGE_PROPERTY_IS_NOTIFICATION = "isNotification";
 
+    public static final String EXCHANGE_PROPERTY_FORM_DATA_MULTI_PART_CONTEXT = "formDataMultiPartContext";
+
     public static final String PROP_HOST = "sponge.remoteApiServer.host";
 
     public static final String PROP_PORT = "sponge.remoteApiServer.port";

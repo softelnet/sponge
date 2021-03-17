@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <form id="uploadForm">
+      <input type="hidden" id="jsonrpc" name="jsonrpc" value='{"jsonrpc":"2.0","method":"call","params":{"name":"InputStreamArgAction","args":["VALUE"]},"id":1}'>
+      <label for="file">Filename:</label>
+      <input type="file" name="fileStream" id="file" />
+      <label for="file2">Filename 2:</label>
+      <input type="file" name="fileStream2" id="file2" />
+      <input id="submit" type="submit" value="Upload">
+      <p/>
+      <div id="message"></div>
+    </form>
+
+  <script type="text/javascript">
+  document.getElementById("uploadForm").onsubmit = async (e) => {
+      e.preventDefault();
+
+      document.getElementById("message").innerHTML = "Uploading files...";
+
+      let response = await fetch("/call", {
+        method: "POST",
+        body: new FormData(uploadForm)
+      });
+
+      let json = await response.json();
+
+      document.getElementById("message").innerHTML = json.result.value;
+    };
+  </script>
+  </body>
+</html>

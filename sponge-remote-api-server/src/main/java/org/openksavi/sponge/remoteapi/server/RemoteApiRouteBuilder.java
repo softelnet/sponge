@@ -20,6 +20,7 @@ import static org.apache.camel.model.rest.RestParamType.body;
 import static org.apache.camel.model.rest.RestParamType.query;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -34,6 +35,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,6 +51,10 @@ import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestDefinition;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -94,6 +100,7 @@ import org.openksavi.sponge.remoteapi.model.response.ReloadResponse;
 import org.openksavi.sponge.remoteapi.model.response.ResponseHeader;
 import org.openksavi.sponge.remoteapi.model.response.SendEventResponse;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
+import org.openksavi.sponge.remoteapi.server.util.FormDataMultiPartContext;
 import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
 import org.openksavi.sponge.type.value.OutputStreamValue;
 
@@ -172,6 +179,9 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         // @formatter:off
         RestConfigurationDefinition configuration = restConfiguration().component(getSettings().getComponentId())
             .bindingMode(RestBindingMode.off)
+            // disableStreamCache is turned on to allow uploading large files in action calls (with InputStreamType arguments).
+            // https://github.com/apache/camel/blob/master/components/camel-servlet/src/main/docs/servlet-component.adoc
+            .endpointProperty("disableStreamCache", "true")
             .dataFormatProperty("prettyPrint", Boolean.toString(getSettings().isPrettyPrint()))
             .enableCORS(true)
             .contextPath("/" + (getSettings().getPath() != null ? getSettings().getPath() : ""))
@@ -397,10 +407,51 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         return new CamelRemoteApiSession(null, exchange);
     }
 
+    protected FormDataMultiPartContext readFormDataMultiPartContext(RemoteApiOperation operation, Exchange exchange) throws Exception {
+        HttpServletRequest httpRequest = exchange.getIn(HttpMessage.class).getRequest();
+
+        if (!ServletFileUpload.isMultipartContent(httpRequest)) {
+            return null;
+        }
+
+        ServletFileUpload upload = new ServletFileUpload();
+
+        FileItemIterator iter = upload.getItemIterator(httpRequest);
+
+        FormDataMultiPartContext multiPartContext = new FormDataMultiPartContext();
+
+        if (iter.hasNext()) {
+            FileItemStream item = iter.next();
+            if (item.isFormField()) {
+                try (InputStream inputStream = item.openStream()) {
+                    String json = IOUtils.toString(inputStream, StandardCharsets.UTF_8.name());
+
+                    multiPartContext.setJson(json);
+                }
+            }
+        }
+
+        if (multiPartContext.getJson() == null) {
+            throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INTERNAL, "Missing a required JSON-RPC form field");
+        }
+
+        multiPartContext.setFileItemIterator(iter);
+
+        return multiPartContext;
+    }
+
     @SuppressWarnings({ "unchecked" })
     protected Processor createOperationExecutionProcessor(Function<Message, String> requestBodyProvider, RemoteApiOperation operation) {
         return exchange -> {
-            String requestBody = requestBodyProvider.apply(exchange.getIn());
+            FormDataMultiPartContext formDataMultiPartContext = null;
+            if (operation.isSupportsFormDataMultiPart()) {
+                formDataMultiPartContext = readFormDataMultiPartContext(operation, exchange);
+            }
+
+            exchange.setProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_FORM_DATA_MULTI_PART_CONTEXT, formDataMultiPartContext);
+
+            String requestBody =
+                    formDataMultiPartContext != null ? formDataMultiPartContext.getJson() : requestBodyProvider.apply(exchange.getIn());
 
             if (logger.isDebugEnabled()) {
                 logger.debug("Remote API {} request: {}", operation.getMethod(), RemoteApiUtils.obfuscatePassword(requestBody));
@@ -557,7 +608,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                 (service, request, exchange) -> service.getActions(request)));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_CALL, "Call an action", ActionCallRequest.class,
                 ActionCallParams.class, "The call action request", ActionCallResponse.class, "The action call response",
-                (service, request, exchange) -> service.call(request)));
+                (service, request, exchange) -> service.call(request), true));
         addOperation(new RemoteApiOperation<>(RemoteApiConstants.METHOD_IS_ACTION_ACTIVE, "Is action active", IsActionActiveRequest.class,
                 IsActionActiveParams.class, "The action active request", IsActionActiveResponse.class, "The action active response",
                 (service, request, exchange) -> service.isActionActive(request)));

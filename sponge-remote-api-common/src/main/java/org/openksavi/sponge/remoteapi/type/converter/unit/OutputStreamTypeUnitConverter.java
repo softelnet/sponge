@@ -19,25 +19,20 @@ package org.openksavi.sponge.remoteapi.type.converter.unit;
 import org.openksavi.sponge.remoteapi.type.converter.BaseUnitTypeConverter;
 import org.openksavi.sponge.remoteapi.type.converter.TypeConverter;
 import org.openksavi.sponge.type.DataTypeKind;
-import org.openksavi.sponge.type.StreamType;
+import org.openksavi.sponge.type.OutputStreamType;
 import org.openksavi.sponge.type.value.OutputStreamValue;
 
-public class StreamTypeUnitConverter extends BaseUnitTypeConverter<OutputStreamValue, StreamType> {
+/**
+ * Marshalling is handled by the upper layer.
+ */
+public class OutputStreamTypeUnitConverter extends BaseUnitTypeConverter<OutputStreamValue, OutputStreamType> {
 
-    public StreamTypeUnitConverter() {
-        super(DataTypeKind.STREAM);
-    }
-
-    /**
-     * Marshalling handled by the upper layer.
-     */
-    @Override
-    public Object marshal(TypeConverter converter, StreamType type, OutputStreamValue value) {
-        return value;
+    public OutputStreamTypeUnitConverter() {
+        super(DataTypeKind.OUTPUT_STREAM);
     }
 
     @Override
-    public OutputStreamValue unmarshal(TypeConverter converter, StreamType type, Object value) {
-        throw new UnsupportedOperationException("Unmarshalling of a stream value is not supported");
+    public OutputStreamValue unmarshal(TypeConverter converter, OutputStreamType type, Object value) {
+        throw new UnsupportedOperationException("Unmarshalling of an output stream value is not supported");
     }
 }

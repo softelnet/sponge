@@ -33,6 +33,7 @@ import org.openksavi.sponge.core.BaseProcessorAdapter;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.ProcessorType;
 import org.openksavi.sponge.type.DataType;
+import org.openksavi.sponge.type.DataTypeKind;
 import org.openksavi.sponge.type.provided.ProvidedValue;
 import org.openksavi.sponge.util.DataTypeUtils;
 import org.openksavi.sponge.util.SpongeApiUtils;
@@ -163,13 +164,15 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                 validateArg(argType);
 
                 // Optional arguments may be specified only as last in the argument list.
-                Validate.isTrue(!foundFirstOptionalArg || argType.isOptional(), "Only last arguments may be optional");
+                Validate.isTrue(!foundFirstOptionalArg || argType.isOptional(), "Only trailing arguments may be optional");
                 if (argType.isOptional()) {
                     foundFirstOptionalArg = true;
                 }
             }
 
             validateArgProvided();
+
+            validateInputStreamArgs();
         }
 
         validateResult(getMeta().getResult());
@@ -204,6 +207,20 @@ public class BaseActionAdapter extends BaseProcessorAdapter<Action> implements A
                         type.getKind().name());
             }
         }, false);
+    }
+
+    private void validateInputStreamArgs() {
+        if (getMeta().getArgs() != null) {
+            boolean foundFirstInputStreamArg = false;
+            for (DataType argType : getMeta().getArgs()) {
+                // InputStreamType arguments may be specified only as last in the argument list.
+                Validate.isTrue(!foundFirstInputStreamArg || argType.getKind() == DataTypeKind.INPUT_STREAM,
+                        "Only trailing arguments may be of type InputStreamType");
+                if (argType.getKind() == DataTypeKind.INPUT_STREAM) {
+                    foundFirstInputStreamArg = true;
+                }
+            }
+        }
     }
 
     private static boolean isArgProvided(DataType argType) {

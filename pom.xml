@@ -87,6 +87,7 @@
         <commons-crypto.version>1.1.0</commons-crypto.version>
         <commons-email.version>1.5</commons-email.version>
         <commons-compress.version>1.20</commons-compress.version>
+        <commons-fileupload.version>1.4</commons-fileupload.version>
         <quartz.version>2.3.2</quartz.version>
         <guava.version>29.0-jre</guava.version>
         <caffeine.version>2.8.8</caffeine.version>
@@ -695,6 +696,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
                 <version>${commons-compress.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons-fileupload.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
