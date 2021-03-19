@@ -75,6 +75,13 @@
         </Or>
         <Bug pattern="BC_UNCONFIRMED_CAST" />
     </Match>
+    <Match>
+        <Class name="org.openksavi.sponge.springboot.remoteservice.SpongeRemoteServiceAutoConfiguration" />
+        <Or>
+            <Method name="setupGrpcApiServerPlugin" />
+        </Or>
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
+    </Match>
 
     <!-- Reason: Platform dependent encoding is sufficient for an interactive mode -->
     <Match>
@@ -99,6 +106,9 @@
     <!-- Reason: Generated -->
     <Match>
         <Package name="org.openksavi.sponge.grpcapi.proto"/>
+    </Match>
+    <Match>
+        <Package name="org.openksavi.sponge.examples.project.springboot.model"/>
     </Match>
 
     <!-- Reason: Used only in tests -->

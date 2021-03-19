@@ -22,7 +22,7 @@ The {appName} uses several {sponge} concepts such as actions and action argument
 
 You could build a customized GUI using your own Flutter code that will call the same {sponge} actions as the {appName}, using the upcoming {sponge} Flutter API library.
 
-Unless noted otherwise in the release notes, the {appName} and the {sponge} Flutter API library versions `0.minor.*` are compatible only with the {sponge}  versions `1.minor.*`, e.g. the `0.16.5` version of the {appName} will be compatible with the `1.16.1` version of the {sponge} engine.
+Unless noted otherwise in the release notes, the {appName} and the {sponge} Flutter API library are compatible with the {sponge} service that has the same Remote API protocol version.
 
 The {appName} layout is optimized for smartphones.
 
