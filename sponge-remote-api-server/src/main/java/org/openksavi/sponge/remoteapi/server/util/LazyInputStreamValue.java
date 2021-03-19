@@ -19,7 +19,6 @@ package org.openksavi.sponge.remoteapi.server.util;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 
 import org.apache.commons.fileupload.FileItemStream;
 
@@ -42,47 +41,38 @@ public class LazyInputStreamValue extends InputStreamValue {
 
     @Override
     public String getContentType() {
-        nextFileItem();
+        ensureCurrentItem();
         return super.getContentType();
     }
 
     @Override
     public InputStream getInputStream() {
-        nextFileItem();
+        ensureCurrentItem();
         return super.getInputStream();
     }
 
     @Override
     public String getFilename() {
-        nextFileItem();
+        ensureCurrentItem();
         return super.getFilename();
     }
 
     @Override
     public Map<String, Object> getHeaders() {
-        nextFileItem();
+        ensureCurrentItem();
         return super.getHeaders();
     }
 
-    private void nextFileItem() {
-        if (consumed) {
-            return;
-        }
+    public boolean hasNext() {
+        return context.hasNextItem(name);
+    }
 
+    public LazyInputStreamValue next() {
+        return new LazyInputStreamValue(name, context);
+    }
+
+    private void applyItem(FileItemStream item) {
         try {
-            if (!context.getFileItemIterator().hasNext()) {
-                throw new SpongeException("There is no more parts in the multipart form data");
-            }
-
-            FileItemStream item = context.getFileItemIterator().next();
-
-            consumed = true;
-
-            if (!Objects.equals(item.getFieldName(), name)) {
-                throw new SpongeException(String.format("The multipart form data part name '%s' is different that the expected name '%s'",
-                        item.getName(), name));
-            }
-
             setInputStream(item.openStream());
             setFilename(item.getName());
             setContentType(item.getContentType());
@@ -97,5 +87,19 @@ public class LazyInputStreamValue extends InputStreamValue {
         } catch (Exception e) {
             throw SpongeUtils.wrapException(e);
         }
+    }
+
+    private void ensureCurrentItem() {
+        if (consumed) {
+            return;
+        }
+
+        if (!hasNext()) {
+            throw new SpongeException("There is no more files for " + name);
+        }
+
+        consumed = true;
+
+        applyItem(context.nextItem(name));
     }
 }

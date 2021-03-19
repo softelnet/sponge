@@ -6,6 +6,7 @@ Used for testing a Remote API server and clients.
 from java.util.concurrent.atomic import AtomicBoolean
 from org.apache.commons.io import IOUtils
 from java.time import LocalDateTime
+from java.nio.charset import StandardCharsets
 
 def onInit():
     # Variables for assertions only.
@@ -429,6 +430,27 @@ class SubAction2(Action):
         self.withArgs([ListType("target1")]).withResult(ListType())
     def onCall(self, target1):
         return target1 + ["z"]
+
+class InputStreamArgAction(Action):
+    def onConfigure(self):
+        self.withLabel("Input stream arg").withArgs([
+            StringType("value"),
+            InputStreamType("fileStream"),
+            InputStreamType("fileStream2")
+        ]).withResult(StringType())
+    def onCall(self, value, fileStream, fileStream2):
+        uploaded = "Uploaded"
+        uploadDir = "{}/upload/".format(sponge.home)
+        # Single file.
+        if fileStream.hasNext():
+            IOUtils.readLines(fileStream.inputStream, StandardCharsets.UTF_8)
+            uploaded += " " + fileStream.filename
+        # Multiple files.
+        while fileStream2.hasNext():
+            fs2 = fileStream2.next()
+            IOUtils.readLines(fs2.inputStream, StandardCharsets.UTF_8)
+            uploaded += " " + fs2.filename
+        return uploaded
 
 class RemoteApiIsActionPublic(Action):
     def onCall(self, actionAdapter):

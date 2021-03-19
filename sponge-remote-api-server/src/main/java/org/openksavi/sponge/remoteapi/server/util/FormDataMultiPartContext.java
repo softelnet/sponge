@@ -16,13 +16,21 @@
 
 package org.openksavi.sponge.remoteapi.server.util;
 
+import java.util.Objects;
+
 import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.lang3.StringUtils;
+
+import org.openksavi.sponge.core.util.SpongeUtils;
 
 public class FormDataMultiPartContext {
 
     private String json;
 
     private FileItemIterator fileItemIterator;
+
+    private FileItemStream currentItem;
 
     public String getJson() {
         return json;
@@ -32,11 +40,51 @@ public class FormDataMultiPartContext {
         this.json = json;
     }
 
-    public FileItemIterator getFileItemIterator() {
-        return fileItemIterator;
-    }
-
     public void setFileItemIterator(FileItemIterator fileItemIterator) {
         this.fileItemIterator = fileItemIterator;
+    }
+
+    public boolean hasNextItem(String name) {
+        try {
+
+            if (currentItem == null) {
+                do {
+                    if (!fileItemIterator.hasNext()) {
+                        return false;
+                    }
+
+                    currentItem = fileItemIterator.next();
+                } while (StringUtils.isBlank(currentItem.getName())); // Skip empty files.
+            }
+
+            return itemMatches(currentItem, name);
+        } catch (Exception e) {
+            throw SpongeUtils.wrapException(e);
+        }
+    }
+
+    private boolean itemMatches(FileItemStream item, String name) {
+        return Objects.equals(currentItem.getFieldName(), name) && !StringUtils.isBlank(currentItem.getName());
+    }
+
+    public FileItemStream nextItem(String name) {
+        try {
+            FileItemStream item;
+
+            if (currentItem == null) {
+                currentItem = fileItemIterator.next();
+            }
+
+            if (!itemMatches(currentItem, name)) {
+                throw new IllegalStateException("There are no more items for " + name);
+            }
+
+            item = currentItem;
+            currentItem = null;
+
+            return item;
+        } catch (Exception e) {
+            throw SpongeUtils.wrapException(e);
+        }
     }
 }

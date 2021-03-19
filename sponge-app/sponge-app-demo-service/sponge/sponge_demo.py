@@ -295,9 +295,17 @@ class InputStreamArgAction(Action):
         ]).withResult(StringType())
     def onCall(self, value, fileStream, fileStream2):
         if not sponge.getVariable("demo.readOnly", False):
+            uploaded = "Uploaded"
             uploadDir = "{}/upload/".format(sponge.home)
-            FileUtils.copyInputStreamToFile(fileStream.inputStream, File(uploadDir + fileStream.filename))
-            print "Writing " + fileStream.filename
-            FileUtils.copyInputStreamToFile(fileStream2.inputStream, File(uploadDir + fileStream2.filename))
-            print "Writing " + fileStream2.filename
-        return "Uploaded {} and {}".format(fileStream.filename, fileStream2.filename)
+            # Single file.
+            if fileStream.hasNext():
+                FileUtils.copyInputStreamToFile(fileStream.inputStream, File(uploadDir + fileStream.filename))
+                uploaded += " " + fileStream.filename
+                print "Writing " + fileStream.filename
+            # Multiple files.
+            while fileStream2.hasNext():
+                fs2 = fileStream2.next()
+                FileUtils.copyInputStreamToFile(fs2.inputStream, File(uploadDir + fs2.filename))
+                print "Writing " + fs2.filename
+                uploaded += " " + fs2.filename
+        return uploaded
