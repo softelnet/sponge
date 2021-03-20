@@ -1,6 +1,6 @@
 # Dockerfile
 
-FROM adoptopenjdk:11-jdk-hotspot
+FROM adoptopenjdk:11-jre-hotspot-bionic
 
 ARG SPONGE_VERSION
 
