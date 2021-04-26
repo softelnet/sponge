@@ -158,6 +158,8 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                         Validate.notNull(exchange.getProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_METHOD_NAME, String.class),
                                 "The method name is not set in the Camel route");
 
+                exchange.getIn().removeHeaders("*");
+
                 // A notification request should be a valid JSON-RPC request so in case of "Parse error" or "Invalid request"
                 // an error response will be sent.
                 setupResponse(methodName, exchange, apiService.createErrorResponse(processingException),
@@ -440,9 +442,10 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         return multiPartContext;
     }
 
-    @SuppressWarnings({ "unchecked" })
     protected Processor createOperationExecutionProcessor(Function<Message, String> requestBodyProvider, RemoteApiOperation operation) {
         return exchange -> {
+            Map<String, Object> incomingExchangeHeaders = new LinkedHashMap<>(exchange.getIn().getHeaders());
+
             FormDataMultiPartContext formDataMultiPartContext = null;
             if (operation.isSupportsFormDataMultiPart()) {
                 formDataMultiPartContext = readFormDataMultiPartContext(operation, exchange);
@@ -457,10 +460,8 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                 logger.debug("Remote API {} request: {}", operation.getMethod(), RemoteApiUtils.obfuscatePassword(requestBody));
             }
 
-            boolean isJsonRpcOperation = Objects.equals(operation.getMethod(), RemoteApiConstants.ENDPOINT_JSONRPC);
-
             // Allow empty body if not strict JSON-RPC.
-            if (!isJsonRpcOperation && StringUtils.isBlank(requestBody)) {
+            if (!isJsonRpcOperation(operation) && StringUtils.isBlank(requestBody)) {
                 requestBody = "{}";
             }
 
@@ -470,93 +471,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                 // Open a new session. The user will be set later in the service.
                 apiService.openSession(createSession(exchange));
 
-                RemoteApiOperation targetOperation;
-
-                JsonNode requestNode;
-                try {
-                    requestNode = getObjectMapper().readTree(requestBody);
-                } catch (JsonProcessingException e) {
-                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_PARSE, e.getMessage());
-                }
-
-                if (requestNode.isArray()) {
-                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INTERNAL, "JSON-RPC batch is not supported");
-                } else if (!requestNode.isObject()) {
-                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "The request should be an object");
-                }
-
-                GenericRequest genericRequest;
-
-                try {
-                    genericRequest = getObjectMapper().convertValue(requestNode, GenericRequest.class);
-                } catch (Exception e) {
-                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, e.getMessage());
-                }
-
-                exchange.setProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_REQUEST_ID, genericRequest.getId());
-
-                if (isJsonRpcOperation) {
-                    exchange.setProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_IS_NOTIFICATION,
-                            !requestNode.has(JsonRpcConstants.MEMBER_ID));
-
-                    if (genericRequest.getMethod() == null) {
-                        throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "JSON-RPC method is missing");
-                    }
-
-                    if (!requestNode.has(JsonRpcConstants.MEMBER_JSONRPC)) {
-                        throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "JSON-RPC version is missing");
-                    }
-
-                    if (!Objects.equals(genericRequest.getJsonrpc(), JsonRpcConstants.VERSION)) {
-                        throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST,
-                                String.format("Only JSON-RPC version %s is supported", JsonRpcConstants.VERSION));
-                    }
-
-                    targetOperation = operations.get(genericRequest.getMethod());
-
-                    // Excluding the jsonrpc endpoint as the target.
-                    if (targetOperation == null || targetOperation == operation) {
-                        throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_METHOD_NOT_FOUND,
-                                String.format("JSON-RPC method '%s' not found", genericRequest.getMethod()));
-                    }
-                } else {
-                    exchange.setProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_IS_NOTIFICATION, false);
-
-                    if (genericRequest.getMethod() != null) {
-                        if (!genericRequest.getMethod().equals(operation.getMethod())) {
-                            throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST,
-                                    String.format("Invalid JSON-RPC method '%s' for the '%s' endpoint", genericRequest.getMethod(),
-                                            operation.getMethod()));
-                        }
-                    } else {
-                        genericRequest.setMethod(operation.getMethod());
-                    }
-
-                    targetOperation = operation;
-                }
-
-                // Create target request class by reflection constructor and set members.
-                SpongeRequest targetRequest = (SpongeRequest) targetOperation.getRequestClass().newInstance();
-                targetRequest.setMethod(genericRequest.getMethod());
-                targetRequest.setId(genericRequest.getId());
-
-                try {
-                    targetRequest.setParams((RequestParams) getObjectMapper().convertValue(genericRequest.getParams(),
-                            targetOperation.getRequestParamsClass()));
-                } catch (IllegalArgumentException e) {
-                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_PARAMS, e.getMessage());
-                }
-
-                // Set empty params and header if none.
-                if (targetRequest.getParams() == null) {
-                    targetRequest.setParams(targetRequest.createParams());
-                }
-
-                if (targetRequest.getHeader() == null) {
-                    targetRequest.setHeader(new RequestHeader());
-                }
-
-                SpongeResponse response = targetOperation.getHandler().handle(getRemoteApiService(), targetRequest, exchange);
+                SpongeResponse response = handleTargetOperation(operation, exchange, requestBody);
 
                 // Handle an action call that returns a stream.
                 OutputStreamValue streamValue = getActionCallOutputStreamResponse(response);
@@ -569,10 +484,144 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                 exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, isNotification(exchange)
                         ? RemoteApiConstants.HTTP_RESPONSE_CODE_NO_RESPONSE : RemoteApiConstants.HTTP_RESPONSE_CODE_OK);
             } finally {
-                // Close the session.
-                apiService.closeSession();
+                try {
+                    removeResponseHttpHeadersCopiedFromRequestHttpHeaders(exchange, incomingExchangeHeaders);
+                } finally {
+                    // Close the session.
+                    apiService.closeSession();
+                }
             }
         };
+    }
+
+    private boolean isJsonRpcOperation(RemoteApiOperation operation) {
+        return Objects.equals(operation.getMethod(), RemoteApiConstants.ENDPOINT_JSONRPC);
+    }
+
+    @SuppressWarnings("unchecked")
+    private SpongeResponse handleTargetOperation(RemoteApiOperation operation, Exchange exchange, String requestBody)
+            throws InstantiationException, IllegalAccessException {
+        JsonNode requestNode = createRequestNode(requestBody);
+
+        GenericRequest genericRequest;
+        try {
+            genericRequest = getObjectMapper().convertValue(requestNode, GenericRequest.class);
+        } catch (Exception e) {
+            throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, e.getMessage());
+        }
+
+        exchange.setProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_REQUEST_ID, genericRequest.getId());
+
+        RemoteApiOperation targetOperation =
+                createTargetOperationAndConfigureGenericRequest(operation, exchange, requestNode, genericRequest);
+
+        SpongeRequest targetRequest = createTargetRequest(genericRequest, targetOperation);
+
+        return targetOperation.getHandler().handle(getRemoteApiService(), targetRequest, exchange);
+    }
+
+    @SuppressWarnings("unchecked")
+    private SpongeRequest createTargetRequest(GenericRequest genericRequest, RemoteApiOperation targetOperation)
+            throws InstantiationException, IllegalAccessException {
+        // Create target request class by reflection constructor and set members.
+
+        SpongeRequest targetRequest = (SpongeRequest) targetOperation.getRequestClass().newInstance();
+        targetRequest.setMethod(genericRequest.getMethod());
+        targetRequest.setId(genericRequest.getId());
+
+        try {
+            targetRequest.setParams(
+                    (RequestParams) getObjectMapper().convertValue(genericRequest.getParams(), targetOperation.getRequestParamsClass()));
+        } catch (IllegalArgumentException e) {
+            throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_PARAMS, e.getMessage());
+        }
+
+        // Set empty params and header if none.
+        if (targetRequest.getParams() == null) {
+            targetRequest.setParams(targetRequest.createParams());
+        }
+
+        if (targetRequest.getHeader() == null) {
+            targetRequest.setHeader(new RequestHeader());
+        }
+
+        return targetRequest;
+    }
+
+    private RemoteApiOperation createTargetOperationAndConfigureGenericRequest(RemoteApiOperation operation, Exchange exchange,
+            JsonNode requestNode, GenericRequest genericRequest) {
+        RemoteApiOperation targetOperation;
+
+        if (isJsonRpcOperation(operation)) {
+            exchange.setProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_IS_NOTIFICATION, !requestNode.has(JsonRpcConstants.MEMBER_ID));
+
+            if (genericRequest.getMethod() == null) {
+                throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "JSON-RPC method is missing");
+            }
+
+            if (!requestNode.has(JsonRpcConstants.MEMBER_JSONRPC)) {
+                throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "JSON-RPC version is missing");
+            }
+
+            if (!Objects.equals(genericRequest.getJsonrpc(), JsonRpcConstants.VERSION)) {
+                throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST,
+                        String.format("Only JSON-RPC version %s is supported", JsonRpcConstants.VERSION));
+            }
+
+            targetOperation = operations.get(genericRequest.getMethod());
+
+            // Excluding the jsonrpc endpoint as the target.
+            if (targetOperation == null || targetOperation == operation) {
+                throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_METHOD_NOT_FOUND,
+                        String.format("JSON-RPC method '%s' not found", genericRequest.getMethod()));
+            }
+        } else {
+            exchange.setProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_IS_NOTIFICATION, false);
+
+            if (genericRequest.getMethod() != null) {
+                if (!genericRequest.getMethod().equals(operation.getMethod())) {
+                    throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, String.format(
+                            "Invalid JSON-RPC method '%s' for the '%s' endpoint", genericRequest.getMethod(), operation.getMethod()));
+                }
+            } else {
+                genericRequest.setMethod(operation.getMethod());
+            }
+
+            targetOperation = operation;
+        }
+
+        return targetOperation;
+    }
+
+    private JsonNode createRequestNode(String requestBody) {
+        JsonNode requestNode;
+        try {
+            requestNode = getObjectMapper().readTree(requestBody);
+        } catch (JsonProcessingException e) {
+            throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_PARSE, e.getMessage());
+        }
+
+        if (requestNode.isArray()) {
+            throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INTERNAL, "JSON-RPC batch is not supported");
+        } else if (!requestNode.isObject()) {
+            throw new JsonRpcServerException(JsonRpcConstants.ERROR_CODE_INVALID_REQUEST, "The request should be an object");
+        }
+
+        return requestNode;
+    }
+
+    /**
+     * Remove incoming headers that have not been changed, so they won't be copied to the response.
+     *
+     * @param exchange the exchange.
+     * @param incomingExchangeHeaders the incoming exchange headers.
+     */
+    private void removeResponseHttpHeadersCopiedFromRequestHttpHeaders(Exchange exchange, Map<String, Object> incomingExchangeHeaders) {
+        incomingExchangeHeaders.forEach((name, value) -> {
+            if (exchange.getIn().getHeaders().containsKey(name) && Objects.equals(exchange.getIn().getHeader(name), value)) {
+                exchange.getIn().removeHeader(name);
+            }
+        });
     }
 
     protected <I extends SpongeRequest<P>, P, O extends SpongeResponse> void addOperation(RemoteApiOperation<I, P, O> operation) {

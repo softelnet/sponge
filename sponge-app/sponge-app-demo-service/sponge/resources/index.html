@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <body>
+    <!-- Upload -->
     <form id="uploadForm">
       <input type="hidden" id="jsonrpc" name="jsonrpc" value='{"jsonrpc":"2.0","method":"call","params":{"name":"InputStreamArgAction","args":["VALUE"]},"id":1}'>
       <label for="file">Filename:</label>
@@ -12,7 +13,15 @@
       <div id="message"></div>
     </form>
 
+    <p/>
+
+    <!-- Download -->
+    <input id="filename" type="text" />
+    <button id="downloadButton">Download</button>
+    <div id="downloadMessage"></div>
+
   <script type="text/javascript">
+  // Upload.
   document.getElementById("uploadForm").onsubmit = async (e) => {
       e.preventDefault();
 
@@ -26,6 +35,40 @@
       let json = await response.json();
 
       document.getElementById("message").innerHTML = json.result.value;
+    };
+    
+    // Download.
+    document.getElementById("downloadButton").onclick = async () => {
+        let filename = document.getElementById("filename").value
+        document.getElementById("downloadMessage").innerHTML = `Downloading ${filename}...`;
+        
+        let response = await fetch("/jsonrpc", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: `{"jsonrpc":"2.0","method":"call","params":{"name":"OutputStreamFromUploadAction","args":{"filename":"${filename}"}},"id":1}`
+        });
+        
+        if (response.ok) {
+            let blob = await response.blob();
+            let file = window.URL.createObjectURL(blob);
+            let a = document.createElement("a");
+            a.href = file;
+            a.download = filename || 'download';
+            let clickHandler = () => {
+                setTimeout(() => {
+                    URL.revokeObjectURL(file);
+                    this.removeEventListener('click', clickHandler);
+                    document.getElementById("downloadMessage").innerHTML = `Downloaded ${filename}.`;
+                }, 150);
+            }; 
+            a.addEventListener('click', clickHandler, false);
+            a.click();
+        } else {
+            let json = await response.json();
+            document.getElementById("downloadMessage").innerHTML = `Error: ${json.error.message}`;
+          }
     };
   </script>
   </body>

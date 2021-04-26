@@ -128,8 +128,8 @@ import org.openksavi.sponge.type.ListType;
 import org.openksavi.sponge.type.MapType;
 import org.openksavi.sponge.type.NumberType;
 import org.openksavi.sponge.type.ObjectType;
-import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.OutputStreamType;
+import org.openksavi.sponge.type.RecordType;
 import org.openksavi.sponge.type.StringType;
 import org.openksavi.sponge.type.TypeType;
 import org.openksavi.sponge.type.VoidType;
@@ -332,7 +332,11 @@ public abstract class SpongeUtils {
                 .collect(Collectors.joining(", ")) + "]";
     }
 
-    private static SpongeException doWrapException(String sourceName, KnowledgeBaseInterpreter interpreter, Throwable throwable) {
+    private static SpongeException wrapInterpreterException(String sourceName, KnowledgeBaseInterpreter interpreter, Throwable throwable) {
+        return wrapException(sourceName, interpreter != null ? interpreter.getSpecificExceptionMessage(throwable) : null, throwable);
+    }
+
+    public static SpongeException wrapException(String sourceName, String specificErrorMessage, Throwable throwable) {
         if (throwable instanceof SpongeException) {
             return (SpongeException) throwable;
         }
@@ -342,7 +346,6 @@ public abstract class SpongeUtils {
             Thread.currentThread().interrupt();
         }
 
-        String specificErrorMessage = interpreter != null ? interpreter.getSpecificExceptionMessage(throwable) : null;
         if (sourceName == null) {
             return specificErrorMessage == null ? new SpongeException(throwable) : new SpongeException(specificErrorMessage, throwable);
         } else {
@@ -358,7 +361,7 @@ public abstract class SpongeUtils {
      * @return Sponge exception.
      */
     public static SpongeException wrapException(Throwable throwable) {
-        return doWrapException(null, null, throwable);
+        return wrapException(null, (String) null, throwable);
     }
 
     /**
@@ -369,26 +372,27 @@ public abstract class SpongeUtils {
      * @return Sponge exception.
      */
     public static SpongeException wrapException(String sourceName, Throwable throwable) {
-        return doWrapException(sourceName, null, throwable);
+        return wrapException(sourceName, (String) null, throwable);
     }
 
     public static SpongeException wrapException(Processor<?> processor, Throwable throwable) {
-        return doWrapException(getProcessorQualifiedName(processor).toString(), processor.getKnowledgeBase().getInterpreter(), throwable);
+        return wrapInterpreterException(getProcessorQualifiedName(processor).toString(), processor.getKnowledgeBase().getInterpreter(),
+                throwable);
     }
 
     public static SpongeException wrapException(KnowledgeBaseInterpreter interpreter, Throwable throwable) {
-        return doWrapException(null, interpreter, throwable);
+        return wrapInterpreterException(null, interpreter, throwable);
     }
 
     public static SpongeException wrapException(String sourceName, KnowledgeBaseInterpreter interpreter, Throwable throwable) {
-        return doWrapException(sourceName, interpreter, throwable);
+        return wrapInterpreterException(sourceName, interpreter, throwable);
     }
 
     public static SpongeException wrapInvokeException(Object target, String method, KnowledgeBaseInterpreter interpreter,
             Throwable throwable) {
         String sourceName =
                 (target instanceof ProcessorOperations ? getProcessorQualifiedName((ProcessorOperations) target) : target) + "." + method;
-        return doWrapException(sourceName, interpreter, throwable);
+        return wrapInterpreterException(sourceName, interpreter, throwable);
     }
 
     public static boolean containsException(Throwable exception, final Class<? extends Throwable> type) {

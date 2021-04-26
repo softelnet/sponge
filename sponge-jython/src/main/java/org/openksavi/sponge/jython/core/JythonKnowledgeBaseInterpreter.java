@@ -26,12 +26,10 @@ import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.python.core.Py;
-import org.python.core.PyException;
 import org.python.core.PyJavaType;
 import org.python.core.PyObject;
 import org.python.core.PySystemState;
@@ -48,8 +46,10 @@ import org.openksavi.sponge.core.plugin.BasePlugin;
 import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.jython.JythonActionBuilder;
+import org.openksavi.sponge.jython.JythonOutputStreamValue;
 import org.openksavi.sponge.jython.JythonRule;
 import org.openksavi.sponge.jython.PythonConstants;
+import org.openksavi.sponge.jython.util.JythonUtils;
 import org.openksavi.sponge.jython.util.PyBiConsumer;
 import org.openksavi.sponge.jython.util.PyConsumer;
 import org.openksavi.sponge.jython.util.PyPredicate;
@@ -59,6 +59,7 @@ import org.openksavi.sponge.kb.KnowledgeBaseConstants;
 import org.openksavi.sponge.kb.ScriptKnowledgeBaseInterpreter;
 import org.openksavi.sponge.plugin.Plugin;
 import org.openksavi.sponge.rule.Rule;
+import org.openksavi.sponge.type.value.OutputStreamValue;
 
 /**
  * Knowledge base interpreter supporting knowledge base to be defined in the Jython (Python) language.
@@ -99,6 +100,9 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
         addImport(scriptEngine, PyConsumer.class);
         addImport(scriptEngine, PyBiConsumer.class);
         addImport(scriptEngine, PySupplier.class);
+
+        // Redefine OutputStreamValue to use a customized version for Jython.
+        addImport(scriptEngine, JythonOutputStreamValue.class, OutputStreamValue.class.getSimpleName());
 
         scriptEngine.put(KnowledgeBaseConstants.VAR_ENGINE_OPERATIONS, getEngineOperations());
 
@@ -191,16 +195,6 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
 
     @Override
     public String getSpecificExceptionMessage(Throwable e) {
-        // Remove unnecessary leading exception class names added by Jython.
-        if (e.getMessage() != null && (e instanceof ScriptException || e instanceof PyException)) {
-            return SpongeUtils.removeLeadingExceptionClassNamesFromMessage(e);
-        }
-
-        // Jython exception message may be null.
-        if (e.getMessage() == null && e instanceof PyException) {
-            return e.toString();
-        }
-
-        return null;
+        return JythonUtils.getSpecificExceptionMessage(e);
     }
 }

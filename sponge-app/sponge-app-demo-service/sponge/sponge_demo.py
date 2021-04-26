@@ -7,6 +7,7 @@ from java.lang import String, Boolean
 from java.time.format import DateTimeFormatter
 from java.time import LocalDateTime
 from java.io import File
+from java.nio.file import Files
 from org.apache.commons.io import IOUtils, FileUtils
 
 def onInit():
@@ -309,3 +310,21 @@ class InputStreamArgAction(Action):
                 print "Writing " + fs2.filename
                 uploaded += " " + fs2.filename
         return uploaded
+
+class OutputStreamFromUploadAction(Action):
+    def onConfigure(self):
+        self.withLabel("Output stream from upload").withArgs([
+            StringType("filename"),
+        ]).withResult(OutputStreamType())
+    def onCall(self, filename):
+        if not sponge.getVariable("demo.readOnly", False):
+            uploaded = "Uploaded"
+            uploadDir = "{}/upload/".format(sponge.home)
+            file = File(uploadDir + filename)
+            streamValue = OutputStreamValue(lambda output: FileUtils.copyFile(file, output)).withHeader(
+                u"Content-Disposition", 'attachment; filename="{}"'.format(filename))
+            mimeType = Files.probeContentType(file.toPath())
+            if mimeType:
+                streamValue.withContentType(mimeType)
+
+            return streamValue

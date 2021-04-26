@@ -472,7 +472,7 @@ An event may be sent as:
 |Periodically sends events starting at the specified time (given in milliseconds as the number of milliseconds since 01/01/1970 or as an {javaSeJavaDocUrl}/java/time/Instant.html[`Instant`]) every `interval` (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]).
 
 |`sendAt(crontabSpec)`
-|Sends events at time specified by Cron compatible time entry.
+|Sends events at a time specified by a Cron compatible time entry (supports http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html[Quartz] format).
 
 |`sendEvery(interval)`
 |Periodically sends events every `interval` (given in milliseconds or as a {javaSeJavaDocUrl}/java/time/Duration.html[`Duration`]).
