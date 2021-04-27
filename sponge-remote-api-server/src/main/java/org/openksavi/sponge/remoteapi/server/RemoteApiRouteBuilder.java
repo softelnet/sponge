@@ -150,6 +150,10 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
     protected Processor createDefaultOnExceptionProcessor() {
         return exchange -> {
             try {
+                if (!getSettings().isCopyHttpRequestHeaders()) {
+                    exchange.getIn().removeHeaders("*");
+                }
+
                 Throwable processingException = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class);
 
                 logger.info("Remote API error", processingException);
@@ -157,8 +161,6 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                 String methodName =
                         Validate.notNull(exchange.getProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_METHOD_NAME, String.class),
                                 "The method name is not set in the Camel route");
-
-                exchange.getIn().removeHeaders("*");
 
                 // A notification request should be a valid JSON-RPC request so in case of "Parse error" or "Invalid request"
                 // an error response will be sent.
@@ -183,9 +185,8 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
             .bindingMode(RestBindingMode.off)
             // disableStreamCache is turned on to allow uploading large files in action calls (with InputStreamType arguments).
             // https://github.com/apache/camel/blob/master/components/camel-servlet/src/main/docs/servlet-component.adoc
-            .endpointProperty("disableStreamCache", "true")
+            .endpointProperty("disableStreamCache", Boolean.TRUE.toString())
             .dataFormatProperty("prettyPrint", Boolean.toString(getSettings().isPrettyPrint()))
-            .enableCORS(true)
             .contextPath("/" + (getSettings().getPath() != null ? getSettings().getPath() : ""))
             // Add swagger api doc out of the box.
             .apiContextPath("/" + RemoteApiConstants.ENDPOINT_DOC)
@@ -485,7 +486,9 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                         ? RemoteApiConstants.HTTP_RESPONSE_CODE_NO_RESPONSE : RemoteApiConstants.HTTP_RESPONSE_CODE_OK);
             } finally {
                 try {
-                    removeResponseHttpHeadersCopiedFromRequestHttpHeaders(exchange, incomingExchangeHeaders);
+                    if (!getSettings().isCopyHttpRequestHeaders()) {
+                        removeResponseHttpHeadersCopiedFromRequestHttpHeaders(exchange, incomingExchangeHeaders);
+                    }
                 } finally {
                     // Close the session.
                     apiService.closeSession();

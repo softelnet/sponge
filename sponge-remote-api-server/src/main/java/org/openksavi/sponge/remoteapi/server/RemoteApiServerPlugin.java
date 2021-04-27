@@ -187,6 +187,11 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
         if (ignoreUnknownArgs != null) {
             settings.setIgnoreUnknownArgs(ignoreUnknownArgs);
         }
+
+        Boolean copyHttpRequestHeaders = configuration.getBoolean(RemoteApiServerConstants.TAG_COPY_HTTP_REQUEST_HEADERS, null);
+        if (copyHttpRequestHeaders != null) {
+            settings.setCopyHttpRequestHeaders(copyHttpRequestHeaders);
+        }
     }
 
     protected void refreshSettings() {

@@ -171,6 +171,10 @@ public class SpongeRemoteServiceAutoConfiguration {
             settings.setIgnoreUnknownArgs(serviceProperties.getIgnoreUnknownArgs());
         }
 
+        if (serviceProperties.getCopyHttpRequestHeaders() != null) {
+            settings.setCopyHttpRequestHeaders(serviceProperties.getCopyHttpRequestHeaders());
+        }
+
         settings.getOpenApiProperties().putAll(serviceProperties.getOpenApiProperties());
 
         if (serviceProperties.getDiscovery().getUrl() != null) {

@@ -95,6 +95,10 @@ The default name of the Remote API plugin (which can be used in knowledge bases)
 |`ignoreUnknownArgs`
 |`boolean`
 |The flag specifying if the service should ignore unknown action arguments passed by the client. Defaults to `false`.
+
+|`copyHttpRequestHeaders`
+|`boolean`
+|The flag specifying if the HTTP request headers should be copied to the HTTP response. Defaults to `false`.
 |===
 
 .The Remote API server plugin XML configuration example

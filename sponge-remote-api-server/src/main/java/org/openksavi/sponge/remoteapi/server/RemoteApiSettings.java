@@ -99,6 +99,9 @@ public class RemoteApiSettings {
     /** The flag specifying if the service should ignore unknown action arguments passed by the client. Defaults to {@code false}. */
     private boolean ignoreUnknownArgs = false;
 
+    /** The flag specifying if the HTTP request headers should be copied to the HTTP response. Defaults to {@code false}. */
+    private boolean copyHttpRequestHeaders = false;
+
     public String getComponentId() {
         return componentId;
     }
@@ -303,6 +306,14 @@ public class RemoteApiSettings {
         this.ignoreUnknownArgs = ignoreUnknownArgs;
     }
 
+    public boolean isCopyHttpRequestHeaders() {
+        return copyHttpRequestHeaders;
+    }
+
+    public void setCopyHttpRequestHeaders(boolean copyHttpRequestHeaders) {
+        this.copyHttpRequestHeaders = copyHttpRequestHeaders;
+    }
+
     @Override
     public String toString() {
         return "RemoteApiSettings [componentId=" + componentId + ", host=" + host + ", port=" + port + ", path=" + path + ", version="
@@ -313,6 +324,7 @@ public class RemoteApiSettings {
                 + ", includeDetailedErrorMessage=" + includeDetailedErrorMessage + ", authTokenExpirationDuration="
                 + authTokenExpirationDuration + ", openApiProperties=" + openApiProperties + ", includeResponseTimes="
                 + includeResponseTimes + ", registerServiceDiscovery=" + registerServiceDiscovery + ", serviceDiscoveryInfo="
-                + serviceDiscoveryInfo + ", ignoreUnknownArgs=" + ignoreUnknownArgs + "]";
+                + serviceDiscoveryInfo + ", ignoreUnknownArgs=" + ignoreUnknownArgs + ", copyHttpRequestHeaders=" + copyHttpRequestHeaders
+                + "]";
     }
 }

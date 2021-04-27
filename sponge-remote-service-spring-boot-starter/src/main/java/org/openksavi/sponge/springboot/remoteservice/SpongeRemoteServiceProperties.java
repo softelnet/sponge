@@ -70,6 +70,9 @@ public class SpongeRemoteServiceProperties {
     /** The flag specifying if the service should ignore unknown action arguments passed by the client. Defaults to {@code false}. */
     private Boolean ignoreUnknownArgs;
 
+    /** The flag specifying if the HTTP request headers should be copied to the HTTP response. Defaults to {@code false}. */
+    private Boolean copyHttpRequestHeaders = false;
+
     private final GrpcProperties grpc = new GrpcProperties();
 
     public String getVersion() {
@@ -194,6 +197,14 @@ public class SpongeRemoteServiceProperties {
 
     public void setIgnoreUnknownArgs(Boolean ignoreUnknownArgs) {
         this.ignoreUnknownArgs = ignoreUnknownArgs;
+    }
+
+    public Boolean getCopyHttpRequestHeaders() {
+        return copyHttpRequestHeaders;
+    }
+
+    public void setCopyHttpRequestHeaders(Boolean copyHttpRequestHeaders) {
+        this.copyHttpRequestHeaders = copyHttpRequestHeaders;
     }
 
     public GrpcProperties getGrpc() {
