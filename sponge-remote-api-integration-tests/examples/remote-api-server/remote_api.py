@@ -325,8 +325,8 @@ class OutputStreamResultAction(Action):
     def onConfigure(self):
         self.withNoArgs().withResult(OutputStreamType())
     def onCall(self):
-        return OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8")).withContentType("text/plain; charset=\"UTF-8\"").withHeaders({
-            })
+        return OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8"))\
+            .withContentType("text/plain; charset=\"UTF-8\"").withFilename("sample file.txt").withHeaders({})
 
 class RegisteredTypeArgAction(Action):
     def onConfigure(self):

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.http.common.HttpCommonComponent;
 import org.apache.camel.http.common.HttpMessage;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -100,6 +102,8 @@ import org.openksavi.sponge.remoteapi.model.response.ReloadResponse;
 import org.openksavi.sponge.remoteapi.model.response.ResponseHeader;
 import org.openksavi.sponge.remoteapi.model.response.SendEventResponse;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
+import org.openksavi.sponge.remoteapi.server.camel.CamelHttpBindingAsUtil;
+import org.openksavi.sponge.remoteapi.server.camel.CamelSupportUtils;
 import org.openksavi.sponge.remoteapi.server.util.FormDataMultiPartContext;
 import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
 import org.openksavi.sponge.type.value.OutputStreamValue;
@@ -112,6 +116,8 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
     private RemoteApiService apiService;
 
     private Map<String, RemoteApiOperation<?, ?, ?>> operations = new LinkedHashMap<>();
+
+    private CamelHttpBindingAsUtil httpBindingAsUtil = new CamelHttpBindingAsUtil();
 
     public RemoteApiRouteBuilder() {
         //
@@ -188,6 +194,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
             .endpointProperty("disableStreamCache", Boolean.TRUE.toString())
             .dataFormatProperty("prettyPrint", Boolean.toString(getSettings().isPrettyPrint()))
             .contextPath("/" + (getSettings().getPath() != null ? getSettings().getPath() : ""))
+            .enableCORS(getSettings().isCorsEnabled())
             // Add swagger api doc out of the box.
             .apiContextPath("/" + RemoteApiConstants.ENDPOINT_DOC)
                 .apiVendorExtension(false);
@@ -284,17 +291,38 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         }
     }
 
+    /**
+     * Writes headers and a stream response directly to the HttpServletResponse, before Camel DefaultHttpBinding. The reason for doing this
+     * here is to process the result stream inside a Remote API operation boundaries (e.g. in an action call operation). <p/> WARNING: HTTP
+     * headers that will be written by the DefaultHttpBinding will be ignored in the HTTP response.
+     *
+     * @param method the method.
+     * @param exchange the exchange.
+     * @param streamValue the stream value.
+     */
     protected void setupStreamResponse(String method, Exchange exchange, OutputStreamValue streamValue) {
         try {
             HttpServletResponse httpResponse = exchange.getIn(HttpMessage.class).getResponse();
-            streamValue.getHeaders().forEach((name, value) -> {
-                if (value != null) {
-                    httpResponse.setHeader(name, String.valueOf(value));
-                }
-            });
+
+            if (getSettings().isCorsEnabled()) {
+                CamelSupportUtils.setCorsHeaders(exchange.getContext().getRestConfiguration().getCorsHeaders(), exchange);
+            }
+
+            HttpCommonComponent httpComponent =
+                    (HttpCommonComponent) exchange.getContext().getComponent(getSettings().getComponentId(), false);
+            httpBindingAsUtil.appendHeaders(exchange, httpResponse, httpComponent);
+
+            streamValue.getHeaders().entrySet().stream().filter(entry -> entry.getValue() != null)
+                    .forEach(entry -> httpResponse.setHeader(entry.getKey(), String.valueOf(entry.getValue())));
 
             if (streamValue.getContentType() != null) {
                 httpResponse.setContentType(streamValue.getContentType());
+            }
+
+            if (streamValue.getFilename() != null
+                    && !streamValue.getHeaders().containsKey(RemoteApiConstants.HTTP_HEADER_CONTENT_DISPOSITION)) {
+                httpResponse.setHeader(RemoteApiConstants.HTTP_HEADER_CONTENT_DISPOSITION,
+                        String.format("attachment; filename=\"%s\"", URLEncoder.encode(streamValue.getFilename(), "UTF-8")));
             }
 
             ServletOutputStream output = httpResponse.getOutputStream();
@@ -474,6 +502,10 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
 
                 SpongeResponse response = handleTargetOperation(operation, exchange, requestBody);
 
+                if (!getSettings().isCopyHttpRequestHeaders()) {
+                    removeResponseHttpHeadersCopiedFromRequestHttpHeaders(exchange, incomingExchangeHeaders);
+                }
+
                 // Handle an action call that returns a stream.
                 OutputStreamValue streamValue = getActionCallOutputStreamResponse(response);
                 if (streamValue == null) {
@@ -485,14 +517,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
                 exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, isNotification(exchange)
                         ? RemoteApiConstants.HTTP_RESPONSE_CODE_NO_RESPONSE : RemoteApiConstants.HTTP_RESPONSE_CODE_OK);
             } finally {
-                try {
-                    if (!getSettings().isCopyHttpRequestHeaders()) {
-                        removeResponseHttpHeadersCopiedFromRequestHttpHeaders(exchange, incomingExchangeHeaders);
-                    }
-                } finally {
-                    // Close the session.
-                    apiService.closeSession();
-                }
+                apiService.closeSession();
             }
         };
     }

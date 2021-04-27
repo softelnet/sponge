@@ -54,6 +54,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -267,11 +269,23 @@ public abstract class SpongeUtils {
                 .findFirst().orElse(null);
     }
 
-    public static Thread executeConcurrentlyOnce(SpongeEngine engine, Runnable runnable, String name) {
-        Thread thread = new Thread(runnable, "executeConcurrentlyOnce-" + name);
-        thread.start();
+    public static Future<?> executeConcurrentlyOnce(SpongeEngine engine, Runnable runnable, String name) {
+        ExecutorService executor = Executors.newSingleThreadExecutor(r -> new Thread(r, name));
+        Future<?> future = executor.submit(() -> {
+            try {
+                runnable.run();
+            } catch (Throwable e) {
+                if (e instanceof InterruptedException) {
+                    throw e;
+                }
 
-        return thread;
+                engine.handleError(name, e);
+            }
+        });
+
+        executor.shutdown();
+
+        return future;
     }
 
     public static String createGlobalLoggerName(KnowledgeBaseEngineOperations knowledgeBaseEngineOperations) {

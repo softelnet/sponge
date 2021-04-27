@@ -192,6 +192,11 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
         if (copyHttpRequestHeaders != null) {
             settings.setCopyHttpRequestHeaders(copyHttpRequestHeaders);
         }
+
+        Boolean corsEnabled = configuration.getBoolean(RemoteApiServerConstants.TAG_CORS_ENABLED, null);
+        if (corsEnabled != null) {
+            settings.setCorsEnabled(corsEnabled);
+        }
     }
 
     protected void refreshSettings() {

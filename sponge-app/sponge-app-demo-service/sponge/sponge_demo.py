@@ -248,7 +248,8 @@ class OutputStreamResultAction(Action):
     def onConfigure(self):
         self.withLabel("Unsupported action using a stream").withNoArgs().withResult(OutputStreamType())
     def onCall(self):
-        return OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8")).withContentType("text/plain; charset=\"UTF-8\"")
+        return OutputStreamValue(lambda output: IOUtils.write("Sample text file\n", output, "UTF-8"))\
+            .withContentType("text/plain; charset=\"UTF-8\"").withFilename("sample file.txt")
 
 class LowerCaseHello(Action):
     def onConfigure(self):

@@ -101,6 +101,8 @@ public final class RemoteApiServerConstants {
 
     public static final String TAG_COPY_HTTP_REQUEST_HEADERS = "copyHttpRequestHeaders";
 
+    public static final String TAG_CORS_ENABLED = "corsEnabled";
+
     public static final String DEFAULT_NAME = "Sponge";
 
     public static final String DEFAULT_ANONYMOUS_USERNAME = "anonymous";

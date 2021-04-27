@@ -8,6 +8,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 [discrete]
 == 1.17.1 (not released yet)
 * Added a new `copyHttpRequestHeaders` property to the Remote API settings. The flag indicates if the HTTP request headers should be copied to the HTTP response. Defaults to `false`.
+* Added a new `corsEnabled` property to the Remote API settings. The flag indicates if CORS is enabled, i.e. CORS headers will be included in the response HTTP headers. Defaults to `false`.
 
 [discrete]
 == 1.17.0 (2021-03-19)
