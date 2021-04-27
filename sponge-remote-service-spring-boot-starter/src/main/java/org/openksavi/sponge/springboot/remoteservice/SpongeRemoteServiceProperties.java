@@ -73,6 +73,11 @@ public class SpongeRemoteServiceProperties {
     /** The flag specifying if the HTTP request headers should be copied to the HTTP response. Defaults to {@code false}. */
     private Boolean copyHttpRequestHeaders = false;
 
+    /**
+     * The flag specifying if CORS is enabled, i.e. CORS headers will be included in the response HTTP headers. Defaults to {@code false}.
+     */
+    private Boolean corsEnabled = false;
+
     private final GrpcProperties grpc = new GrpcProperties();
 
     public String getVersion() {
@@ -205,6 +210,14 @@ public class SpongeRemoteServiceProperties {
 
     public void setCopyHttpRequestHeaders(Boolean copyHttpRequestHeaders) {
         this.copyHttpRequestHeaders = copyHttpRequestHeaders;
+    }
+
+    public Boolean getCorsEnabled() {
+        return corsEnabled;
+    }
+
+    public void setCorsEnabled(Boolean corsEnabled) {
+        this.corsEnabled = corsEnabled;
     }
 
     public GrpcProperties getGrpc() {

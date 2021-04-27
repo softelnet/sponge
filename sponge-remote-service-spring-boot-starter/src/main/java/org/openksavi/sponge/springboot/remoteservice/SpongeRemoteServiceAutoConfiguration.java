@@ -175,6 +175,10 @@ public class SpongeRemoteServiceAutoConfiguration {
             settings.setCopyHttpRequestHeaders(serviceProperties.getCopyHttpRequestHeaders());
         }
 
+        if (serviceProperties.getCorsEnabled() != null) {
+            settings.setCorsEnabled(serviceProperties.getCorsEnabled());
+        }
+
         settings.getOpenApiProperties().putAll(serviceProperties.getOpenApiProperties());
 
         if (serviceProperties.getDiscovery().getUrl() != null) {

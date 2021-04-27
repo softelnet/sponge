@@ -102,6 +102,11 @@ public class RemoteApiSettings {
     /** The flag specifying if the HTTP request headers should be copied to the HTTP response. Defaults to {@code false}. */
     private boolean copyHttpRequestHeaders = false;
 
+    /**
+     * The flag specifying if CORS is enabled, i.e. CORS headers will be included in the response HTTP headers. Defaults to {@code false}.
+     */
+    private boolean corsEnabled = false;
+
     public String getComponentId() {
         return componentId;
     }
@@ -314,6 +319,14 @@ public class RemoteApiSettings {
         this.copyHttpRequestHeaders = copyHttpRequestHeaders;
     }
 
+    public boolean isCorsEnabled() {
+        return corsEnabled;
+    }
+
+    public void setCorsEnabled(boolean corsEnabled) {
+        this.corsEnabled = corsEnabled;
+    }
+
     @Override
     public String toString() {
         return "RemoteApiSettings [componentId=" + componentId + ", host=" + host + ", port=" + port + ", path=" + path + ", version="
@@ -325,6 +338,6 @@ public class RemoteApiSettings {
                 + authTokenExpirationDuration + ", openApiProperties=" + openApiProperties + ", includeResponseTimes="
                 + includeResponseTimes + ", registerServiceDiscovery=" + registerServiceDiscovery + ", serviceDiscoveryInfo="
                 + serviceDiscoveryInfo + ", ignoreUnknownArgs=" + ignoreUnknownArgs + ", copyHttpRequestHeaders=" + copyHttpRequestHeaders
-                + "]";
+                + ", corsEnabled=" + corsEnabled + "]";
     }
 }

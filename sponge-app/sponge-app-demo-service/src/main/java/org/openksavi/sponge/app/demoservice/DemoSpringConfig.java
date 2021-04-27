@@ -60,6 +60,7 @@ public class DemoSpringConfig extends SpongeCamelConfiguration {
         plugin.getSettings().setPublishReload(true);
         plugin.getSettings().setIncludeDetailedErrorMessage(false);
         plugin.getSettings().setPrettyPrint(true);
+        plugin.getSettings().setCorsEnabled(true);
 
         plugin.setSecurityProvider(new SimpleSpringInMemorySecurityProvider());
 
