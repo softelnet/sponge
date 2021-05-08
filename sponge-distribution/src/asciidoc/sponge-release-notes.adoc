@@ -9,6 +9,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 == 1.17.1 (not released yet)
 * Added a new `copyHttpRequestHeaders` property to the Remote API settings. The flag indicates if the HTTP request headers should be copied to the HTTP response. Defaults to `false`.
 * Added a new `corsEnabled` property to the Remote API settings. The flag indicates if CORS is enabled, i.e. CORS headers will be included in the response HTTP headers. Defaults to `false`.
+* Fixed a bug that could cause `FileNotFoundException` for a non existing knowledge base file even though it was optional.
 
 [discrete]
 == 1.17.0 (2021-03-19)
@@ -26,7 +27,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 [discrete]
 == 1.16.5 (2021-01-20)
-* Fixed the bug causing `java.lang.UnsatisfiedLinkError: 'int org.fusesource.jansi.internal.CLibrary.ioctl(int, long, org.fusesource.jansi.internal.CLibrary$WinSize)'` in a Docker container `openksavi/sponge` running in an interactive mode, by downgrading the `JLine` dependency.
+* Fixed a bug causing `java.lang.UnsatisfiedLinkError: 'int org.fusesource.jansi.internal.CLibrary.ioctl(int, long, org.fusesource.jansi.internal.CLibrary$WinSize)'` in a Docker container `openksavi/sponge` running in an interactive mode, by downgrading the `JLine` dependency.
 
 [discrete]
 == 1.16.4 (2021-01-19)
@@ -47,7 +48,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a new `ignoreUnknownArgs` property to the Remote API settings. The flag indicates if the service should ignore unknown action arguments passed by the client. Defaults to `false`.
 * Added support for using a git repository as a set of knowledge base files (in the `sponge-kb-engine` artifact).
 * Added a new type feature `align` (with values `left`, `center`, `right`) and a feature value `toggleButton` for the `widget` feature for the `BooleanType`.
-* Fixed the bug that prevented reloading of Groovy and Kotlin script knowledge bases.
+* Fixed a bug that prevented reloading of Groovy and Kotlin script knowledge bases.
 * Documentation updates.
 * Dependencies upgrade.
 
@@ -138,7 +139,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added `ProvidedMeta.lazyUpdate`, a flag specifying if a provided value should be updated lazily in a client code when a dependency changes (experimental).
 * Added support for accessing left-over standalone command-line application arguments in knowledge bases via `sponge.engine.args`.
 * Added support for features in action arguments provision.
-* Fixed the bug causing an error when loading a configuration file from a Sponge home directory set as a non system property.
+* Fixed a bug causing an error when loading a configuration file from a Sponge home directory set as a non system property.
 * The {sponge} standalone command-line application is now released under the Apache 2.0 license.
 * Dependencies upgrade.
 
@@ -150,8 +151,8 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added support for loading script knowledge base files from JAR archives located in a filesystem (the `spar` URL protocol).
 * The gRPC client allows an explicit service port configuration.
 * Removed `sponge-external` group of projects from the main repository, including `sponge-mpd` (MPD support that uses an external Java library).
-* Fixed the gRPC client default port resolving.
-* Fixed the REST API `send` operation bug that prevented setting an event label and description.
+* Fixed a gRPC client default port resolving.
+* Fixed a REST API `send` operation bug that prevented setting an event label and description.
 * Unit tests migrated from JUnit4 to JUnit 5.
 * Dependencies upgrade.
 
@@ -190,7 +191,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a new type `StreamType`.
 * Added a new REST API error code `ERROR_CODE_INCORRECT_USERNAME_PASSWORD ("SPONGE004")`.
 * Added a thread local session to the REST API service. The session provides access to a logged user and a Camel exchange.
-* Fixed the bug that caused a `NullPointerException` when sending a record with a `null` value of a field in the REST API request.
+* Fixed a bug that caused a `NullPointerException` when sending a record with a `null` value of a field in the REST API request.
 * Moved the `sponge-mpd` dependency (GPL) from `sponge-standalone-extensions` to `sponge-distribution` and changed the `sponge-standalone-extensions` license to Apache.
 * Dependencies upgrade.
 
@@ -205,7 +206,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added support for categories. Processors may be assigned to registered categories.
 * Added new types: `DynamicType`, `TypeType`, `DateTimeType`.
 * Added `CategoryMeta.features` and a dynamic category selection for processors.
-* Fixed the bug that caused an error when sending an empty body in the REST API request.
+* Fixed a bug that caused an error when sending an empty body in the REST API request.
 * Dependencies upgrade.
 
 [discrete]
@@ -290,13 +291,13 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 * Added a new attribute to the REST API `actions` operation that allows specifying an action name or a regular expression.
 * Added a new `ActionType` type that allows using a result of one action to be a type for another action argument or result.
-* Fixed the error that may happen while loading optional knowledge base files if a directory doesnt't exist.
+* Fixed an error that may happen while loading optional knowledge base files if a directory doesnt't exist.
 * The `sponge-core` artifact now shades the Reflections artifact (that use Guava).
 
 [discrete]
 == 1.3.2 (2018-07-06)
 
-* Fixed the error that may happen while loading optional knowledge base files using the `SpringKnowledgeBaseFileProvider`.
+* Fixed an error that may happen while loading optional knowledge base files using the `SpringKnowledgeBaseFileProvider`.
 * Libraries upgrade (most notably Spring to version 5).
 
 [discrete]
@@ -329,7 +330,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 * Support for using ReactiveX (`sponge-reactivex`) in knowledge bases, e.g. for processing a stream of {sponge} events using reactive programming.
 * Added support for passing a knowledge base script as a String to the EngineBuilder API.
-* Fixed the error preventing closing a standalone application when there was an exception thrown in `onShutdown` callback function in a knowledge base.
+* Fixed an error preventing closing a standalone application when there was an exception thrown in `onShutdown` callback function in a knowledge base.
 * Pi4J (`sponge-rpi-pi4j`) and GrovePi (`sponge-rpi-grovepi`) integration examples.
 * Dependencies upgrade.
 
@@ -373,14 +374,14 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * CamelProducerAction may be also set in the Camel In message header named CamelSpongeAction.
 * SpringEngine may be configured not to start immediately (see `SpringEngineBuilder.autoStartup` method).
 * Improvements in the interactive mode of the standalone command-line application (now JLine is used, supporting for example a command history).
-* Fixed the error preventing substitution of properties defined via the EngineBuilder API in the properties section in the XML configuration files.
+* Fixed an error preventing substitution of properties defined via the EngineBuilder API in the properties section in the XML configuration files.
 
 [discrete]
 == 1.0.4 (2017-09-20)
 
 * Implementation of unordered rules, i.e. rules that listen to unordered sequences of events. Unordered rules is a new feature that should be treated as an experimental one.
 * API change: The `Rule` methods `setConditions` and `setAllConditions` have been renamed respectively to `addConditions` and `addJavaConditions`.
-* Fixed the error in the interactive mode of the standalone application preventing exit when using `exit` or `quit` command.
+* Fixed an error in the interactive mode of the standalone application preventing exit when using `exit` or `quit` command.
 * Dependencies upgrade.
 * Distribution as a Docker container.
 
@@ -397,14 +398,14 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Event name patterns in event processors.
 * Removed `matches` method in `Event`.
 * `EventDefinition` `send` methods accept `Duration` and `Instant` types.
-* Fixed the concurrency problem in event set processors.
+* Fixed a concurrency problem in event set processors.
 * New tests for scripting support.
 * Dependencies upgrade.
 
 [discrete]
 == 1.0.1 (2017-08-21)
 
-* Fixed the possible SyncAsyncEventSetProcessorMainProcessingUnitHandler concurrency error.
+* Fixed a possible SyncAsyncEventSetProcessorMainProcessingUnitHandler concurrency error.
 
 [discrete]
 == 1.0.0 (2017-08-18)

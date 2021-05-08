@@ -18,6 +18,7 @@ package org.openksavi.sponge.integration.tests.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -34,6 +35,8 @@ import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
+import org.openksavi.sponge.config.ConfigException;
+import org.openksavi.sponge.core.kb.FileKnowledgeBaseScript;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.spring.SpringSpongeEngine;
 
@@ -56,6 +59,8 @@ public class KnowledgeBaseLoadFromArchive {
     private static final String KB_FILE_3 = "knowledge_base_from_archive_3.py";
 
     private static final String ACTION_ARG = "Action arg";
+
+    private static final String NON_EXISTING_ARCHIVE_FILE = ARCHIVE_LOCATION_DIR + "/non-existing-dir/kb-non-existing-*-archive.jar";
 
     private void addKbFile(ArchiveOutputStream o, String kbFile, String entryName) throws IOException {
         File source = new File(KB_SOURCEFILE_DIR, kbFile);
@@ -86,11 +91,18 @@ public class KnowledgeBaseLoadFromArchive {
         FileUtils.deleteQuietly(new File(ARCHIVE_FILE_2));
     }
 
-    private void finish(SpongeEngine engine) throws IOException {
-        assertFalse(engine.isError());
-        assertTrue(engine.isRunning());
+    private void finish(SpongeEngine engine, boolean assertEngineState) throws IOException {
+        if (assertEngineState) {
+            assertFalse(engine.isError());
+            assertTrue(engine.isRunning());
+        }
+
         engine.shutdown();
         deleteArchives();
+    }
+
+    private void finish(SpongeEngine engine) throws IOException {
+        finish(engine, true);
     }
 
     @Test
@@ -212,6 +224,38 @@ public class KnowledgeBaseLoadFromArchive {
             assertEquals(ACTION_ARG, engine.getOperations().call(String.class, "Action3FromArchive", Arrays.asList(ACTION_ARG)));
         } finally {
             finish(engine);
+        }
+    }
+
+    @Test
+    public void testLoadFromNonExistingArchiveByWildcardRequired() throws IOException {
+        createTwoLevelArchive();
+
+        String file = "spar:" + NON_EXISTING_ARCHIVE_FILE + "!/*.py";
+
+        SpongeEngine engine = SpringSpongeEngine.builder().knowledgeBase("kb", new FileKnowledgeBaseScript(file, true)).build();
+
+        try {
+            ConfigException exception = assertThrows(ConfigException.class, () -> engine.startup());
+
+            assertEquals(String.format("Knowledge base file(s) %s not found", file), exception.getMessage());
+        } finally {
+            finish(engine, false);
+        }
+    }
+
+    @Test
+    public void testLoadFromNonExistingArchiveByWildcardOptional() throws IOException {
+        createTwoLevelArchive();
+
+        String file = "spar:" + NON_EXISTING_ARCHIVE_FILE + "!/*.py";
+
+        SpongeEngine engine = SpringSpongeEngine.builder().knowledgeBase("kb", new FileKnowledgeBaseScript(file, false)).build();
+
+        try {
+            engine.startup();
+        } finally {
+            finish(engine, false);
         }
     }
 }
