@@ -101,6 +101,7 @@ public class HttpTest extends BasicTestTemplate {
         byte[] responseBody = okHttpResponse.body().bytes();
         String responseString = new String(responseBody);
         assertEquals("text/plain;charset=\"utf-8\"", StringUtils.remove(okHttpResponse.header("Content-Type").trim().toLowerCase(), " "));
+        assertEquals("attachment; filename=\"sample+file.txt\"", okHttpResponse.header("Content-Disposition"));
         assertEquals("Sample text file\n", responseString);
     }
 

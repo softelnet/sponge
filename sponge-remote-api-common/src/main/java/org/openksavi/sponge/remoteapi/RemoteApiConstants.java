@@ -98,6 +98,8 @@ public final class RemoteApiConstants {
 
     public static final String SERVICE_DISCOVERY_PROPERTY_URL = "url";
 
+    public static final String HTTP_HEADER_CONTENT_DISPOSITION = "Content-Disposition";
+
     private RemoteApiConstants() {
         //
     }

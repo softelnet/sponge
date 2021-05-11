@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -290,6 +291,15 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
         }
     }
 
+    /**
+     * Writes headers and a stream response directly to the HttpServletResponse, before Camel DefaultHttpBinding. The reason for doing this
+     * here is to process the result stream inside a Remote API operation boundaries (e.g. in an action call operation). <p/> WARNING: HTTP
+     * headers that will be written by the DefaultHttpBinding will be ignored in the HTTP response.
+     *
+     * @param method the method.
+     * @param exchange the exchange.
+     * @param streamValue the stream value.
+     */
     protected void setupStreamResponse(String method, Exchange exchange, OutputStreamValue streamValue) {
         try {
             HttpServletResponse httpResponse = exchange.getIn(HttpMessage.class).getResponse();
@@ -307,6 +317,12 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
 
             if (streamValue.getContentType() != null) {
                 httpResponse.setContentType(streamValue.getContentType());
+            }
+
+            if (streamValue.getFilename() != null
+                    && !streamValue.getHeaders().containsKey(RemoteApiConstants.HTTP_HEADER_CONTENT_DISPOSITION)) {
+                httpResponse.setHeader(RemoteApiConstants.HTTP_HEADER_CONTENT_DISPOSITION,
+                        String.format("attachment; filename=\"%s\"", URLEncoder.encode(streamValue.getFilename(), "UTF-8")));
             }
 
             ServletOutputStream output = httpResponse.getOutputStream();

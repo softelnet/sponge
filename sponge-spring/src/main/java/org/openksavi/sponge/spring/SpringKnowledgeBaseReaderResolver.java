@@ -120,7 +120,14 @@ public class SpringKnowledgeBaseReaderResolver {
 
                 // If wildcards used in for an archive itself.
                 if (archiveSpec.contains("*")) {
-                    Arrays.asList(RESOURCE_RESOLVER.getResources(archiveSpec)).forEach(resource -> {
+                    Resource[] resources;
+                    try {
+                        resources = RESOURCE_RESOLVER.getResources(archiveSpec);
+                    } catch (FileNotFoundException e) {
+                        resources = new Resource[0];
+                    }
+
+                    Arrays.asList(resources).forEach(resource -> {
                         try {
                             effectiveFilenames.add(SpringConstants.URL_PROTOCOL_SPAR_WITH_SEPARATOR + resource.getFile().getAbsolutePath()
                                     + archiveContentsSpec);
