@@ -16,6 +16,7 @@
 
 package org.openksavi.sponge.jython.core;
 
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,6 +40,7 @@ import org.python.jsr223.PyScriptEngineScope.ScopeIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.action.ActionBuilder;
 import org.openksavi.sponge.core.engine.BaseSpongeEngine;
 import org.openksavi.sponge.core.kb.EngineScriptKnowledgeBaseInterpreter;
@@ -196,5 +198,14 @@ public class JythonKnowledgeBaseInterpreter extends EngineScriptKnowledgeBaseInt
     @Override
     public String getSpecificExceptionMessage(Throwable e) {
         return JythonUtils.getSpecificExceptionMessage(e);
+    }
+
+    @Override
+    public <T> T eval(Reader reader, String filename) {
+        if (filename != null && !StringUtils.isAsciiPrintable(filename)) {
+            throw new SpongeException(String.format("Jython filename should contain only ASCII characters: %s", filename));
+        }
+
+        return super.eval(reader, filename);
     }
 }

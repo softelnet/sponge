@@ -68,6 +68,7 @@
                                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer" />
                             </transformers>
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+                            <createSourcesJar>true</createSourcesJar>
                         </configuration>
                     </execution>
                 </executions>
