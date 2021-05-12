@@ -42,6 +42,8 @@ public interface ProcessorManager extends EngineModule {
      *
      * @param knowledgeBase knowledge base.
      * @param processorBuilder processor builder.
+     * 
+     * @param <T> processor.
      */
     <T extends Processor<?>> void enable(KnowledgeBase knowledgeBase, ProcessorBuilder<T> processorBuilder);
 

@@ -25,7 +25,8 @@ public class JsonRpcServerException extends ApplicationServerSpongeException {
     /**
      * Creates a new exception.
      *
-     * @param message exception message.
+     * @param code the error code.
+     * @param message the exception message.
      */
     public JsonRpcServerException(int code, String message) {
         super(message);

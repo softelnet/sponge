@@ -1,10 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.openksavi.sponge</groupId>
         <artifactId>sponge-parent</artifactId>
-        <version>1.17.1-SNAPSHOT</version>
+        <version>1.17.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -260,6 +260,10 @@
                                         <dependencySourceExclude>org.openksavi.sponge:sponge-examples*</dependencySourceExclude>
                                         <dependencySourceExclude>org.openksavi.sponge:sponge-app*</dependencySourceExclude>
                                     </dependencySourceExcludes>
+                                    <excludePackageNames>org.openksavi.sponge.grpcapi.proto;org.openksavi.sponge.grpcapi.proto.*</excludePackageNames>
+                                    <!-- <sourceFileExcludes>
+                                        <sourceFileExclude>**/generated-sources/protobuf/**/*.java</sourceFileExclude>
+                                    </sourceFileExcludes> -->
                                 </configuration>
                             </execution>
                         </executions>

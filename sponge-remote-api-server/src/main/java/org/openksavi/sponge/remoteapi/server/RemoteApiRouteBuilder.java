@@ -293,7 +293,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
 
     /**
      * Writes headers and a stream response directly to the HttpServletResponse, before Camel DefaultHttpBinding. The reason for doing this
-     * here is to process the result stream inside a Remote API operation boundaries (e.g. in an action call operation). <p/> WARNING: HTTP
+     * here is to process the result stream inside a Remote API operation boundaries (e.g. in an action call operation). WARNING: HTTP
      * headers that will be written by the DefaultHttpBinding will be ignored in the HTTP response.
      *
      * @param method the method.

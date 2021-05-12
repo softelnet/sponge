@@ -6,7 +6,7 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
-== 1.17.1 (not released yet)
+== 1.17.1 (2021-05-11)
 * Added a new `copyHttpRequestHeaders` property to the Remote API settings. The flag indicates if the HTTP request headers should be copied to the HTTP response. Defaults to `false`.
 * Added a new `corsEnabled` property to the Remote API settings. The flag indicates if CORS is enabled, i.e. CORS headers will be included in the response HTTP headers. Defaults to `false`.
 * Fixed a bug that could cause `FileNotFoundException` for a non existing knowledge base file even though such kowledge base was optional.
