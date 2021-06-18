@@ -78,6 +78,17 @@ public class SpongeRemoteServiceProperties {
      */
     private Boolean corsEnabled = false;
 
+    /**
+     * The flag specifying if the Open API specification should also contain GET operations. Defaults to {@code false}.
+     */
+    private Boolean openApiDocsForGetVerbOperations = false;
+
+    /** Suffix for Open API operation ID for GET operations. */
+    private String openApiOperationIdSuffixForGetVerbOperations;
+
+    /** The regexp specifying which endpoints should be included in the Open API specification. */
+    private String openApiDocsForEndpoints;
+
     private final GrpcProperties grpc = new GrpcProperties();
 
     public String getVersion() {
@@ -218,6 +229,30 @@ public class SpongeRemoteServiceProperties {
 
     public void setCorsEnabled(Boolean corsEnabled) {
         this.corsEnabled = corsEnabled;
+    }
+
+    public Boolean getOpenApiDocsForGetVerbOperations() {
+        return openApiDocsForGetVerbOperations;
+    }
+
+    public void setOpenApiDocsForGetVerbOperations(Boolean openApiDocsForGetVerbOperations) {
+        this.openApiDocsForGetVerbOperations = openApiDocsForGetVerbOperations;
+    }
+
+    public String getOpenApiOperationIdSuffixForGetVerbOperations() {
+        return openApiOperationIdSuffixForGetVerbOperations;
+    }
+
+    public void setOpenApiOperationIdSuffixForGetVerbOperations(String openApiOperationIdSuffixForGetVerbOperations) {
+        this.openApiOperationIdSuffixForGetVerbOperations = openApiOperationIdSuffixForGetVerbOperations;
+    }
+
+    public String getOpenApiDocsForEndpoints() {
+        return openApiDocsForEndpoints;
+    }
+
+    public void setOpenApiDocsForEndpoints(String openApiDocsForEndpoints) {
+        this.openApiDocsForEndpoints = openApiDocsForEndpoints;
     }
 
     public GrpcProperties getGrpc() {

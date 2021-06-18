@@ -48,7 +48,7 @@ public class ActionDelegateOperation<I extends SpongeRequest<P>, P, O extends Sp
     protected ActionDelegateOperation(String method, String description, Class<I> requestClass, Class<P> requestParamsClass,
             String requestDescription, Class<O> responseClass, String responseDescription, String actionName,
             Function<I, List<Object>> argsMapper, BiConsumer<O, A> resultMapper) {
-        super(method, description, requestClass, requestParamsClass, requestDescription, responseClass, responseDescription,
+        super(method, method, description, requestClass, requestParamsClass, requestDescription, responseClass, responseDescription,
                 (service, request, exchange) -> {
                     ActionCallRequest actionCallRequest = new ActionCallRequest();
                     actionCallRequest.getParams().setHeader(new RequestHeader());

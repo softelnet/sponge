@@ -6,6 +6,11 @@ A high-level view of the changes introduced in {sponge} releases.
 Unless noted otherwise in the release notes, {sponge} releases (starting with version 1.5.0) that have the same `major.minor` numbers are compatible.
 
 [discrete]
+== 1.17.2 (not released yet)
+* Added a new `openApiDocsForGetVerbOperations` property to the Remote API settings. The flag specifies if the Open API specification should also contain GET operations. Defaults to `false`.
+* Added a new `openApiOperationIdSuffixForGetVerbOperations` property to the Remote API settings - a suffix for an Open API operation ID for GET operations.
+* Added a new `openApiDocsForEndpoints` property to the Remote API settings - a regexp specifying which endpoints should be included in the Open API specification.
+
 == 1.17.1 (2021-05-11)
 * Added a new `copyHttpRequestHeaders` property to the Remote API settings. The flag indicates if the HTTP request headers should be copied to the HTTP response. Defaults to `false`.
 * Added a new `corsEnabled` property to the Remote API settings. The flag indicates if CORS is enabled, i.e. CORS headers will be included in the response HTTP headers. Defaults to `false`.

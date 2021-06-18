@@ -197,6 +197,23 @@ public class RemoteApiServerPlugin extends JPlugin implements CamelContextAware 
         if (corsEnabled != null) {
             settings.setCorsEnabled(corsEnabled);
         }
+
+        Boolean openApiDocsForGetVerbOperations =
+                configuration.getBoolean(RemoteApiServerConstants.TAG_OPEN_API_DOCS_FOR_GET_VERB_OPERATIONS, null);
+        if (openApiDocsForGetVerbOperations != null) {
+            settings.setOpenApiDocsForGetVerbOperations(openApiDocsForGetVerbOperations);
+        }
+
+        String openApiOperationIdSuffixForGetVerbOperations =
+                configuration.getString(RemoteApiServerConstants.TAG_OPEN_API_OPERATION_ID_SUFFIX_FOR_GET_VERB_OPERATIONS, null);
+        if (openApiOperationIdSuffixForGetVerbOperations != null) {
+            settings.setOpenApiOperationIdSuffixForGetVerbOperations(openApiOperationIdSuffixForGetVerbOperations);
+        }
+
+        String openApiDocsForEndpoints = configuration.getString(RemoteApiServerConstants.TAG_OPEN_API_DOCS_FOR_ENDPOINTS, null);
+        if (openApiDocsForEndpoints != null) {
+            settings.setOpenApiDocsForEndpoints(openApiDocsForEndpoints);
+        }
     }
 
     protected void refreshSettings() {

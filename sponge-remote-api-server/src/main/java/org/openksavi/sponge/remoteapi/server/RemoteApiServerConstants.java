@@ -103,6 +103,12 @@ public final class RemoteApiServerConstants {
 
     public static final String TAG_CORS_ENABLED = "corsEnabled";
 
+    public static final String TAG_OPEN_API_DOCS_FOR_GET_VERB_OPERATIONS = "openApiDocsForGetVerbOperations";
+
+    public static final String TAG_OPEN_API_OPERATION_ID_SUFFIX_FOR_GET_VERB_OPERATIONS = "openApiOperationIdSuffixForGetVerbOperations";
+
+    public static final String TAG_OPEN_API_DOCS_FOR_ENDPOINTS = "openApiDocsForEndpoints";
+
     public static final String DEFAULT_NAME = "Sponge";
 
     public static final String DEFAULT_ANONYMOUS_USERNAME = "anonymous";
@@ -114,6 +120,8 @@ public final class RemoteApiServerConstants {
     public static final boolean DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE = false;
 
     public static final boolean DEFAULT_INCLUDE_RESPONSE_TIMES = false;
+
+    public static final String DEFAULT_GET_VERB_OPERATION_ID_SUFFIX = "_GET";
 
     public static final String EXCHANGE_PROPERTY_METHOD_NAME = "methodName";
 

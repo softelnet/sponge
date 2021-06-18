@@ -179,6 +179,18 @@ public class SpongeRemoteServiceAutoConfiguration {
             settings.setCorsEnabled(serviceProperties.getCorsEnabled());
         }
 
+        if (serviceProperties.getOpenApiDocsForGetVerbOperations() != null) {
+            settings.setOpenApiDocsForGetVerbOperations(serviceProperties.getOpenApiDocsForGetVerbOperations());
+        }
+
+        if (serviceProperties.getOpenApiOperationIdSuffixForGetVerbOperations() != null) {
+            settings.setOpenApiOperationIdSuffixForGetVerbOperations(serviceProperties.getOpenApiOperationIdSuffixForGetVerbOperations());
+        }
+
+        if (serviceProperties.getOpenApiDocsForEndpoints() != null) {
+            settings.setOpenApiDocsForEndpoints(serviceProperties.getOpenApiDocsForEndpoints());
+        }
+
         settings.getOpenApiProperties().putAll(serviceProperties.getOpenApiProperties());
 
         if (serviceProperties.getDiscovery().getUrl() != null) {

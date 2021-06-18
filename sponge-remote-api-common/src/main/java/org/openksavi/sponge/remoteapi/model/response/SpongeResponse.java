@@ -16,7 +16,11 @@
 
 package org.openksavi.sponge.remoteapi.model.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.annotations.ApiModelProperty;
+
+import org.openksavi.sponge.remoteapi.JsonRpcConstants;
 
 /**
  * A Remote API response.
@@ -24,7 +28,8 @@ import io.swagger.annotations.ApiModelProperty;
 @SuppressWarnings("rawtypes")
 public interface SpongeResponse<T extends ResponseResult> {
 
-    @ApiModelProperty(value = "The JSON-RPC version", required = true)
+    @ApiModelProperty(value = "The JSON-RPC version", required = true, allowableValues = JsonRpcConstants.VERSION)
+    @JsonProperty(defaultValue = JsonRpcConstants.VERSION)
     String getJsonrpc();
 
     @ApiModelProperty(value = "The result", required = false)

@@ -27,6 +27,8 @@ public class RemoteApiOperation<I extends SpongeRequest<P>, P, O extends SpongeR
 
     private String method;
 
+    private String operationId;
+
     private String description;
 
     private Class<I> requestClass;
@@ -43,10 +45,11 @@ public class RemoteApiOperation<I extends SpongeRequest<P>, P, O extends SpongeR
 
     private boolean supportsFormDataMultiPart = false;
 
-    public RemoteApiOperation(String method, String description, Class<I> requestClass, Class<P> requestParamsClass,
+    public RemoteApiOperation(String method, String operationId, String description, Class<I> requestClass, Class<P> requestParamsClass,
             String requestDescription, Class<O> responseClass, String responseDescription, RemoteApiMethodHandler<I, O> handler,
             boolean supportsFormDataMultiPart) {
         this.method = method;
+        this.operationId = operationId;
         this.description = description;
         this.requestClass = requestClass;
         this.requestParamsClass = requestParamsClass;
@@ -57,9 +60,10 @@ public class RemoteApiOperation<I extends SpongeRequest<P>, P, O extends SpongeR
         this.supportsFormDataMultiPart = supportsFormDataMultiPart;
     }
 
-    public RemoteApiOperation(String method, String description, Class<I> requestClass, Class<P> requestParamsClass,
+    public RemoteApiOperation(String method, String operationId, String description, Class<I> requestClass, Class<P> requestParamsClass,
             String requestDescription, Class<O> responseClass, String responseDescription, RemoteApiMethodHandler<I, O> handler) {
-        this(method, description, requestClass, requestParamsClass, requestDescription, responseClass, responseDescription, handler, false);
+        this(method, operationId, description, requestClass, requestParamsClass, requestDescription, responseClass, responseDescription,
+                handler, false);
     }
 
     public String getMethod() {
@@ -68,6 +72,14 @@ public class RemoteApiOperation<I extends SpongeRequest<P>, P, O extends SpongeR
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public String getOperationId() {
+        return operationId;
+    }
+
+    public void setOperationId(String operationId) {
+        this.operationId = operationId;
     }
 
     public String getDescription() {

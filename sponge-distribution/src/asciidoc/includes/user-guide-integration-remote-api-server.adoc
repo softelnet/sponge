@@ -103,6 +103,18 @@ The default name of the Remote API plugin (which can be used in knowledge bases)
 |`corsEnabled`
 |`boolean`
 |The flag specifying if CORS is enabled, i.e. CORS headers will be included in the response HTTP headers. Defaults to `false`.
+
+|`openApiDocsForGetVerbOperations`
+|`boolean`
+|The flag specifying if the Open API specification should also contain GET operations. Defaults to `false`.
+
+|`openApiOperationIdSuffixForGetVerbOperations`
+|`String`
+|The suffix for an Open API operation ID for GET operations. Defaults to `_GET`.
+
+|`openApiDocsForEndpoints`
+|`String`
+|The regexp specifying which endpoints should be included in the Open API specification. Defaults to `.*`.
 |===
 
 .The Remote API server plugin XML configuration example

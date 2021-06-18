@@ -18,6 +18,7 @@ package org.openksavi.sponge.remoteapi.server.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -100,6 +101,18 @@ public abstract class RemoteApiTestUtils {
         settings.setName("Sponge Test Remote API");
         settings.setDescription("Sponge Test Remote API description");
         settings.setLicense("Apache 2.0");
+    }
+
+    public static void assertOpenApiHasEndpoint(String responseBody, String endpoint, boolean yes) {
+        if (yes != responseBody.contains("\"/" + endpoint + "\"")) {
+            fail((yes ? "Open API doesn't contains endpoint " : "Open API contains endpoint ") + endpoint);
+        }
+    }
+
+    public static void assertOpenApiHasOperationId(String responseBody, String operationId, boolean yes) {
+        if (yes != responseBody.contains("\"" + operationId + "\"")) {
+            fail((yes ? "Open API doesn't contains operationId " : "Open API contains operationId ") + operationId);
+        }
     }
 
     private RemoteApiTestUtils() {

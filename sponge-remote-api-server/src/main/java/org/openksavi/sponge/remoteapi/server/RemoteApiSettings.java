@@ -107,6 +107,17 @@ public class RemoteApiSettings {
      */
     private boolean corsEnabled = false;
 
+    /**
+     * The flag specifying if the Open API specification should also contain GET operations. Defaults to {@code false}.
+     */
+    private boolean openApiDocsForGetVerbOperations = false;
+
+    /** Suffix for Open API operation ID for GET operations. */
+    private String openApiOperationIdSuffixForGetVerbOperations = RemoteApiServerConstants.DEFAULT_GET_VERB_OPERATION_ID_SUFFIX;
+
+    /** The regexp specifying which endpoints should be included in the Open API specification. */
+    private String openApiDocsForEndpoints = ".*";
+
     public String getComponentId() {
         return componentId;
     }
@@ -327,6 +338,30 @@ public class RemoteApiSettings {
         this.corsEnabled = corsEnabled;
     }
 
+    public boolean isOpenApiDocsForGetVerbOperations() {
+        return openApiDocsForGetVerbOperations;
+    }
+
+    public void setOpenApiDocsForGetVerbOperations(boolean openApiDocsForGetVerbOperations) {
+        this.openApiDocsForGetVerbOperations = openApiDocsForGetVerbOperations;
+    }
+
+    public String getOpenApiOperationIdSuffixForGetVerbOperations() {
+        return openApiOperationIdSuffixForGetVerbOperations;
+    }
+
+    public void setOpenApiOperationIdSuffixForGetVerbOperations(String openApiOperationIdSuffixForGetVerbOperations) {
+        this.openApiOperationIdSuffixForGetVerbOperations = openApiOperationIdSuffixForGetVerbOperations;
+    }
+
+    public String getOpenApiDocsForEndpoints() {
+        return openApiDocsForEndpoints;
+    }
+
+    public void setOpenApiDocsForEndpoints(String openApiDocsForEndpoints) {
+        this.openApiDocsForEndpoints = openApiDocsForEndpoints;
+    }
+
     @Override
     public String toString() {
         return "RemoteApiSettings [componentId=" + componentId + ", host=" + host + ", port=" + port + ", path=" + path + ", version="
@@ -338,6 +373,8 @@ public class RemoteApiSettings {
                 + authTokenExpirationDuration + ", openApiProperties=" + openApiProperties + ", includeResponseTimes="
                 + includeResponseTimes + ", registerServiceDiscovery=" + registerServiceDiscovery + ", serviceDiscoveryInfo="
                 + serviceDiscoveryInfo + ", ignoreUnknownArgs=" + ignoreUnknownArgs + ", copyHttpRequestHeaders=" + copyHttpRequestHeaders
-                + ", corsEnabled=" + corsEnabled + "]";
+                + ", corsEnabled=" + corsEnabled + ", openApiDocsForGetVerbOperations=" + openApiDocsForGetVerbOperations
+                + ", openApiOperationIdSuffixForGetVerbOperations=" + openApiOperationIdSuffixForGetVerbOperations
+                + ", openApiDocsForEndpoints=" + openApiDocsForEndpoints + "]";
     }
 }

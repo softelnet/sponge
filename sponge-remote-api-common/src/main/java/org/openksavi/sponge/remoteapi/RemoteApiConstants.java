@@ -57,6 +57,30 @@ public final class RemoteApiConstants {
 
     public static final String METHOD_RELOAD = "reload";
 
+    public static final String OPERATION_ID_VERSION = "getVersion";
+
+    public static final String OPERATION_ID_FEATURES = "getFeatures";
+
+    public static final String OPERATION_ID_LOGIN = "login";
+
+    public static final String OPERATION_ID_LOGOUT = "logout";
+
+    public static final String OPERATION_ID_KNOWLEDGE_BASES = "getKnowledgeBases";
+
+    public static final String OPERATION_ID_ACTIONS = "getActions";
+
+    public static final String OPERATION_ID_CALL = "call";
+
+    public static final String OPERATION_ID_SEND = "send";
+
+    public static final String OPERATION_ID_IS_ACTION_ACTIVE = "isActionActive";
+
+    public static final String OPERATION_ID_PROVIDE_ACTION_ARGS = "provideActionArgs";
+
+    public static final String OPERATION_ID_EVENT_TYPES = "getEventTypes";
+
+    public static final String OPERATION_ID_RELOAD = "reload";
+
     /** A generic error code. */
     public static final int ERROR_CODE_GENERIC = 1001;
 

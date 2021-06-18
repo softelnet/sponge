@@ -17,15 +17,19 @@
 package org.openksavi.sponge.remoteapi.model.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModelProperty;
+
+import org.openksavi.sponge.remoteapi.JsonRpcConstants;
 
 /**
  * A request.
  */
 public interface SpongeRequest<T> {
 
-    @ApiModelProperty(value = "The JSON-RPC version", required = true)
+    @ApiModelProperty(value = "The JSON-RPC version", required = true, allowableValues = JsonRpcConstants.VERSION)
+    @JsonProperty(defaultValue = JsonRpcConstants.VERSION)
     String getJsonrpc();
 
     @ApiModelProperty(value = "The JSON-RPC method", required = true)
