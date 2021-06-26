@@ -13,6 +13,7 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 * Added a new `openApiOperationIdSuffixForGetVerbOperations` property to the Remote API settings - a suffix for an Open API operation ID for GET operations.
 * Added a new `openApiDocsForEndpoints` property to the Remote API settings - a regexp specifying which endpoints should be included in the Open API specification.
 * Added a new `includeErrorLocationInErrorMessage` property to the Remote API settings. The flag specifies if an error response message should contain an error location. Defaults to `false`.
+* Dependencies upgrade.
 
 == 1.17.1 (2021-05-11)
 * Added a new `copyHttpRequestHeaders` property to the Remote API settings. The flag indicates if the HTTP request headers should be copied to the HTTP response. Defaults to `false`.

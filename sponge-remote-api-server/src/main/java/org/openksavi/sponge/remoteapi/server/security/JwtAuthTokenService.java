@@ -120,7 +120,7 @@ public class JwtAuthTokenService extends BaseAuthTokenService {
 
     @Override
     public void removeAuthToken(String authToken) {
-        Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
         Long authSessionId = claims.getBody().get(CLAIM_AUTH_SESSION_ID, Long.class);
 
         if (authSessionId != null) {

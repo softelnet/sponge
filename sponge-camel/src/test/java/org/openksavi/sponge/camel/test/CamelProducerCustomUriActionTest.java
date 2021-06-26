@@ -17,7 +17,6 @@
 package org.openksavi.sponge.camel.test;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
 import org.apache.camel.test.spring.MockEndpoints;
 import org.junit.Test;
@@ -27,10 +26,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
-@SuppressWarnings("deprecation")
 @RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { CamelProducerCustomUriActionTest.TestConfig.class },
-        loader = CamelSpringDelegatingTestContextLoader.class)
+@ContextConfiguration(classes = { CamelProducerCustomUriActionTest.TestConfig.class })
 @MockEndpoints
 @DirtiesContext
 public class CamelProducerCustomUriActionTest extends CamelProducerCustomActionAbstractTest {

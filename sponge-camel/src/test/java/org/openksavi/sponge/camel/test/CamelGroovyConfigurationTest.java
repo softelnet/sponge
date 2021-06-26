@@ -27,7 +27,6 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.spring.javaconfig.CamelConfiguration;
-import org.apache.camel.test.spring.CamelSpringDelegatingTestContextLoader;
 import org.apache.camel.test.spring.CamelSpringRunner;
 import org.apache.camel.test.spring.MockEndpoints;
 import org.junit.Test;
@@ -40,9 +39,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import org.openksavi.sponge.engine.SpongeEngine;
 
-@SuppressWarnings("deprecation")
 @RunWith(CamelSpringRunner.class)
-@ContextConfiguration(classes = { CamelGroovyConfigurationTest.TestConfig.class }, loader = CamelSpringDelegatingTestContextLoader.class)
+@ContextConfiguration(classes = { CamelGroovyConfigurationTest.TestConfig.class })
 @MockEndpoints
 @DirtiesContext
 public class CamelGroovyConfigurationTest {
