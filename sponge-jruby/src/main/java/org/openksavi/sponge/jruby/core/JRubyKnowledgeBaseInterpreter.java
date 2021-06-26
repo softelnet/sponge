@@ -47,6 +47,7 @@ import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
 import org.openksavi.sponge.core.kb.ScriptClassInstanceProvider;
 import org.openksavi.sponge.core.plugin.BasePlugin;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.core.util.exception.SpongeExceptionUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.jruby.JRubyActionBuilder;
 import org.openksavi.sponge.jruby.JRubyRule;
@@ -201,12 +202,12 @@ public class JRubyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInterp
 
     @Override
     public boolean isKnowledgeBaseException(Throwable exception) {
-        return SpongeUtils.containsException(exception, RaiseException.class);
+        return SpongeExceptionUtils.containsException(exception, RaiseException.class);
     }
 
     @Override
     public Throwable getJavaException(Throwable knowledgeBaseException) {
-        return SpongeUtils.getException(knowledgeBaseException, RaiseException.class);
+        return SpongeExceptionUtils.getException(knowledgeBaseException, RaiseException.class);
     }
 
     /**

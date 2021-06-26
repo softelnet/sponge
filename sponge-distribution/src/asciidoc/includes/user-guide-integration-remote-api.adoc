@@ -137,16 +137,16 @@ A Remote API response supports standard JSON-RPC response members.
 
 NOTE: Request and response features are not converted by the feature converter.
 
-A Remote API error object supports standard JSON-RPC error object members, i.e. `code`, `message` and optional `data`.
+A Remote API error object supports the standard JSON-RPC error object members, i.e. `code`, `message` and optional `data`. The error data is represented as a map.
 
-.Error data properties
+.Predefined error data map keys
 [cols="2,1,4"]
 |===
-|Property |Type |Description
+|Key |Value type |Description
 
 |`detailedErrorMessage`
 |`String`
-|The detailed error message, e.g. an exception stack trace.
+|The optional detailed error message, e.g. an exception stack trace.
 |===
 
 == Methods

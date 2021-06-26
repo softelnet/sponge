@@ -104,6 +104,7 @@ import org.openksavi.sponge.remoteapi.model.response.SendEventResponse;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
 import org.openksavi.sponge.remoteapi.server.camel.CamelHttpBindingAsUtil;
 import org.openksavi.sponge.remoteapi.server.camel.CamelSupportUtils;
+import org.openksavi.sponge.remoteapi.server.error.RemoteApiErrorHandler;
 import org.openksavi.sponge.remoteapi.server.util.FormDataMultiPartContext;
 import org.openksavi.sponge.remoteapi.util.RemoteApiUtils;
 import org.openksavi.sponge.type.value.OutputStreamValue;
@@ -162,7 +163,9 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
 
                 Throwable processingException = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class);
 
-                logger.info("Remote API error", processingException);
+                RemoteApiErrorHandler errorHandler =
+                        apiService.getErrorHandlerFactory().createErrorHandler(getSettings(), processingException);
+                errorHandler.logError();
 
                 String methodName =
                         Validate.notNull(exchange.getProperty(RemoteApiServerConstants.EXCHANGE_PROPERTY_METHOD_NAME, String.class),
@@ -170,7 +173,7 @@ public class RemoteApiRouteBuilder extends RouteBuilder implements HasRemoteApiS
 
                 // A notification request should be a valid JSON-RPC request so in case of "Parse error" or "Invalid request"
                 // an error response will be sent.
-                setupResponse(methodName, exchange, apiService.createErrorResponse(processingException),
+                setupResponse(methodName, exchange, errorHandler.createErrorResponse(),
                         !isNotification(exchange) || shouldNotificationHaveErrorResponse(processingException));
 
                 exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, RemoteApiConstants.HTTP_RESPONSE_CODE_ERROR);

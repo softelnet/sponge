@@ -31,6 +31,7 @@ import javax.script.ScriptException;
 
 import org.openksavi.sponge.SpongeException;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.core.util.exception.SpongeExceptionUtils;
 import org.openksavi.sponge.kb.KnowledgeBaseEngineOperations;
 import org.openksavi.sponge.kb.KnowledgeBaseType;
 
@@ -209,12 +210,12 @@ public abstract class EngineScriptKnowledgeBaseInterpreter extends BaseScriptKno
 
     @Override
     public boolean isKnowledgeBaseException(Throwable exception) {
-        return SpongeUtils.containsException(exception, ScriptException.class);
+        return SpongeExceptionUtils.containsException(exception, ScriptException.class);
     }
 
     @Override
     public Throwable getJavaException(Throwable knowledgeBaseException) {
-        return SpongeUtils.getException(knowledgeBaseException, ScriptException.class);
+        return SpongeExceptionUtils.getException(knowledgeBaseException, ScriptException.class);
     }
 
     @SuppressWarnings({ "unchecked" })

@@ -39,18 +39,18 @@ public class DefaultRequestAuthenticationService extends BaseRequestAuthenticati
 
             return Validate.notNull(apiService.getAuthTokenService(), "Auth token service not configured")
                     .validateAuthToken(header.getAuthToken());
+        }
+
+        if (header.getUsername() != null) {
+            return apiService.getSecurityService().authenticateUser(new UserAuthenticationQuery(header.getUsername(), header.getPassword(),
+                    header.getAuthToken(), apiService.getSession()));
+        }
+
+        if (apiService.getSettings().isAllowAnonymous()) {
+            return apiService.getSecurityService()
+                    .authenticateAnonymous(RemoteApiServerUtils.createAnonymousUser(apiService.getSettings().getAnonymousRole()));
         } else {
-            if (header.getUsername() == null) {
-                if (apiService.getSettings().isAllowAnonymous()) {
-                    return apiService.getSecurityService()
-                            .authenticateAnonymous(RemoteApiServerUtils.createAnonymousUser(apiService.getSettings().getAnonymousRole()));
-                } else {
-                    throw new SpongeException("Anonymous access is not allowed");
-                }
-            } else {
-                return apiService.getSecurityService().authenticateUser(new UserAuthenticationQuery(header.getUsername(),
-                        header.getPassword(), header.getAuthToken(), apiService.getSession()));
-            }
+            throw new SpongeException("Anonymous access is not allowed");
         }
     }
 }

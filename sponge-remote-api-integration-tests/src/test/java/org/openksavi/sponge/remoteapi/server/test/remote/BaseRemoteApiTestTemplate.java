@@ -291,7 +291,7 @@ public abstract class BaseRemoteApiTestTemplate {
             } catch (ErrorResponseException e) {
                 assertEquals(RemoteApiConstants.ERROR_CODE_GENERIC, e.getErrorCode());
                 assertTrue(e.getErrorMessage().startsWith("NameError: global name 'throws_error' is not defined in"));
-                assertTrue(e.getDetailedErrorMessage().startsWith(
+                assertTrue(((String) e.getErrorData().get(RemoteApiConstants.ERROR_DATA_FIELD_DETAILED_ERROR_MESSAGE)).startsWith(
                         "org.openksavi.sponge.engine.WrappedException: NameError: global name 'throws_error' is not defined in"));
             } catch (Throwable e) {
                 fail("ResponseErrorSpongeException expected");
@@ -310,7 +310,7 @@ public abstract class BaseRemoteApiTestTemplate {
             } catch (ErrorResponseException e) {
                 assertEquals(RemoteApiConstants.ERROR_CODE_GENERIC, e.getErrorCode());
                 assertTrue(e.getErrorMessage().startsWith("Exception: Knowledge base exception in"));
-                assertTrue(e.getDetailedErrorMessage()
+                assertTrue(((String) e.getErrorData().get(RemoteApiConstants.ERROR_DATA_FIELD_DETAILED_ERROR_MESSAGE))
                         .startsWith("org.openksavi.sponge.engine.WrappedException: Exception: Knowledge base exception in"));
             } catch (Throwable e) {
                 fail("ResponseErrorSpongeException expected");

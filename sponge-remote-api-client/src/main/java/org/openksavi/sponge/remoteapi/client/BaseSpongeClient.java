@@ -421,7 +421,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
                 if (exception instanceof ErrorResponseException) {
                     ((ErrorResponseException) exception).setErrorCode(error.getCode());
                     if (error.getData() != null) {
-                        ((ErrorResponseException) exception).setDetailedErrorMessage(error.getData().getDetailedErrorMessage());
+                        ((ErrorResponseException) exception).setErrorData(error.getData());
                     }
                 }
 

@@ -7,9 +7,12 @@ Unless noted otherwise in the release notes, {sponge} releases (starting with ve
 
 [discrete]
 == 1.17.2 (not released yet)
+* The Remote API JSON-RPC 2.0 error response data is now represented as a map. The previous, optional `detailedErrorMessage` field is now an optional entry in the map with the `detailedErrorMessage` key.
+* The stateless `ErrorResponseProvider` in the Remote API has been changed to the stateful `RemoteApiErrorHandler` to provide more flexibility.
 * Added a new `openApiDocsForGetVerbOperations` property to the Remote API settings. The flag specifies if the Open API specification should also contain GET operations. Defaults to `false`.
 * Added a new `openApiOperationIdSuffixForGetVerbOperations` property to the Remote API settings - a suffix for an Open API operation ID for GET operations.
 * Added a new `openApiDocsForEndpoints` property to the Remote API settings - a regexp specifying which endpoints should be included in the Open API specification.
+* Added a new `includeErrorLocationInErrorMessage` property to the Remote API settings. The flag specifies if an error response message should contain an error location. Defaults to `false`.
 
 == 1.17.1 (2021-05-11)
 * Added a new `copyHttpRequestHeaders` property to the Remote API settings. The flag indicates if the HTTP request headers should be copied to the HTTP response. Defaults to `false`.

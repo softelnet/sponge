@@ -61,6 +61,7 @@ public class RemoteApiTestServiceSpringConfig extends SpongeCamelConfiguration {
 
         plugin.getSettings().setAllowAnonymous(true);
         plugin.getSettings().setIncludeDetailedErrorMessage(true);
+        plugin.getSettings().setIncludeErrorLocationInErrorMessage(true);
         plugin.getSettings().setPublishReload(true);
         plugin.getSettings().setAuthTokenExpirationDuration(Duration.ofSeconds(2));
 

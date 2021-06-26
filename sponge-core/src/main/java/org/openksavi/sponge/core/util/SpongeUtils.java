@@ -409,15 +409,6 @@ public abstract class SpongeUtils {
         return wrapInterpreterException(sourceName, interpreter, throwable);
     }
 
-    public static boolean containsException(Throwable exception, final Class<? extends Throwable> type) {
-        return ExceptionUtils.indexOfType(exception, type) > -1;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T getException(Throwable exception, final Class<? extends Throwable> type) {
-        return (T) ExceptionUtils.getThrowableList(exception).get(ExceptionUtils.indexOfType(exception, type));
-    }
-
     public static String getSourceName(Throwable exception) {
         return exception instanceof WrappedException ? ((WrappedException) exception).getSourceName() : null;
     }

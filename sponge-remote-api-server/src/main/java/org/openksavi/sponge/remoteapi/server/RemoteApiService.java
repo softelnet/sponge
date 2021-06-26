@@ -47,7 +47,7 @@ import org.openksavi.sponge.remoteapi.model.response.LogoutResponse;
 import org.openksavi.sponge.remoteapi.model.response.ProvideActionArgsResponse;
 import org.openksavi.sponge.remoteapi.model.response.ReloadResponse;
 import org.openksavi.sponge.remoteapi.model.response.SendEventResponse;
-import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
+import org.openksavi.sponge.remoteapi.server.error.RemoteApiErrorHandlerFactory;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionCloseListener;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionOpenListener;
 import org.openksavi.sponge.remoteapi.server.security.AccessService;
@@ -88,9 +88,9 @@ public interface RemoteApiService extends HasEngine, Initializable {
 
     void setAuthTokenService(AuthTokenService authTokenService);
 
-    ErrorResponseProvider getErrorResponseProvider();
+    RemoteApiErrorHandlerFactory getErrorHandlerFactory();
 
-    void setErrorResponseProvider(ErrorResponseProvider errorResponseProvider);
+    void setErrorHandlerFactory(RemoteApiErrorHandlerFactory errorHandlerFactory);
 
     LoginResponse login(LoginRequest request);
 
@@ -117,8 +117,6 @@ public interface RemoteApiService extends HasEngine, Initializable {
     ReloadResponse reload(ReloadRequest request);
 
     Map<String, Object> getFeatures();
-
-    SpongeResponse createErrorResponse(Throwable e);
 
     TypeConverter getTypeConverter();
 

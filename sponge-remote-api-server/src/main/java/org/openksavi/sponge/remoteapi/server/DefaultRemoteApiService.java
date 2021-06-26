@@ -69,7 +69,6 @@ import org.openksavi.sponge.remoteapi.model.request.SendEventRequest;
 import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
 import org.openksavi.sponge.remoteapi.model.response.ActionCallResponse;
 import org.openksavi.sponge.remoteapi.model.response.ActionCallResponse.ActionCallResult;
-import org.openksavi.sponge.remoteapi.model.response.ErrorResponse;
 import org.openksavi.sponge.remoteapi.model.response.GetActionsResponse;
 import org.openksavi.sponge.remoteapi.model.response.GetActionsResponse.GetActionsResult;
 import org.openksavi.sponge.remoteapi.model.response.GetActionsResponse.GetActionsValue;
@@ -95,6 +94,8 @@ import org.openksavi.sponge.remoteapi.model.response.ReloadResponse.ReloadResult
 import org.openksavi.sponge.remoteapi.model.response.SendEventResponse;
 import org.openksavi.sponge.remoteapi.model.response.SendEventResponse.SendEventResult;
 import org.openksavi.sponge.remoteapi.model.response.SpongeResponse;
+import org.openksavi.sponge.remoteapi.server.error.DefaultRemoteApiErrorHandlerFactory;
+import org.openksavi.sponge.remoteapi.server.error.RemoteApiErrorHandlerFactory;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionCloseListener;
 import org.openksavi.sponge.remoteapi.server.listener.OnSessionOpenListener;
 import org.openksavi.sponge.remoteapi.server.security.AccessService;
@@ -137,7 +138,7 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
     private AuthTokenService authTokenService;
 
-    private ErrorResponseProvider errorResponseProvider = new DefaultErrorResponseProvider();
+    private RemoteApiErrorHandlerFactory errorHandlerFactory = new DefaultRemoteApiErrorHandlerFactory();
 
     private TypeConverter typeConverter;
 
@@ -395,13 +396,11 @@ public class DefaultRemoteApiService implements RemoteApiService {
 
     @Override
     public ActionCallResponse call(ActionCallRequest request) {
-        ActionAdapter actionAdapter = null;
-
         Validate.notNull(request, "The request must not be null");
         UserContext userContext = authenticateRequest(request);
 
         String actionName = request.getParams().getName();
-        actionAdapter = getActionAdapterForRequest(actionName, request.getParams().getQualifiedVersion(), userContext);
+        ActionAdapter actionAdapter = getActionAdapterForRequest(actionName, request.getParams().getQualifiedVersion(), userContext);
 
         Object args = request.getParams().getArgs();
         Object actionResult;
@@ -666,17 +665,6 @@ public class DefaultRemoteApiService implements RemoteApiService {
     }
 
     @Override
-    public SpongeResponse createErrorResponse(Throwable e) {
-        Validate.notNull(e, "Exception should be not null");
-
-        ErrorResponse response = new ErrorResponse();
-
-        errorResponseProvider.applyException(this, response, e);
-
-        return response;
-    }
-
-    @Override
     public SpongeEngine getEngine() {
         return engine;
     }
@@ -746,13 +734,13 @@ public class DefaultRemoteApiService implements RemoteApiService {
     }
 
     @Override
-    public ErrorResponseProvider getErrorResponseProvider() {
-        return errorResponseProvider;
+    public RemoteApiErrorHandlerFactory getErrorHandlerFactory() {
+        return errorHandlerFactory;
     }
 
     @Override
-    public void setErrorResponseProvider(ErrorResponseProvider errorResponseProvider) {
-        this.errorResponseProvider = errorResponseProvider;
+    public void setErrorHandlerFactory(RemoteApiErrorHandlerFactory errorHandlerFactory) {
+        this.errorHandlerFactory = errorHandlerFactory;
     }
 
     @Override

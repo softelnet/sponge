@@ -51,6 +51,7 @@ public abstract class BaseHttpRemoteApiTest extends BaseRemoteApiTestTemplate {
 
             plugin.getSettings().setPort(spongeRemoteApiPort());
             plugin.getSettings().setIncludeDetailedErrorMessage(true);
+            plugin.getSettings().setIncludeErrorLocationInErrorMessage(true);
             plugin.getSettings().setPrettyPrint(true);
             // plugin.getSettings().setPublicActions(Arrays.asList(new ProcessorQualifiedName(".*", "^(?!)Private.*")));
 

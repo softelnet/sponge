@@ -11,7 +11,7 @@
     "supportLevel": "Stable",
     "groupId": "org.openksavi.sponge",
     "artifactId": "sponge-camel",
-    "version": "1.17.1",
+    "version": "1.17.2-SNAPSHOT",
     "scheme": "sponge",
     "extendsScheme": "",
     "syntax": "sponge:engineRef",

@@ -24,11 +24,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.CompressionCodecs;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.crypto.MacProvider;
+import io.jsonwebtoken.security.Keys;
 
 import org.openksavi.sponge.core.util.LocalCache;
 import org.openksavi.sponge.core.util.LocalCacheBuilder;
@@ -36,7 +35,7 @@ import org.openksavi.sponge.core.util.SpongeUtils;
 import org.openksavi.sponge.remoteapi.server.InvalidAuthTokenServerException;
 
 /**
- * AN auth token service that uses JSON Web Token (JWT).
+ * An auth token service that uses JSON Web Token (JWT).
  */
 public class JwtAuthTokenService extends BaseAuthTokenService {
 
@@ -44,7 +43,7 @@ public class JwtAuthTokenService extends BaseAuthTokenService {
 
     protected static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    private Key key = MacProvider.generateKey(SIGNATURE_ALGORITHM);
+    private Key key = Keys.secretKeyFor(SIGNATURE_ALGORITHM);
 
     private LocalCache<Long, AuthTokenSession> authTokenSessions;
 
@@ -90,9 +89,8 @@ public class JwtAuthTokenService extends BaseAuthTokenService {
     public String createAuthToken(UserAuthentication userAuthentication) {
         Long authSessionId = currentAuthSessionId.incrementAndGet();
 
-        JwtBuilder builder = Jwts.builder();
-        builder.claim(CLAIM_AUTH_SESSION_ID, authSessionId).signWith(SIGNATURE_ALGORITHM, key).compressWith(CompressionCodecs.DEFLATE);
-        String token = builder.compact();
+        String token = Jwts.builder().claim(CLAIM_AUTH_SESSION_ID, authSessionId).signWith(key, SIGNATURE_ALGORITHM)
+                .compressWith(CompressionCodecs.DEFLATE).compact();
 
         authTokenSessions.put(authSessionId, new AuthTokenSession(userAuthentication));
 
@@ -102,7 +100,7 @@ public class JwtAuthTokenService extends BaseAuthTokenService {
     @Override
     public UserAuthentication validateAuthToken(String authToken) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(authToken);
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
             Long authSessionId = claims.getBody().get(CLAIM_AUTH_SESSION_ID, Long.class);
 
             if (authSessionId == null) {

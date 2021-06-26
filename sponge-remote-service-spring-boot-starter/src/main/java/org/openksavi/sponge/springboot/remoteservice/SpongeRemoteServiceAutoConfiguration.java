@@ -155,6 +155,10 @@ public class SpongeRemoteServiceAutoConfiguration {
             settings.setIncludeDetailedErrorMessage(serviceProperties.getIncludeDetailedErrorMessage());
         }
 
+        if (serviceProperties.getIncludeErrorLocationInErrorMessage() != null) {
+            settings.setIncludeErrorLocationInErrorMessage(serviceProperties.getIncludeErrorLocationInErrorMessage());
+        }
+
         if (serviceProperties.getAuthTokenExpirationDuration() != null) {
             settings.setAuthTokenExpirationDuration(serviceProperties.getAuthTokenExpirationDuration());
         }

@@ -16,6 +16,8 @@
 
 package org.openksavi.sponge.remoteapi.client;
 
+import java.util.Map;
+
 /**
  * Error response exception.
  */
@@ -25,7 +27,7 @@ public class ErrorResponseException extends SpongeClientException {
 
     private Integer errorCode;
 
-    private String detailedErrorMessage;
+    private Map<String, Object> errorData;
 
     /**
      * Creates a new exception.
@@ -67,11 +69,11 @@ public class ErrorResponseException extends SpongeClientException {
         return getMessage();
     }
 
-    public String getDetailedErrorMessage() {
-        return detailedErrorMessage;
+    public Map<String, Object> getErrorData() {
+        return errorData;
     }
 
-    public void setDetailedErrorMessage(String detailedErrorMessage) {
-        this.detailedErrorMessage = detailedErrorMessage;
+    public void setErrorData(Map<String, Object> errorData) {
+        this.errorData = errorData;
     }
 }

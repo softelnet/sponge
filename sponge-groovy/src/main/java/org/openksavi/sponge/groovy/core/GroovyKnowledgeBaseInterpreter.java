@@ -54,6 +54,7 @@ import org.openksavi.sponge.core.kb.CachedScriptClassInstancePovider;
 import org.openksavi.sponge.core.kb.ScriptClassInstanceProvider;
 import org.openksavi.sponge.core.plugin.BasePlugin;
 import org.openksavi.sponge.core.util.SpongeUtils;
+import org.openksavi.sponge.core.util.exception.SpongeExceptionUtils;
 import org.openksavi.sponge.engine.SpongeEngine;
 import org.openksavi.sponge.groovy.GroovyActionBuilder;
 import org.openksavi.sponge.groovy.GroovyConstants;
@@ -262,12 +263,12 @@ public class GroovyKnowledgeBaseInterpreter extends BaseScriptKnowledgeBaseInter
 
     @Override
     public boolean isKnowledgeBaseException(Throwable exception) {
-        return SpongeUtils.containsException(exception, GroovyRuntimeException.class);
+        return SpongeExceptionUtils.containsException(exception, GroovyRuntimeException.class);
     }
 
     @Override
     public Throwable getJavaException(Throwable knowledgeBaseException) {
-        return SpongeUtils.getException(knowledgeBaseException, GroovyRuntimeException.class);
+        return SpongeExceptionUtils.getException(knowledgeBaseException, GroovyRuntimeException.class);
     }
 
     /**

@@ -124,6 +124,8 @@ public final class RemoteApiConstants {
 
     public static final String HTTP_HEADER_CONTENT_DISPOSITION = "Content-Disposition";
 
+    public static final String ERROR_DATA_FIELD_DETAILED_ERROR_MESSAGE = "detailedErrorMessage";
+
     private RemoteApiConstants() {
         //
     }

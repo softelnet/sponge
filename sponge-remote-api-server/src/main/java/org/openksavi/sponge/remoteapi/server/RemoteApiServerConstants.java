@@ -119,6 +119,8 @@ public final class RemoteApiServerConstants {
 
     public static final boolean DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE = false;
 
+    public static final boolean DEFAULT_INCLUDE_ERROR_LOCATION_IN_ERROR_MESSAGE = false;
+
     public static final boolean DEFAULT_INCLUDE_RESPONSE_TIMES = false;
 
     public static final String DEFAULT_GET_VERB_OPERATION_ID_SUFFIX = "_GET";

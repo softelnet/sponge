@@ -80,7 +80,11 @@ public class RemoteApiSettings {
 
     private String anonymousRole = RemoteApiServerConstants.DEFAULT_ROLE_ANONYMOUS;
 
+    /** The flag specifying if an error response should contain a detailed error message. Defaults to {@code false}. */
     private boolean includeDetailedErrorMessage = RemoteApiServerConstants.DEFAULT_INCLUDE_DETAILED_ERROR_MESSAGE;
+
+    /** The flag specifying if an error response message should contain an error location. Defaults to {@code false}. */
+    private boolean includeErrorLocationInErrorMessage = RemoteApiServerConstants.DEFAULT_INCLUDE_ERROR_LOCATION_IN_ERROR_MESSAGE;
 
     /** The duration after which an authentication token will expire. The value {@code null} means infinity. Defaults to 30 minutes. */
     private Duration authTokenExpirationDuration = Duration.ofMinutes(30);
@@ -262,6 +266,14 @@ public class RemoteApiSettings {
         this.includeDetailedErrorMessage = includeDetailedErrorMessage;
     }
 
+    public boolean isIncludeErrorLocationInErrorMessage() {
+        return includeErrorLocationInErrorMessage;
+    }
+
+    public void setIncludeErrorLocationInErrorMessage(boolean includeErrorLocationInErrorMessage) {
+        this.includeErrorLocationInErrorMessage = includeErrorLocationInErrorMessage;
+    }
+
     public Duration getAuthTokenExpirationDuration() {
         return authTokenExpirationDuration;
     }
@@ -369,11 +381,12 @@ public class RemoteApiSettings {
                 + ", publicActions=" + publicActions + ", publicEvents=" + publicEvents + ", sslContextParametersBeanName="
                 + sslContextParametersBeanName + ", sslConfiguration=" + sslConfiguration + ", publishReload=" + publishReload
                 + ", allowAnonymous=" + allowAnonymous + ", adminRole=" + adminRole + ", anonymousRole=" + anonymousRole
-                + ", includeDetailedErrorMessage=" + includeDetailedErrorMessage + ", authTokenExpirationDuration="
-                + authTokenExpirationDuration + ", openApiProperties=" + openApiProperties + ", includeResponseTimes="
-                + includeResponseTimes + ", registerServiceDiscovery=" + registerServiceDiscovery + ", serviceDiscoveryInfo="
-                + serviceDiscoveryInfo + ", ignoreUnknownArgs=" + ignoreUnknownArgs + ", copyHttpRequestHeaders=" + copyHttpRequestHeaders
-                + ", corsEnabled=" + corsEnabled + ", openApiDocsForGetVerbOperations=" + openApiDocsForGetVerbOperations
+                + ", includeDetailedErrorMessage=" + includeDetailedErrorMessage + ", includeErrorLocationInErrorMessage="
+                + includeErrorLocationInErrorMessage + ", authTokenExpirationDuration=" + authTokenExpirationDuration
+                + ", openApiProperties=" + openApiProperties + ", includeResponseTimes=" + includeResponseTimes
+                + ", registerServiceDiscovery=" + registerServiceDiscovery + ", serviceDiscoveryInfo=" + serviceDiscoveryInfo
+                + ", ignoreUnknownArgs=" + ignoreUnknownArgs + ", copyHttpRequestHeaders=" + copyHttpRequestHeaders + ", corsEnabled="
+                + corsEnabled + ", openApiDocsForGetVerbOperations=" + openApiDocsForGetVerbOperations
                 + ", openApiOperationIdSuffixForGetVerbOperations=" + openApiOperationIdSuffixForGetVerbOperations
                 + ", openApiDocsForEndpoints=" + openApiDocsForEndpoints + "]";
     }

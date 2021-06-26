@@ -51,7 +51,11 @@ public class SpongeRemoteServiceProperties {
 
     private String anonymousRole;
 
+    /** The flag specifying if an error response should contain a detailed error message. Defaults to {@code false}. */
     private Boolean includeDetailedErrorMessage;
+
+    /** The flag specifying if an error response message should contain an error location. Defaults to {@code false}. */
+    private Boolean includeErrorLocationInErrorMessage;
 
     /** The duration after which an authentication token will expire. The value {@code null} means infinity. Defaults to 30 minutes. */
     private Duration authTokenExpirationDuration;
@@ -169,6 +173,14 @@ public class SpongeRemoteServiceProperties {
 
     public void setIncludeDetailedErrorMessage(Boolean includeDetailedErrorMessage) {
         this.includeDetailedErrorMessage = includeDetailedErrorMessage;
+    }
+
+    public Boolean getIncludeErrorLocationInErrorMessage() {
+        return includeErrorLocationInErrorMessage;
+    }
+
+    public void setIncludeErrorLocationInErrorMessage(Boolean includeErrorLocationInErrorMessage) {
+        this.includeErrorLocationInErrorMessage = includeErrorLocationInErrorMessage;
     }
 
     public Duration getAuthTokenExpirationDuration() {

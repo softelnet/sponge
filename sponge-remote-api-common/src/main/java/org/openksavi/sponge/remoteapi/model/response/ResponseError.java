@@ -16,6 +16,11 @@
 
 package org.openksavi.sponge.remoteapi.model.response;
 
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -29,9 +34,10 @@ public class ResponseError {
 
     private String message;
 
-    private ErrorData data;
+    @JsonInclude(Include.NON_NULL)
+    private Map<String, Object> data;
 
-    public ResponseError(Integer code, String message, ErrorData data) {
+    public ResponseError(Integer code, String message, Map<String, Object> data) {
         this.code = code;
         this.message = message;
         this.data = data;
@@ -63,33 +69,11 @@ public class ResponseError {
     }
 
     @ApiModelProperty(value = "The error data", required = false)
-    public ErrorData getData() {
+    public Map<String, Object> getData() {
         return data;
     }
 
-    public void setData(ErrorData data) {
+    public void setData(Map<String, Object> data) {
         this.data = data;
-    }
-
-    @ApiModel(value = "ErrorData", description = "An error data")
-    public static class ErrorData {
-
-        private String detailedErrorMessage;
-
-        public ErrorData(String detailedErrorMessage) {
-            this.detailedErrorMessage = detailedErrorMessage;
-        }
-
-        public ErrorData() {
-        }
-
-        @ApiModelProperty(value = "The detailed error message", required = false)
-        public String getDetailedErrorMessage() {
-            return detailedErrorMessage;
-        }
-
-        public void setDetailedErrorMessage(String detailedErrorMessage) {
-            this.detailedErrorMessage = detailedErrorMessage;
-        }
     }
 }

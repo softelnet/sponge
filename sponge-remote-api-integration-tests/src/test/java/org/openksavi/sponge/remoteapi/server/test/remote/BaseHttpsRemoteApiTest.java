@@ -52,6 +52,7 @@ public abstract class BaseHttpsRemoteApiTest extends BaseRemoteApiTestTemplate {
 
             plugin.getSettings().setPort(spongeRemoteApiPort());
             plugin.getSettings().setIncludeDetailedErrorMessage(true);
+            plugin.getSettings().setIncludeErrorLocationInErrorMessage(true);
             plugin.getSettings().setPrettyPrint(true);
 
             SslConfiguration sslConfiguration = new SslConfiguration();

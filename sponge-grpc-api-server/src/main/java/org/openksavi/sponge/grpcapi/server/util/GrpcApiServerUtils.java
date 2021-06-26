@@ -35,6 +35,7 @@ import org.openksavi.sponge.grpcapi.proto.VersionRequest;
 import org.openksavi.sponge.grpcapi.proto.VersionResponse;
 import org.openksavi.sponge.remoteapi.model.request.GetVersionRequest;
 import org.openksavi.sponge.remoteapi.model.request.SpongeRequest;
+import org.openksavi.sponge.remoteapi.model.response.ErrorResponse;
 import org.openksavi.sponge.remoteapi.model.response.GetVersionResponse;
 import org.openksavi.sponge.remoteapi.server.RemoteApiService;
 import org.openksavi.sponge.remoteapi.type.converter.TypeConverter;
@@ -124,7 +125,10 @@ public abstract class GrpcApiServerUtils {
     }
 
     public static StatusRuntimeException createStatusException(RemoteApiService remoteApiService, Throwable e) {
-        return createStatusException(remoteApiService, remoteApiService.createErrorResponse(e).getError());
+        ErrorResponse remoteApiErrorResponse =
+                remoteApiService.getErrorHandlerFactory().createErrorHandler(remoteApiService.getSettings(), e).createErrorResponse();
+
+        return createStatusException(remoteApiService, remoteApiErrorResponse.getError());
     }
 
     public static StatusRuntimeException createStatusException(RemoteApiService remoteApiService,
