@@ -110,9 +110,9 @@ import org.openksavi.sponge.util.SpongeApiUtils;
 @SuppressWarnings("rawtypes")
 public abstract class BaseSpongeClient implements SpongeClient {
 
-    protected static final boolean DEFAULT_ALLOW_FETCH_METADATA = true;
+    protected static final boolean DEFAULT_ALLOW_FETCH_METADATA_FOR_GET_METADATA = true;
 
-    protected static final boolean DEFAULT_ALLOW_FETCH_EVENT_TYPE = true;
+    protected static final boolean DEFAULT_ALLOW_FETCH_EVENT_TYPE_FOR_GET_EVENT_TYPE = true;
 
     private SpongeClientConfiguration configuration;
 
@@ -741,7 +741,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
 
     @Override
     public RemoteActionMeta getActionMeta(String actionName) {
-        return getActionMeta(actionName, DEFAULT_ALLOW_FETCH_METADATA);
+        return getActionMeta(actionName, DEFAULT_ALLOW_FETCH_METADATA_FOR_GET_METADATA);
     }
 
     protected void setupActionExecutionInfo(RemoteActionMeta actionMeta, ActionExecutionInfo info) {
@@ -860,7 +860,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
 
     @Override
     public ActionCallResponse call(ActionCallRequest request, RemoteActionMeta actionMeta) {
-        return call(request, actionMeta, true);
+        return call(request, actionMeta, configuration.isAllowFetchActionMetadataInActionCall());
     }
 
     @Override
@@ -1097,7 +1097,7 @@ public abstract class BaseSpongeClient implements SpongeClient {
 
     @Override
     public RecordType getEventType(String eventTypeName) {
-        return getEventType(eventTypeName, DEFAULT_ALLOW_FETCH_EVENT_TYPE);
+        return getEventType(eventTypeName, DEFAULT_ALLOW_FETCH_EVENT_TYPE_FOR_GET_EVENT_TYPE);
     }
 
     @Override

@@ -53,6 +53,8 @@ public class SpongeClientConfiguration {
 
     private boolean prettyPrint = false;
 
+    private boolean allowFetchActionMetadataInActionCall = true;
+
     private Map<String, Object> features;
 
     public void setUrl(String url) {
@@ -182,6 +184,14 @@ public class SpongeClientConfiguration {
 
     public void setFeatures(Map<String, Object> features) {
         this.features = features;
+    }
+
+    public boolean isAllowFetchActionMetadataInActionCall() {
+        return allowFetchActionMetadataInActionCall;
+    }
+
+    public void setAllowFetchActionMetadataInActionCall(boolean allowFetchActionMetadataInActionCall) {
+        this.allowFetchActionMetadataInActionCall = allowFetchActionMetadataInActionCall;
     }
 
     /**
@@ -374,6 +384,18 @@ public class SpongeClientConfiguration {
          */
         public Builder features(Map<String, Object> features) {
             configuration.setFeatures(features);
+            return this;
+        }
+
+        /**
+         * Sets a flag that allows fetching action metadata from the server before an action call (if not already cached). Defaults to
+         * {@code true}.
+         *
+         * @param allowFetchActionMetadataInActionCall action metadata fetching flag.
+         * @return the builder.
+         */
+        public Builder allowFetchActionMetadataInActionCall(boolean allowFetchActionMetadataInActionCall) {
+            configuration.setAllowFetchActionMetadataInActionCall(allowFetchActionMetadataInActionCall);
             return this;
         }
     }
