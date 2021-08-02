@@ -82,7 +82,7 @@
         <commons-codec.version>1.15</commons-codec.version>
         <commons-crypto.version>1.1.0</commons-crypto.version>
         <commons-email.version>1.5</commons-email.version>
-        <commons-compress.version>1.20</commons-compress.version>
+        <commons-compress.version>1.21</commons-compress.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <quartz.version>2.3.2</quartz.version>
         <guava.version>30.1.1-jre</guava.version>
