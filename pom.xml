@@ -70,23 +70,23 @@
 
         <jython.version>2.7.2</jython.version>
         <jruby.version>9.2.19.0</jruby.version>
-        <groovy.version>3.0.8</groovy.version>
-        <kotlin.version>1.5.20</kotlin.version>
+        <groovy.version>3.0.9</groovy.version>
+        <kotlin.version>1.5.30</kotlin.version>
 
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-configuration2.version>2.7</commons-configuration2.version>
-        <commons-io.version>2.10.0</commons-io.version>
+        <commons-io.version>2.11.0</commons-io.version>
         <commons-cli.version>1.4</commons-cli.version>
         <commons-codec.version>1.15</commons-codec.version>
         <commons-crypto.version>1.1.0</commons-crypto.version>
         <commons-email.version>1.5</commons-email.version>
-        <commons-compress.version>1.20</commons-compress.version>
+        <commons-compress.version>1.21</commons-compress.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <quartz.version>2.3.2</quartz.version>
         <guava.version>30.1.1-jre</guava.version>
-        <caffeine.version>2.9.1</caffeine.version>
+        <caffeine.version>2.9.2</caffeine.version>
         <spring.version>5.3.8</spring.version>
         <spring-integration.version>5.5.1</spring-integration.version>
         <spring-security.version>5.4.7</spring-security.version>
@@ -99,7 +99,7 @@
         <rxjava2.version>2.2.21</rxjava2.version>
         <okhttp.version>4.9.1</okhttp.version>
         <reflections.version>0.9.12</reflections.version>
-        <jackson.version>2.12.3</jackson.version>
+        <jackson.version>2.12.5</jackson.version>
         <swagger.version>1.6.2</swagger.version>
         <jjwt.version>0.11.2</jjwt.version>
         <jserialcomm.version>2.6.2</jserialcomm.version>
@@ -119,11 +119,11 @@
 
         <jetty.version>9.4.35.v20201120</jetty.version>
 
-        <slf4j.version>1.7.31</slf4j.version>
-        <logback.version>1.2.3</logback.version>
+        <slf4j.version>1.7.32</slf4j.version>
+        <logback.version>1.2.5</logback.version>
         <junit-jupiter.version>5.7.2</junit-jupiter.version>
         <junit-platform.version>5.7.2</junit-platform.version>
-        <mockito.version>3.11.2</mockito.version>
+        <mockito.version>3.12.4</mockito.version>
         <jcip.version>1.0-1</jcip.version>
 
         <log4j2.version>2.14.1</log4j2.version>
