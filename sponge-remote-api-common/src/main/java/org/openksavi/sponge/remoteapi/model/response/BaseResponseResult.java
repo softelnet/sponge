@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A base response result.
@@ -42,6 +43,7 @@ public class BaseResponseResult<T> implements ResponseResult<T> {
     }
 
     @Override
+    @ApiModelProperty(value = "The response header", required = false)
     public ResponseHeader getHeader() {
         return header;
     }
