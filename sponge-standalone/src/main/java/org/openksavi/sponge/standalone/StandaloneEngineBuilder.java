@@ -211,8 +211,6 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
                 }
             }
 
-            StandaloneEngineListener standaloneListener = new StandaloneEngineListener(engine);
-
             StandaloneSettings settings = new StandaloneSettings();
 
             List<String> springConfigurationFiles = Stream.of(commandLine.getOptions())
@@ -239,6 +237,8 @@ public class StandaloneEngineBuilder extends EngineBuilder<StandaloneSpongeEngin
 
             // Add a default standalone plugin.
             engine.getPluginManager().addPlugin(new StandalonePlugin());
+
+            StandaloneEngineListener standaloneListener = new StandaloneEngineListener(engine);
 
             engine.addOnStartupListener(standaloneListener);
             engine.addOnShutdownListener(standaloneListener);
