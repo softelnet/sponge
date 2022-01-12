@@ -87,7 +87,7 @@
         <quartz.version>2.3.2</quartz.version>
         <guava.version>30.1.1-jre</guava.version>
         <caffeine.version>2.9.2</caffeine.version>
-        <spring.version>5.3.8</spring.version>
+        <spring.version>5.3.14</spring.version>
         <spring-integration.version>5.5.1</spring-integration.version>
         <spring-security.version>5.4.7</spring-security.version>
         <camel.version>3.9.0</camel.version>
